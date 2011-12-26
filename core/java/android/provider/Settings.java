@@ -616,6 +616,8 @@ public final class Settings {
     private static final String TAG = "Settings";
     private static final boolean LOCAL_LOGV = false || false;
 
+
+
     public static class SettingNotFoundException extends AndroidException {
         public SettingNotFoundException(String msg) {
             super(msg);
@@ -750,6 +752,8 @@ public final class Settings {
             }
         }
     }
+
+
 
     /**
      * System settings, containing miscellaneous system preferences.  This
@@ -1893,6 +1897,15 @@ public final class Settings {
          *
          * @hide
          */
+        
+        
+        public static final String STATUSBAR_CARRIER_SHOW = "statusbar_carrier_show";
+        public static final String STATUSBAR_CARRIER_COLOR = "statusbar_carrier_color";
+        public static final String STATUSBAR_CARRIER_CUSTOM = "statusbar_carrier_custom";
+        public static final String STATUSBAR_CARRIER_CUSTOM_TEXT = "statusbar_carrier_custom_text";
+        
+        
+        
         public static final String[] SETTINGS_TO_BACKUP = {
             STAY_ON_WHILE_PLUGGED_IN,
             WIFI_USE_STATIC_IP,
@@ -1952,6 +1965,10 @@ public final class Settings {
             SIP_CALL_OPTIONS,
             SIP_RECEIVE_CALLS,
             POINTER_SPEED,
+            STATUSBAR_CARRIER_SHOW,
+            STATUSBAR_CARRIER_COLOR,
+            STATUSBAR_CARRIER_CUSTOM,
+            STATUSBAR_CARRIER_CUSTOM_TEXT,
         };
 
         // Settings moved to Settings.Secure
@@ -2183,6 +2200,12 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+		
+		
+		
+		
+		
     }
 
     /**
@@ -4358,4 +4381,15 @@ public final class Settings {
     public static String getGTalkDeviceId(long androidId) {
         return "android-" + Long.toHexString(androidId);
     }
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
 }
