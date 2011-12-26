@@ -20,17 +20,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.provider.Telephony;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.View;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.TimeZone;
 
-import com.android.internal.R;
+
+
 
 /**
  * This widget display an analogic clock with two hands for hours and
@@ -38,6 +40,38 @@ import com.android.internal.R;
  */
 public class CarrierLabel extends TextView {
     private boolean mAttached;
+    private boolean mShowCarrier = true;
+    
+    
+    
+    Handler mHandler = new Handler();
+    final CarrierObserver mCarrierObserver = new CarrierObserver(mHandler) ;
+
+
+    // Gps settings observer
+    class CarrierObserver extends ContentObserver{
+    	
+    	public CarrierObserver(Handler handler) {
+    		super(handler);
+    	}
+
+        @Override
+        public void onChange(boolean selfChange){
+        	
+            try {
+				mShowCarrier = (Boolean)(Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_SHOW) == 1);
+			} catch (SettingNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            UpdateCarrierLabel();
+        }
+    }
+    
+    
+    
+    
 
     public CarrierLabel(Context context) {
         this(context, null);
@@ -58,6 +92,19 @@ public class CarrierLabel extends TextView {
 
         if (!mAttached) {
             mAttached = true;
+            
+            
+            getContext().getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_SHOW), true, mCarrierObserver);
+            
+            try {
+				mShowCarrier = (Boolean)(Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_SHOW) == 1);
+			} catch (SettingNotFoundException e) {
+				e.printStackTrace();
+			}
+
+            UpdateCarrierLabel();
+    		
             IntentFilter filter = new IntentFilter();
             filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
@@ -87,10 +134,8 @@ public class CarrierLabel extends TextView {
     };
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
-        if (false) {
-            Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
-                    + " showPlmn=" + showPlmn + " plmn=" + plmn);
-        }
+        Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
+		        + " showPlmn=" + showPlmn + " plmn=" + plmn);
         StringBuilder str = new StringBuilder();
         boolean something = false;
         if (showPlmn && plmn != null) {
@@ -109,8 +154,19 @@ public class CarrierLabel extends TextView {
         } else {
             setText(com.android.internal.R.string.lockscreen_carrier_default);
         }
+        UpdateCarrierLabel();
     }
 
+    
+    void UpdateCarrierLabel(){
+        if (mShowCarrier) {
+        	setVisibility(View.VISIBLE);
+        } else {
+        	setVisibility(View.GONE);
+        }
+    	
+    }
+    
     
 }
 

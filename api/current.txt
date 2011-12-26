@@ -17567,11 +17567,15 @@ package android.provider {
     field public static final int SCREEN_BRIGHTNESS_MODE_MANUAL = 0; // 0x0
     field public static final java.lang.String SCREEN_OFF_TIMEOUT = "screen_off_timeout";
     field public static final deprecated java.lang.String SETTINGS_CLASSNAME = "settings_classname";
+    field public static final java.lang.String[] SETTINGS_TO_BACKUP;
     field public static final java.lang.String SETUP_WIZARD_HAS_RUN = "setup_wizard_has_run";
     field public static final java.lang.String SHOW_GTALK_SERVICE_STATUS = "SHOW_GTALK_SERVICE_STATUS";
     field public static final java.lang.String SHOW_PROCESSES = "show_processes";
     field public static final deprecated java.lang.String SHOW_WEB_SUGGESTIONS = "show_web_suggestions";
     field public static final java.lang.String SOUND_EFFECTS_ENABLED = "sound_effects_enabled";
+    field public static final java.lang.String STATUSBAR_CARRIER_COLOR = "statusbar_carrier_color";
+    field public static final java.lang.String STATUSBAR_CARRIER_CUSTOM = "statusbar_carrier_custom";
+    field public static final java.lang.String STATUSBAR_CARRIER_CUSTOM_TEXT = "statusbar_carrier_custom_text";
     field public static final java.lang.String STAY_ON_WHILE_PLUGGED_IN = "stay_on_while_plugged_in";
     field public static final java.lang.String SYS_PROP_SETTING_VERSION = "sys.settings_system_version";
     field public static final java.lang.String TEXT_AUTO_CAPS = "auto_caps";
