@@ -362,4 +362,18 @@
 
     <!-- Content description of the clear button in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_clear_all">Clear all notifications.</string>
+
+
+    <string name="but1">Wifi</string>
+    <string name="but2">Gps</string>
+    <string name="but3">Bluetooth</string>
+    <string name="but4">Sound</string>
+    <string name="but5">Airplane</string>
+    <string name="but6">Brightness</string>
+    <string name="but7">Rotate</string>
+    <string name="but8">Sync</string>
+    <string name="but9">Data</string>
+
+
+
 </resources>
