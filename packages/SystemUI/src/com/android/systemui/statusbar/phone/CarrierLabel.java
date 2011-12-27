@@ -61,6 +61,7 @@ public class CarrierLabel extends TextView {
     		super(handler);
     	}
 
+ 
         @Override
         public void onChange(boolean selfChange){
         	
