@@ -41,17 +41,23 @@ import android.widget.TextView;
 public class CarrierLabel extends TextView {
     private boolean mAttached;
     private boolean mShowCarrier = true;
+    private int mCarrierColor = 0xff33b5e5;
+    private boolean mCustomCarrier = true;
+    private String mCustomCarrierText = "Tranquil Ice";
     
     
     
     Handler mHandler = new Handler();
-    final CarrierObserver mCarrierObserver = new CarrierObserver(mHandler) ;
+    final ShowCarrierObserver mShowCarrierObserver = new ShowCarrierObserver(mHandler);
+    final CarrierColorObserver mCarrierColorObserver = new CarrierColorObserver(mHandler);
+    final CustomCarrierObserver mCustomCarrierObserver = new CustomCarrierObserver(mHandler) ;
+    final CustomCarrierTextObserver mCustomCarrierTextObserver = new CustomCarrierTextObserver(mHandler) ;
 
 
-    // Gps settings observer
-    class CarrierObserver extends ContentObserver{
+    // ShowCarrier settings observer
+    class ShowCarrierObserver extends ContentObserver{
     	
-    	public CarrierObserver(Handler handler) {
+    	public ShowCarrierObserver(Handler handler) {
     		super(handler);
     	}
 
@@ -61,7 +67,6 @@ public class CarrierLabel extends TextView {
             try {
 				mShowCarrier = (Boolean)(Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_SHOW) == 1);
 			} catch (SettingNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             
@@ -72,6 +77,68 @@ public class CarrierLabel extends TextView {
     
     
     
+    // CarrierColor settings observer
+    class CarrierColorObserver extends ContentObserver{
+    	
+    	public CarrierColorObserver(Handler handler) {
+    		super(handler);
+    	}
+
+        @Override
+        public void onChange(boolean selfChange){
+        	
+            try {
+				mCarrierColor = (Integer) Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_COLOR);
+			} catch (SettingNotFoundException e) {
+				e.printStackTrace();
+			}
+            
+            UpdateCarrierLabel();
+        }
+    }
+    
+  
+    
+    // CarrierCustom settings observer
+    class CustomCarrierObserver extends ContentObserver{
+    	
+    	public CustomCarrierObserver(Handler handler) {
+    		super(handler);
+    	}
+
+        @Override
+        public void onChange(boolean selfChange){
+        	
+            try {
+				mCustomCarrier = (Boolean)(Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_CUSTOM) == 1);
+			} catch (SettingNotFoundException e) {
+				e.printStackTrace();
+			}
+            
+            UpdateCarrierLabel();
+        }
+    }    
+    
+   
+    
+    
+    // CarrierCustomText settings observer
+    class CustomCarrierTextObserver extends ContentObserver{
+    	
+    	public CustomCarrierTextObserver(Handler handler) {
+    		super(handler);
+    	}
+
+        @Override
+        public void onChange(boolean selfChange){
+        	
+            mCustomCarrierText = (String) Settings.System.getString(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_CUSTOM_TEXT);
+            
+            UpdateCarrierLabel();
+        }
+    }    
+    
+ 
 
     public CarrierLabel(Context context) {
         this(context, null);
@@ -95,7 +162,18 @@ public class CarrierLabel extends TextView {
             
             
             getContext().getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_SHOW), true, mCarrierObserver);
+                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_SHOW), true, mShowCarrierObserver);
+            
+            getContext().getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_COLOR), true, mCarrierColorObserver);
+            
+            getContext().getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_CUSTOM), true, mCustomCarrierObserver);
+            
+            getContext().getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_CUSTOM_TEXT), true, mCustomCarrierTextObserver);
+            
+            
             
             try {
 				mShowCarrier = (Boolean)(Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_SHOW) == 1);
@@ -103,6 +181,20 @@ public class CarrierLabel extends TextView {
 				e.printStackTrace();
 			}
 
+            try {
+				mCarrierColor = (Integer) Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_COLOR);
+			} catch (SettingNotFoundException e) {
+				e.printStackTrace();
+			}
+            
+            try {
+				mCustomCarrier = (Boolean) (Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_CUSTOM) == 1);
+			} catch (SettingNotFoundException e) {
+				e.printStackTrace();
+			}
+            
+            mCustomCarrierText = (String)Settings.System.getString(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_CUSTOM_TEXT);
+            
             UpdateCarrierLabel();
     		
             IntentFilter filter = new IntentFilter();
@@ -164,6 +256,12 @@ public class CarrierLabel extends TextView {
         } else {
         	setVisibility(View.GONE);
         }
+        
+        setTextColor(mCarrierColor);
+        
+        if (mCustomCarrier) setText(mCustomCarrierText);
+        	
+        
     	
     }
     
