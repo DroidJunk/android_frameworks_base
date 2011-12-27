@@ -30,6 +30,8 @@ import android.util.Slog;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.internal.telephony.Phone;
+
 
 
 
@@ -44,6 +46,7 @@ public class CarrierLabel extends TextView {
     private int mCarrierColor = 0xff33b5e5;
     private boolean mCustomCarrier = true;
     private String mCustomCarrierText = "Tranquil Ice";
+    private String mDefaultCarrierText = "";
     
     
     
@@ -247,9 +250,11 @@ public class CarrierLabel extends TextView {
         } else {
             setText(com.android.internal.R.string.lockscreen_carrier_default);
         }
+        mDefaultCarrierText = (String) getText();
         UpdateCarrierLabel();
     }
 
+    
     
     void UpdateCarrierLabel(){
         if (mShowCarrier) {
@@ -260,7 +265,11 @@ public class CarrierLabel extends TextView {
         
         setTextColor(mCarrierColor);
         
-        if (mCustomCarrier) setText(mCustomCarrierText);
+        if (mCustomCarrier) {
+        	setText(mCustomCarrierText);
+        } else {
+        	setText(mDefaultCarrierText);
+        }
         	
         
     	
