@@ -66,18 +66,18 @@ public class TranqSoundButton extends TranqToggleButton {
 	void updateResources() {
 
 		if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_NORMAL) {
-			mIndicator.setBackgroundColor(0xffc0ff00);
+			mIndicator.setBackgroundColor(0xffffbb33);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_on);
-			setTextColor(0xffc0ff00);
+			setTextColor(0xff00ddff);
 			} else 
 				if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_VIBRATE) {
-				mIndicator.setBackgroundColor(0xffc0ff00);
+				mIndicator.setBackgroundColor(0xffe09400);
 				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off_vibrate);
-				setTextColor(0xffc0ff00);
+				setTextColor(0xffffbb33);
 				
 			} else {
 				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off);
-				mIndicator.setBackgroundColor(0xff959595);
+				mIndicator.setBackgroundColor(0xff292929);
 				setTextColor(0xffffffff);
 		}
 	}

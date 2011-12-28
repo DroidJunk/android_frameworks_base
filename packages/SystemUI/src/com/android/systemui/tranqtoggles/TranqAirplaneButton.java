@@ -63,14 +63,14 @@ public class TranqAirplaneButton extends TranqToggleButton {
 	void updateResources() {
 
 		if (Settings.System.getInt(getContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
-			mIndicator.setBackgroundColor(0xffc0ff00);
+			mIndicator.setBackgroundColor(0xffffbb33);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_on);
-			setTextColor(0xffc0ff00);
+			setTextColor(0xffffbb33);
 			mState = true;
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_off);
-			mIndicator.setBackgroundColor(0xff959595);
+			mIndicator.setBackgroundColor(0xff292929);
 			setTextColor(0xffffffff);
 			mState = false;
 		}
