@@ -68,13 +68,13 @@ public class TranqSyncButton extends TranqToggleButton {
 	void updateResources() {
 		
 		if (ContentResolver.getMasterSyncAutomatically()) {
-			mIndicator.setBackgroundColor(0xffc0ff00);
+			mIndicator.setBackgroundColor(0xffffbb33);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_on);
-			setTextColor(0xffc0ff00);
+			setTextColor(0xffffbb33);
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_off);
-			mIndicator.setBackgroundColor(0xff959595);
+			mIndicator.setBackgroundColor(0xff000000);
 			setTextColor(0xffffffff);
 		}
 	}
@@ -103,7 +103,7 @@ public class TranqSyncButton extends TranqToggleButton {
 	    Intent i = new Intent();
 	    i.setAction("android.intent.action.CLOSE_SYSTEM_DIALOGS");
 	    getContext().sendBroadcast(i);
-	    i.setAction("android.settings.SYNC_SETTINGS");
+	    i.setAction("android.settings.SETTINGS");
         i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(i);
 	}

@@ -66,13 +66,13 @@ public class TranqBluetoothButton extends TranqToggleButton {
 	void updateResources() {
 
 		if (mBluetoothAdaper.isEnabled()) {
-			mIndicator.setBackgroundColor(0xffc0ff00);
+			mIndicator.setBackgroundColor(0xffffbb33);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_bluetooth_on);
-			setTextColor(0xffc0ff00);
+			setTextColor(0xffffbb33);
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_bluetooth_off);
-			mIndicator.setBackgroundColor(0xff959595);
+			mIndicator.setBackgroundColor(0xff000000);
 			setTextColor(0xffffffff);
 		}
 	}

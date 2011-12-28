@@ -11,18 +11,21 @@ import android.view.View;
 import android.net.wifi.WifiManager;
 
 
-
 public class TranqWifiButton extends TranqToggleButton {
 	
 	private View mIndicator;
 	private View mIcon;
 	private WifiManager mWifiManager; 
 	private BroadcastReceiver mBroadcastReciver;
+	private Context mContext; 
 	
 
 
 	public TranqWifiButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		// TODO Auto-generated constructor stub
+		
+		mContext = context;
 		
 		mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		
@@ -46,13 +49,13 @@ public class TranqWifiButton extends TranqToggleButton {
             }
         };
 
-        getContext().registerReceiver(mBroadcastReciver, mFilter);
+        mContext.registerReceiver(mBroadcastReciver, mFilter);
 		updateResources();
 	}
 
 	
 	protected void onDetachedFromWindow(){
-		getContext().unregisterReceiver(mBroadcastReciver);
+		mContext.unregisterReceiver(mBroadcastReciver);
 	}
 
 
@@ -65,13 +68,13 @@ public class TranqWifiButton extends TranqToggleButton {
 	void updateResources() {
 
 		if (mWifiManager.isWifiEnabled()) {
-			mIndicator.setBackgroundColor(0xffc0ff00);
+			mIndicator.setBackgroundColor(0xffffbb33);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_on);
-			setTextColor(0xffc0ff00);
+			setTextColor(0xffffbb33);
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_off);
-			mIndicator.setBackgroundColor(0xff959595);
+			mIndicator.setBackgroundColor(0xff000000);
 			setTextColor(0xffffffff);
 		}
 	}
@@ -99,10 +102,10 @@ public class TranqWifiButton extends TranqToggleButton {
 
 	    Intent i = new Intent();
 	    i.setAction("android.intent.action.CLOSE_SYSTEM_DIALOGS");
-	    getContext().sendBroadcast(i);
+	    mContext.sendBroadcast(i);
 	    i.setAction("android.settings.WIFI_SETTINGS");
         i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(i);
+        mContext.startActivity(i);
 	}
 
 
