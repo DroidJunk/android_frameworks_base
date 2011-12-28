@@ -69,6 +69,11 @@ public class NavigationBarView extends LinearLayout {
     public View getMenuButton() {
         return mCurrentView.findViewById(R.id.menu);
     }
+    
+    public View getMenuButton1() {
+        return mCurrentView.findViewById(R.id.menu1);
+       
+    }
 
     public View getBackButton() {
         return mCurrentView.findViewById(R.id.back);
@@ -140,6 +145,7 @@ public class NavigationBarView extends LinearLayout {
         mShowMenu = show;
 
         getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.INVISIBLE);
+        getMenuButton1().setVisibility(mShowMenu ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setLowProfile(final boolean lightsOut) {
@@ -298,6 +304,7 @@ public class NavigationBarView extends LinearLayout {
         final View home = getHomeButton();
         final View recent = getRecentsButton();
         final View menu = getMenuButton();
+        final View menu1 = getMenuButton1();
 
         pw.println("      back: "
                 + PhoneStatusBar.viewInfo(back)
@@ -314,6 +321,10 @@ public class NavigationBarView extends LinearLayout {
         pw.println("      menu: "
                 + PhoneStatusBar.viewInfo(menu)
                 + " " + visibilityToString(menu.getVisibility())
+                );
+        pw.println("      menu: "
+                + PhoneStatusBar.viewInfo(menu1)
+                + " " + visibilityToString(menu1.getVisibility())
                 );
         pw.println("    }");
     }
