@@ -75,7 +75,7 @@ public class TranqWifiButton extends TranqToggleButton {
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_off);
 			mIndicator.setBackgroundColor(0xff292929);
-			setTextColor(0xffffffff);
+			setTextColor(0xff8f8f8f);
 		}
 	}
 

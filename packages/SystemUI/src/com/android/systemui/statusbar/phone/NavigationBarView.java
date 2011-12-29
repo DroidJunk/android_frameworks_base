@@ -73,7 +73,7 @@ public class NavigationBarView extends LinearLayout {
     public View getMenuButton1() {
         return mCurrentView.findViewById(R.id.menu1);
        
-    }
+   }
 
     public View getBackButton() {
         return mCurrentView.findViewById(R.id.back);
@@ -278,7 +278,7 @@ public class NavigationBarView extends LinearLayout {
         final Rect r = new Rect();
 
         pw.println(String.format("      this: " + PhoneStatusBar.viewInfo(this)
-                        + " " + visibilityToString(getVisibility())));
+                + " " + visibilityToString(getVisibility())));
 
         getWindowVisibleDisplayFrame(r);
         final boolean offscreen = r.right > mDisplay.getRawWidth()
