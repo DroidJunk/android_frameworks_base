@@ -229,7 +229,18 @@
                 android:layout_weight="0"
                 android:contentDescription="@string/accessibility_back"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
+                />                
+            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/menu1"
+                android:layout_height="40dp"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_sysbar_menu_land"
+                systemui:keyCode="82"
+                android:layout_weight="0"
+                android:visibility="invisible"
+                android:contentDescription="@string/accessibility_menu"
+                systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
                 />
+
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/menu1"
                 android:layout_height="40dp"
                 android:layout_width="match_parent"

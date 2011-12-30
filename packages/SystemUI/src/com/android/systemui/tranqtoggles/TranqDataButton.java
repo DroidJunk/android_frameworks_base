@@ -101,8 +101,9 @@ public class TranqDataButton extends TranqToggleButton {
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_off);
-			mIndicator.setBackgroundColor(0xff292929);
-			setTextColor(0xff8f8f8f);
+			mIndicator.setBackgroundColor(0xff000000);
+			setTextColor(0xffffffff);
+
 		}
 	}
 
