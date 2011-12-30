@@ -13,8 +13,8 @@ public abstract class TranqToggleButton extends TextView {
 
 	public TranqToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		
+		setBackgroundColor(0x0272727);
 		
 		setOnClickListener(new OnClickListener() { 
 			public void onClick (View v){

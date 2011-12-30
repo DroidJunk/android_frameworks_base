@@ -35,6 +35,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_5);
 		mIcon = (View) getRootView().findViewById(R.id.airplane_icon);	
 		
+		
 	    final IntentFilter mFilter = new IntentFilter();
 	    mFilter.addAction("android.intent.action.AIRPLANE_MODE");
 	    mBroadcastReciver = new BroadcastReceiver() {
@@ -61,7 +62,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
-
+		
 		if (Settings.System.getInt(getContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
 			mIndicator.setBackgroundColor(0xffffbb33);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_on);
@@ -71,8 +72,8 @@ public class TranqAirplaneButton extends TranqToggleButton {
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_off);
 
-			mIndicator.setBackgroundColor(0xff000000);
-			setTextColor(0xffffffff);
+			mIndicator.setBackgroundColor(0xffba7b00);
+			setTextColor(0xffba7b00);
 			mState = false;
 		}
 		

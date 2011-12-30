@@ -94,10 +94,6 @@ public class TranqRotateButton extends TranqToggleButton {
 	@Override
 	void updateResources() {
 
-		
-		
-		
-		
 	    boolean rotateStatus = true;
 		try {
 			rotateStatus = (Settings.System.getInt(getContext().getContentResolver(), Settings.System.ACCELEROMETER_ROTATION) == 1);
@@ -111,8 +107,8 @@ public class TranqRotateButton extends TranqToggleButton {
 			setTextColor(0xffffbb33);
 	      }else{
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_rotate_off);
-			mIndicator.setBackgroundColor(0xff000000);
-			setTextColor(0xffffffff);
+			mIndicator.setBackgroundColor(0xff795000);
+			setTextColor(0xff795000);
 	      }
 	}
 

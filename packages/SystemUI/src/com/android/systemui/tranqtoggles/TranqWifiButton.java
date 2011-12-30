@@ -23,7 +23,6 @@ public class TranqWifiButton extends TranqToggleButton {
 
 	public TranqWifiButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		
 		mContext = context;
 		
@@ -66,7 +65,7 @@ public class TranqWifiButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
-
+		
 		if (mWifiManager.isWifiEnabled()) {
 			mIndicator.setBackgroundColor(0xffffbb33);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_on);
@@ -74,8 +73,8 @@ public class TranqWifiButton extends TranqToggleButton {
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_off);
-			mIndicator.setBackgroundColor(0xff000000);
-			setTextColor(0xffffffff);
+			mIndicator.setBackgroundColor(0xff795000);
+			setTextColor(0xff795000);
 		}
 	}
 

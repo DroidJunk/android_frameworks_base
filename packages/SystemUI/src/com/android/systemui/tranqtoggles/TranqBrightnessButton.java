@@ -93,7 +93,7 @@ public class TranqBrightnessButton extends TranqToggleButton {
 	
 	@Override
 	void updateResources() {
-
+		
 	    boolean autoBrightnessStatus = true;
 		try {
 			autoBrightnessStatus = (Settings.System.getInt(getContext().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == 1);
@@ -108,8 +108,8 @@ public class TranqBrightnessButton extends TranqToggleButton {
 	      }else{
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_brightness_off);
 
-			mIndicator.setBackgroundColor(0xff000000);
-			setTextColor(0xffffffff);
+			mIndicator.setBackgroundColor(0xff795000);
+			setTextColor(0xff795000);
 
 	      }
 	}

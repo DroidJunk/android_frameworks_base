@@ -89,8 +89,8 @@ public class TranqGpsButton extends TranqToggleButton {
 			setTextColor(0xffffbb33);
 	    }else{
 	    	mIcon.setBackgroundResource(R.drawable.tranqtoggle_gps_off);
-			mIndicator.setBackgroundColor(0xff000000);
-			setTextColor(0xffffffff);
+			mIndicator.setBackgroundColor(0xff795000);
+			setTextColor(0xff795000);
 
 	    }
 	}

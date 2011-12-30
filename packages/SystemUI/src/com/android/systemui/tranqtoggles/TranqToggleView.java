@@ -11,8 +11,8 @@ public class TranqToggleView extends RelativeLayout {
 
 	public TranqToggleView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub\\
 		
+		setBackgroundColor(0x0272727);
 
 	}
 

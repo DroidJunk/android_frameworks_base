@@ -74,8 +74,8 @@ public class TranqSyncButton extends TranqToggleButton {
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_off);
-			mIndicator.setBackgroundColor(0xff000000);
-			setTextColor(0xffffffff);
+			mIndicator.setBackgroundColor(0xff795000);
+			setTextColor(0xff795000);
 		}
 	}
 

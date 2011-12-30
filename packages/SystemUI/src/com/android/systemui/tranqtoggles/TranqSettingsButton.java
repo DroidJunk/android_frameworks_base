@@ -39,6 +39,8 @@ public class TranqSettingsButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 		
+		setTextColor(0xffffbb33);
+		
 	}
 
 	

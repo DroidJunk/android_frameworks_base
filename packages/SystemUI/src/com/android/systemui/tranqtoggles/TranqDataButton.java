@@ -93,7 +93,6 @@ public class TranqDataButton extends TranqToggleButton {
 	@Override
 	void updateResources() {
 
-		
 		if (mConnectivityManager.getActiveNetworkInfo() == null) {
 			mIndicator.setBackgroundColor(0xffffbb33);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_on);
@@ -101,8 +100,8 @@ public class TranqDataButton extends TranqToggleButton {
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_off);
-			mIndicator.setBackgroundColor(0xff000000);
-			setTextColor(0xffffffff);
+			mIndicator.setBackgroundColor(0xff795000);
+			setTextColor(0xff795000);
 
 		}
 	}
