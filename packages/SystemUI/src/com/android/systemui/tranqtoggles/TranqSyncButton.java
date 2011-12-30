@@ -103,7 +103,7 @@ public class TranqSyncButton extends TranqToggleButton {
 	    Intent i = new Intent();
 	    i.setAction("android.intent.action.CLOSE_SYSTEM_DIALOGS");
 	    getContext().sendBroadcast(i);
-	    i.setAction("android.settings.SETTINGS");
+	    i.setAction("android.settings.AccountSyncSettingsActivity");
         i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(i);
 	}
