@@ -20,19 +20,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.ContentObserver;
-import android.os.Handler;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.provider.Telephony;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
 import android.widget.TextView;
-
-import com.android.internal.telephony.Phone;
-
-
 
 
 
@@ -41,108 +38,19 @@ import com.android.internal.telephony.Phone;
  * minutes.
  */
 public class CarrierLabel extends TextView {
+	
+	private final String Tranq_Settings = "TRANQ_SETTINGS";
     private boolean mAttached;
+	private SharedPreferences mPrefs;
     private boolean mShowCarrier = true;
     private int mCarrierColor = 0xff33b5e5;
     private boolean mCustomCarrier = true;
     private String mCustomCarrierText = "Tranquil Ice";
+    private int mCarrierSize = 15;
     private String mDefaultCarrierText = "";
     
-    
-    
-    Handler mHandler = new Handler();
-    final ShowCarrierObserver mShowCarrierObserver = new ShowCarrierObserver(mHandler);
-    final CarrierColorObserver mCarrierColorObserver = new CarrierColorObserver(mHandler);
-    final CustomCarrierObserver mCustomCarrierObserver = new CustomCarrierObserver(mHandler) ;
-    final CustomCarrierTextObserver mCustomCarrierTextObserver = new CustomCarrierTextObserver(mHandler) ;
 
-
-    // ShowCarrier settings observer
-    class ShowCarrierObserver extends ContentObserver{
-    	
-    	public ShowCarrierObserver(Handler handler) {
-    		super(handler);
-    	}
-
- 
-        @Override
-        public void onChange(boolean selfChange){
-        	
-            try {
-				mShowCarrier = (Boolean)(Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_SHOW) == 1);
-			} catch (SettingNotFoundException e) {
-				e.printStackTrace();
-			}
-            
-            UpdateCarrierLabel();
-        }
-    }
     
-    
-    
-    
-    // CarrierColor settings observer
-    class CarrierColorObserver extends ContentObserver{
-    	
-    	public CarrierColorObserver(Handler handler) {
-    		super(handler);
-    	}
-
-        @Override
-        public void onChange(boolean selfChange){
-        	
-            try {
-				mCarrierColor = (Integer) Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_COLOR);
-			} catch (SettingNotFoundException e) {
-				e.printStackTrace();
-			}
-            
-            UpdateCarrierLabel();
-        }
-    }
-    
-  
-    
-    // CarrierCustom settings observer
-    class CustomCarrierObserver extends ContentObserver{
-    	
-    	public CustomCarrierObserver(Handler handler) {
-    		super(handler);
-    	}
-
-        @Override
-        public void onChange(boolean selfChange){
-        	
-            try {
-				mCustomCarrier = (Boolean)(Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_CUSTOM) == 1);
-			} catch (SettingNotFoundException e) {
-				e.printStackTrace();
-			}
-            
-            UpdateCarrierLabel();
-        }
-    }    
-    
-   
-    
-    
-    // CarrierCustomText settings observer
-    class CustomCarrierTextObserver extends ContentObserver{
-    	
-    	public CustomCarrierTextObserver(Handler handler) {
-    		super(handler);
-    	}
-
-        @Override
-        public void onChange(boolean selfChange){
-        	
-            mCustomCarrierText = (String) Settings.System.getString(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_CUSTOM_TEXT);
-            
-            UpdateCarrierLabel();
-        }
-    }    
-    
- 
 
     public CarrierLabel(Context context) {
         this(context, null);
@@ -164,45 +72,27 @@ public class CarrierLabel extends TextView {
         if (!mAttached) {
             mAttached = true;
             
-            
-            getContext().getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_SHOW), true, mShowCarrierObserver);
-            
-            getContext().getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_COLOR), true, mCarrierColorObserver);
-            
-            getContext().getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_CUSTOM), true, mCustomCarrierObserver);
-            
-            getContext().getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_CARRIER_CUSTOM_TEXT), true, mCustomCarrierTextObserver);
-            
-            
-            
-            try {
-				mShowCarrier = (Boolean)(Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_SHOW) == 1);
-			} catch (SettingNotFoundException e) {
+      		Context settingsContext = getContext();
+			try {
+				settingsContext = getContext().createPackageContext("com.android.settings",0);
+			} catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-            try {
-				mCarrierColor = (Integer) Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_COLOR);
-			} catch (SettingNotFoundException e) {
-				e.printStackTrace();
-			}
-            
-            try {
-				mCustomCarrier = (Boolean) (Settings.System.getInt(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_CUSTOM) == 1);
-			} catch (SettingNotFoundException e) {
-				e.printStackTrace();
-			}
-            
-            mCustomCarrierText = (String)Settings.System.getString(getContext().getContentResolver(), Settings.System.STATUSBAR_CARRIER_CUSTOM_TEXT);
-            
-            UpdateCarrierLabel();
+     		
+			mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+     		
+     		mShowCarrier = mPrefs.getBoolean("show_carrier", true);
+    		mCarrierColor = mPrefs.getInt("carrier_color", 0xff33b5e5);
+    		mCustomCarrier = mPrefs.getBoolean("carrier_custom", true);
+    		mCustomCarrierText = mPrefs.getString("carrier_custom_text", "Tranquil Ice");
+    		mCarrierSize = mPrefs.getInt("carrier_size", 15);
+    		
+            updateCarrierLabel();
     		
             IntentFilter filter = new IntentFilter();
             filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
+            filter.addAction(Tranq_Settings);
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
     }
@@ -226,6 +116,16 @@ public class CarrierLabel extends TextView {
                         intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
                         intent.getStringExtra(Telephony.Intents.EXTRA_PLMN));
             }
+            
+            if (action.equals("TRANQ_SETTINGS")) {
+             	mShowCarrier = intent.getBooleanExtra("ShowCarrier", mShowCarrier);
+            	mCustomCarrier = intent.getBooleanExtra("CustomCarrier", mCustomCarrier);
+            	mCarrierColor = intent.getIntExtra("CarrierColor", mCarrierColor);	
+            	if (intent.getStringExtra("CustomCarrierText") != null) mCustomCarrierText	= intent.getStringExtra("CustomCarrierText");
+            	mCarrierSize = intent.getIntExtra("CarrierSize", mCarrierSize);
+            	updateCarrierLabel();
+            }
+             
         }
     };
 
@@ -248,17 +148,19 @@ public class CarrierLabel extends TextView {
         if (something) {
             setText(str.toString());
         } else {
-            setText(com.android.internal.R.string.lockscreen_carrier_default);
+        	setText(com.android.internal.R.string.lockscreen_carrier_default);
         }
         mDefaultCarrierText = (String) getText();
-        UpdateCarrierLabel();
+        updateCarrierLabel();
     }
 
     
     
-    void UpdateCarrierLabel(){
+    void updateCarrierLabel(){
+    	
         if (mShowCarrier) {
         	setVisibility(View.VISIBLE);
+              
         } else {
         	setVisibility(View.GONE);
         }
@@ -270,9 +172,9 @@ public class CarrierLabel extends TextView {
         } else {
         	setText(mDefaultCarrierText);
         }
-        	
         
-    	
+        setTextSize(mCarrierSize);
+     	
     }
     
     
