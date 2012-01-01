@@ -24,6 +24,7 @@ public class TranqDataButton extends TranqToggleButton {
 	
 	private View mIndicator;
 	private View mIcon;
+	private WifiManager mWifiManager; 
 	private Cursor dataCursor;
 	private ConnectivityManager mConnectivityManager; 
 	private BroadcastReceiver mBroadcastReciver;
@@ -32,7 +33,7 @@ public class TranqDataButton extends TranqToggleButton {
 	
 
 	
-	// Brightness settings observer
+	// Data Mode observer
 	class DataModeObserver extends ContentObserver{
 		
 		public DataModeObserver(Handler handler) {
@@ -53,6 +54,7 @@ public class TranqDataButton extends TranqToggleButton {
 	public TranqDataButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
+		mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		
 	}
@@ -110,16 +112,20 @@ public class TranqDataButton extends TranqToggleButton {
 	@Override
 	void toggleOn() {
 		
+		if (!mWifiManager.isWifiEnabled()) {
 		mConnectivityManager.setMobileDataEnabled(true);
 		updateResources();
+		}
 	}
 
 
 	@Override
 	void toggleOff() {
 		
+		if (!mWifiManager.isWifiEnabled()) {
 		mConnectivityManager.setMobileDataEnabled(false);
 		updateResources();
+		}
 	}
 
 
