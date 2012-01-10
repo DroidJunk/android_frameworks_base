@@ -105,7 +105,7 @@ public class Clock extends TextView {
      		mShowClock = mPrefs.getBoolean("show_clock", true);
      		mClockAmPm = mPrefs.getBoolean("clock_ampm", true);
     		mClockColor = mPrefs.getInt("clock_color", 0xff33b5e5);
-    		mClockSize = mPrefs.getInt("carrier_size", 15);
+    		mClockSize = mPrefs.getInt("clock_size", 15);
     		
             IntentFilter filter = new IntentFilter();
 

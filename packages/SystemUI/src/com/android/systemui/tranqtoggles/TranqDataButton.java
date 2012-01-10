@@ -66,7 +66,8 @@ public class TranqDataButton extends TranqToggleButton {
 		super.onAttachedToWindow();
 		
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_9);
-		mIcon = (View) getRootView().findViewById(R.id.data_icon);	
+		mIcon = (View) getRootView().findViewById(R.id.data_icon);
+
 		
  
 		dataCursor =  getContext().getContentResolver().query(Settings.Secure.CONTENT_URI, null,
@@ -96,16 +97,16 @@ public class TranqDataButton extends TranqToggleButton {
 	void updateResources() {
 
 		if (mConnectivityManager.getActiveNetworkInfo() == null) {
-			mIndicator.setBackgroundColor(0xffffbb33);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_on);
-			setTextColor(0xffffbb33);
+			setTextColor(TranqToggleView.mToggleTextOnColor);
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_off);
-			mIndicator.setBackgroundColor(0xff795000);
-			setTextColor(0xff795000);
-
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
+			setTextColor(TranqToggleView.mToggleTextOffColor);
 		}
+		
 	}
 
 

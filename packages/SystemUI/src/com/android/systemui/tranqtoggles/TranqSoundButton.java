@@ -18,6 +18,7 @@ public class TranqSoundButton extends TranqToggleButton {
 	
 	private View mIndicator;
 	private View mIcon;
+	private View mDivider;
 	private BroadcastReceiver mBroadcastReciver;
 	private AudioManager mAudioManager;	
 
@@ -37,6 +38,7 @@ public class TranqSoundButton extends TranqToggleButton {
 		
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_4);
 		mIcon = (View) getRootView().findViewById(R.id.sound_icon);	
+		mDivider = (View) getRootView().findViewById(R.id.divider_4);
 		
 	    final IntentFilter mFilter = new IntentFilter();
 	    mFilter.addAction("android.media.RINGER_MODE_CHANGED");
@@ -67,20 +69,22 @@ public class TranqSoundButton extends TranqToggleButton {
 		
 		if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_NORMAL) {
 
-			mIndicator.setBackgroundColor(0xffffbb33);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_on);
-			setTextColor(0xffffbb33);
+			setTextColor(TranqToggleView.mToggleTextOnColor);
 			} else 
 				if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_VIBRATE) {
-				mIndicator.setBackgroundColor(0xff795000);
+				mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
 				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off_vibrate);
-				setTextColor(0xff795000);
+				setTextColor(TranqToggleView.mToggleTextOffColor);
 				
 			} else {
 				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off);
-				mIndicator.setBackgroundColor(0xff795000);
-				setTextColor(0xff795000);
+				mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
+				setTextColor(TranqToggleView.mToggleTextOffColor);
 		}
+		
+		mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
 	}
 
 

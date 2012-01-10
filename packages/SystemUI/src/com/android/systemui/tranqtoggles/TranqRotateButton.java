@@ -25,6 +25,7 @@ public class TranqRotateButton extends TranqToggleButton {
 	
 	private View mIndicator;
 	private View mIcon;
+	private View mDivider;
 	private Context mContext; 
 	Handler mHandler = new Handler();
 	final RotateModeObserver mRotateModeObserver = new RotateModeObserver(mHandler) ;
@@ -60,6 +61,7 @@ public class TranqRotateButton extends TranqToggleButton {
 		
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_7);
 		mIcon = (View) getRootView().findViewById(R.id.rotate_icon);	
+		mDivider = (View) getRootView().findViewById(R.id.divider_7);
 		
         getContext().getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION), true,
@@ -102,14 +104,16 @@ public class TranqRotateButton extends TranqToggleButton {
 		}
 		
 	    if(rotateStatus){
-			mIndicator.setBackgroundColor(0xffffbb33);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_rotate_on);
-			setTextColor(0xffffbb33);
+			setTextColor(TranqToggleView.mToggleTextOnColor);
 	      }else{
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_rotate_off);
-			mIndicator.setBackgroundColor(0xff795000);
-			setTextColor(0xff795000);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
+			setTextColor(TranqToggleView.mToggleTextOffColor);
 	      }
+		  
+		  mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
 	}
 
 

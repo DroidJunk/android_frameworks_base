@@ -16,6 +16,7 @@ public class TranqSyncButton extends TranqToggleButton {
 	
 	private View mIndicator;
 	private View mIcon;
+	private View mDivider;
 	private BroadcastReceiver mBroadcastReciver;
 	
 
@@ -36,6 +37,7 @@ public class TranqSyncButton extends TranqToggleButton {
 		
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_8);
 		mIcon = (View) getRootView().findViewById(R.id.sync_icon);	
+		mDivider = (View) getRootView().findViewById(R.id.divider_8);
 		
 		
 		
@@ -68,15 +70,17 @@ public class TranqSyncButton extends TranqToggleButton {
 	void updateResources() {
 		
 		if (ContentResolver.getMasterSyncAutomatically()) {
-			mIndicator.setBackgroundColor(0xffffbb33);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_on);
-			setTextColor(0xffffbb33);
+			setTextColor(TranqToggleView.mToggleTextOnColor);
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_off);
-			mIndicator.setBackgroundColor(0xff795000);
-			setTextColor(0xff795000);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
+			setTextColor(TranqToggleView.mToggleTextOffColor);
 		}
+		
+		mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
 	}
 
 

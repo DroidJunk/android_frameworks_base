@@ -20,6 +20,7 @@ public class TranqGpsButton extends TranqToggleButton {
 	
 	private View mIndicator;
 	private View mIcon;
+	private View mDivider;
 	private Cursor gpsCursor;
 	Handler mHandler = new Handler();
 	final GpsObserver mGpsObserver = new GpsObserver(mHandler) ;
@@ -53,6 +54,7 @@ public class TranqGpsButton extends TranqToggleButton {
 		
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_2);
 		mIcon = (View) getRootView().findViewById(R.id.gps_icon);	
+		mDivider = (View) getRootView().findViewById(R.id.divider_2);
 
         gpsCursor = getContext().getContentResolver().query(Settings.Secure.CONTENT_URI, null,
                 "(" + Settings.System.NAME + "=?)",
@@ -84,15 +86,17 @@ public class TranqGpsButton extends TranqToggleButton {
 		ContentResolver contentResolver = getContext().getContentResolver();
 	    boolean gpsStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.GPS_PROVIDER);
 	    if(gpsStatus){
-			mIndicator.setBackgroundColor(0xffffbb33);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_gps_on);
-			setTextColor(0xffffbb33);
+			setTextColor(TranqToggleView.mToggleTextOnColor);
 	    }else{
 	    	mIcon.setBackgroundResource(R.drawable.tranqtoggle_gps_off);
-			mIndicator.setBackgroundColor(0xff795000);
-			setTextColor(0xff795000);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
+			setTextColor(TranqToggleView.mToggleTextOffColor);
 
 	    }
+		
+		mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
 	}
 
 

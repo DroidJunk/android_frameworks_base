@@ -25,6 +25,7 @@ public class TranqBrightnessButton extends TranqToggleButton {
 	
 	private View mIndicator;
 	private View mIcon;
+	private View mDivider;
 	private Context mContext; 
 	Handler mHandler = new Handler();
 	final BrightnessModeObserver mBrightnessModeObserver = new BrightnessModeObserver(mHandler) ;
@@ -59,7 +60,8 @@ public class TranqBrightnessButton extends TranqToggleButton {
 		super.onAttachedToWindow();
 		
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_6);
-		mIcon = (View) getRootView().findViewById(R.id.brightness_icon);	
+		mIcon = (View) getRootView().findViewById(R.id.brightness_icon);
+		mDivider = (View) getRootView().findViewById(R.id.divider_6);		
 		
         getContext().getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE), true,
@@ -102,16 +104,18 @@ public class TranqBrightnessButton extends TranqToggleButton {
 		}
 		
 	    if(autoBrightnessStatus){
-			mIndicator.setBackgroundColor(0xffffbb33);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_brightness_on);
-			setTextColor(0xffffbb33);
+			setTextColor(TranqToggleView.mToggleTextOnColor);
 	      }else{
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_brightness_off);
 
-			mIndicator.setBackgroundColor(0xff795000);
-			setTextColor(0xff795000);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
+			setTextColor(TranqToggleView.mToggleTextOffColor);
 
 	      }
+		  
+		  mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
 	}
 
 
