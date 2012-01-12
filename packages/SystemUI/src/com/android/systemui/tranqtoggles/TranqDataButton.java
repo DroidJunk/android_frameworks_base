@@ -16,6 +16,8 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
+import android.os.INetworkManagementService;
+import android.os.ServiceManager;
 import android.provider.Settings;
 
 
@@ -27,9 +29,25 @@ public class TranqDataButton extends TranqToggleButton {
 	private WifiManager mWifiManager; 
 	private Cursor dataCursor;
 	private ConnectivityManager mConnectivityManager; 
-	private BroadcastReceiver mBroadcastReciver;
 	Handler mHandler = new Handler();
 	final DataModeObserver mDataModeObserver = new DataModeObserver(mHandler) ;
+
+	
+
+	
+	// Rotate settings observer
+	class RotateModeObserver extends ContentObserver{
+		
+		public RotateModeObserver(Handler handler) {
+			super(handler);
+		}
+
+	    @Override
+	    public void onChange(boolean selfChange){
+
+	    	updateResources();
+	    }
+	}	
 	
 
 	
@@ -57,8 +75,10 @@ public class TranqDataButton extends TranqToggleButton {
 		mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		
+		
 	}
 
+	
 	
 	
 	
@@ -68,7 +88,6 @@ public class TranqDataButton extends TranqToggleButton {
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_9);
 		mIcon = (View) getRootView().findViewById(R.id.data_icon);
 
-		
  
 		dataCursor =  getContext().getContentResolver().query(Settings.Secure.CONTENT_URI, null,
                 "(" + Settings.System.NAME + "=?)",
@@ -89,14 +108,13 @@ public class TranqDataButton extends TranqToggleButton {
 	@Override
 	protected boolean getStatusOn(){
 		
-		return mConnectivityManager.getActiveNetworkInfo() != null;
-		
+		return mConnectivityManager.getMobileDataEnabled();
 	}
 
 	@Override
 	void updateResources() {
-
-		if (mConnectivityManager.getActiveNetworkInfo() == null) {
+		
+		if (mConnectivityManager.getMobileDataEnabled()) {
 			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_on);
 			setTextColor(TranqToggleView.mToggleTextOnColor);
@@ -113,20 +131,19 @@ public class TranqDataButton extends TranqToggleButton {
 	@Override
 	void toggleOn() {
 		
-		if (!mWifiManager.isWifiEnabled()) {
 		mConnectivityManager.setMobileDataEnabled(true);
 		updateResources();
-		}
+		
 	}
 
 
 	@Override
 	void toggleOff() {
 		
-		if (!mWifiManager.isWifiEnabled()) {
+		
 		mConnectivityManager.setMobileDataEnabled(false);
 		updateResources();
-		}
+	
 	}
 
 
