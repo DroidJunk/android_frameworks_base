@@ -7,9 +7,16 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SyncStatusObserver;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import com.android.systemui.R;
+import com.android.systemui.tranqtoggles.TranqGpsButton.GpsObserver;
 
 
 public class TranqSyncButton extends TranqToggleButton {
@@ -18,16 +25,35 @@ public class TranqSyncButton extends TranqToggleButton {
 	private View mIcon;
 	private View mDivider;
 	private BroadcastReceiver mBroadcastReciver;
+	private Cursor syncCursor;
+	Handler mHandler = new Handler();
+
 	
+	
+	private SyncStatusObserver syncStatusObserver = new SyncStatusObserver() {
 
+	    @Override
+	    public void onStatusChanged(int which) {
+            mHandler.post(new Runnable() {
+                public void run() {
+                	updateResources();;
+                }
+            });
+	    	
+	    	
+	    }
+	};
 
+	
+	
+	
+	
 	public TranqSyncButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
 
-
-		
 	}
+	
+	
 
 	
 	
@@ -39,29 +65,22 @@ public class TranqSyncButton extends TranqToggleButton {
 		mIcon = (View) getRootView().findViewById(R.id.sync_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_8);
 		
+		ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS , syncStatusObserver);
 		
-		
-	    final IntentFilter mFilter = new IntentFilter();
-	    mFilter.addAction(Intent.ACTION_SYNC_STATE_CHANGED);
-	    mBroadcastReciver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-            	updateResources();
-            }
-        };
-
-        getContext().registerReceiver(mBroadcastReciver, mFilter);
 		updateResources();
 	}
 
 	
 	protected void onDetachedFromWindow(){
-		getContext().unregisterReceiver(mBroadcastReciver);
+		
+		ContentResolver.removeStatusChangeListener(syncStatusObserver);
+		
 	}
 
 
 	@Override
 	protected boolean getStatusOn(){
+
 		return ContentResolver.getMasterSyncAutomatically();
 
 	}
@@ -69,9 +88,10 @@ public class TranqSyncButton extends TranqToggleButton {
 	@Override
 	void updateResources() {
 		
+		
 		if (ContentResolver.getMasterSyncAutomatically()) {
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_on);
+			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
 			setTextColor(TranqToggleView.mToggleTextOnColor);
 			
 		} else {
@@ -87,15 +107,16 @@ public class TranqSyncButton extends TranqToggleButton {
 
 	@Override
 	void toggleOn() {
-		
+
 		ContentResolver.setMasterSyncAutomatically(true);
 		updateResources();
+		
 	}
 
 
 	@Override
 	void toggleOff() {
-		
+
 		ContentResolver.setMasterSyncAutomatically(false);
 		updateResources();
 	}
@@ -107,7 +128,7 @@ public class TranqSyncButton extends TranqToggleButton {
 	    Intent i = new Intent();
 	    i.setAction("android.intent.action.CLOSE_SYSTEM_DIALOGS");
 	    getContext().sendBroadcast(i);
-	    i.setAction("android.settings.AccountSyncSettingsActivity");
+	    i.setAction("android.settings.SYNC_SETTINGS");
         i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(i);
 	}
