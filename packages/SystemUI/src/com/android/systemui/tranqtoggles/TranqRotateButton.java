@@ -32,7 +32,7 @@ public class TranqRotateButton extends TranqToggleButton {
 	
 
 	
-	// Brightness settings observer
+	// Rotate settings observer
 	class RotateModeObserver extends ContentObserver{
 		
 		public RotateModeObserver(Handler handler) {

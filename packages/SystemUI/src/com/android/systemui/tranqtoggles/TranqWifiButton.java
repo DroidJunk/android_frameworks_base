@@ -18,7 +18,6 @@ public class TranqWifiButton extends TranqToggleButton {
 	private View mDivider;
 	private WifiManager mWifiManager; 
 	private BroadcastReceiver mBroadcastReciver;
-	private Context mContext; 
 	
 
 
@@ -50,7 +49,7 @@ public class TranqWifiButton extends TranqToggleButton {
             }
         };
 
-        mContext.registerReceiver(mBroadcastReciver, mFilter);
+        getContext().registerReceiver(mBroadcastReciver, mFilter);
 		updateResources();
 	}
 
