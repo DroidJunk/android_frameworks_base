@@ -23,10 +23,7 @@ import android.provider.Settings;
 public class TranqSettingsButton extends TranqToggleButton {
 	
 
-	private View mIcon;
-	
 
-		
 
 	public TranqSettingsButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -39,6 +36,7 @@ public class TranqSettingsButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 		
+
 		setTextColor(0xffffbb33);
 		
 	}
@@ -59,9 +57,8 @@ public class TranqSettingsButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
-
-		
 	}
+		
 
 
 	@Override

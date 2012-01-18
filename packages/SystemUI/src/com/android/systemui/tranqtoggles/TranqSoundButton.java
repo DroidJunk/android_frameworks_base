@@ -69,22 +69,22 @@ public class TranqSoundButton extends TranqToggleButton {
 		
 		if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_NORMAL) {
 
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_on);
-			setTextColor(TranqToggleView.mToggleTextOnColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 			} else 
 				if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_VIBRATE) {
-				mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
+				mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off_vibrate);
-				setTextColor(TranqToggleView.mToggleTextOffColor);
+				setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 				
 			} else {
 				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off);
-				mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
-				setTextColor(TranqToggleView.mToggleTextOffColor);
+				mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
+				setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
 		
-		mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
+		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
 

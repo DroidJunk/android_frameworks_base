@@ -86,17 +86,17 @@ public class TranqGpsButton extends TranqToggleButton {
 		ContentResolver contentResolver = getContext().getContentResolver();
 	    boolean gpsStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.GPS_PROVIDER);
 	    if(gpsStatus){
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_gps_on);
-			setTextColor(TranqToggleView.mToggleTextOnColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	    }else{
 	    	mIcon.setBackgroundResource(R.drawable.tranqtoggle_gps_off);
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
-			setTextColor(TranqToggleView.mToggleTextOffColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 
 	    }
 		
-		mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
+		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
 

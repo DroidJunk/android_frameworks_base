@@ -115,14 +115,14 @@ public class TranqDataButton extends TranqToggleButton {
 	void updateResources() {
 		
 		if (mConnectivityManager.getMobileDataEnabled()) {
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_on);
-			setTextColor(TranqToggleView.mToggleTextOnColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_off);
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
-			setTextColor(TranqToggleView.mToggleTextOffColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
 		
 	}

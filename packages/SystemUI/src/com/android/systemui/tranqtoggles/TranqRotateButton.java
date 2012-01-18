@@ -104,16 +104,16 @@ public class TranqRotateButton extends TranqToggleButton {
 		}
 		
 	    if(rotateStatus){
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_rotate_on);
-			setTextColor(TranqToggleView.mToggleTextOnColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	      }else{
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_rotate_off);
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
-			setTextColor(TranqToggleView.mToggleTextOffColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 	      }
 		  
-		  mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
+		  mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
 

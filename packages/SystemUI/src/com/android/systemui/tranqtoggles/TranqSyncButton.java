@@ -91,16 +91,16 @@ public class TranqSyncButton extends TranqToggleButton {
 		
 		if (ContentResolver.getMasterSyncAutomatically()) {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_on);
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
-			setTextColor(TranqToggleView.mToggleTextOnColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_off);
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
-			setTextColor(TranqToggleView.mToggleTextOffColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
 		
-		mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
+		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
 

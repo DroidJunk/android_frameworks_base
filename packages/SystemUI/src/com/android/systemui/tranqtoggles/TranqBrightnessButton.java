@@ -104,18 +104,18 @@ public class TranqBrightnessButton extends TranqToggleButton {
 		}
 		
 	    if(autoBrightnessStatus){
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_brightness_on);
-			setTextColor(TranqToggleView.mToggleTextOnColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	      }else{
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_brightness_off);
 
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
-			setTextColor(TranqToggleView.mToggleTextOffColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 
 	      }
 		  
-		  mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
+		  mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
 

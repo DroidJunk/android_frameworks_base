@@ -29,6 +29,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 
@@ -54,6 +55,25 @@ public class CarrierLabel extends TextView {
 
     public CarrierLabel(Context context) {
         this(context, null);
+        
+        setClickable(true);
+        
+		setOnClickListener(new OnClickListener() { 
+			public void onClick (View v){
+	        	Intent i = new Intent();
+	        	i.setAction(Tranq_Settings );
+	       	   	i.putExtra("TogglesOn", true);
+	       	   	getContext().sendBroadcast(i);
+	       	   	i = null;
+	       	   	
+	        	i = new Intent();
+	            i.setAction(Tranq_Settings );
+	            i.putExtra("UpdateToggles", true);
+	            getContext().sendBroadcast(i);
+	            i = null;
+			}
+		}
+		);
     }
 
     public CarrierLabel(Context context, AttributeSet attrs) {

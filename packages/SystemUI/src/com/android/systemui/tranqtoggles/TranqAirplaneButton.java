@@ -67,20 +67,20 @@ public class TranqAirplaneButton extends TranqToggleButton {
 	void updateResources() {
 		
 		if (Settings.System.getInt(getContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOnColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_on);
-			setTextColor(TranqToggleView.mToggleTextOnColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 			mState = true;
 			
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_off);
 
-			mIndicator.setBackgroundColor(TranqToggleView.mToggleIndOffColor);
-			setTextColor(TranqToggleView.mToggleTextOffColor);
+			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
+			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 			mState = false;
 		}
 		
-		mDivider.setBackgroundColor(TranqToggleView.mToggleDivColor);
+		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 
 	}
 
