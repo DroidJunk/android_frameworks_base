@@ -26,6 +26,7 @@ import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.android.systemui.R;
@@ -42,7 +43,9 @@ public final class DateView extends TextView {
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
 	private SharedPreferences mPrefs;
     private int mDateColor = 0xff33b5e5;
-
+    
+    
+    
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -62,6 +65,23 @@ public final class DateView extends TextView {
 
     public DateView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+    
+    	setOnClickListener(new OnClickListener() { 
+    		public void onClick (View v){
+            	Intent i = new Intent();
+        	    i.setAction("android.intent.action.CLOSE_SYSTEM_DIALOGS");
+        	    getContext().sendBroadcast(i);
+        	    i.setAction("android.settings.CUSTOM_SETTINGS");
+                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(i);
+           	   	i = null;
+           	   	
+
+    		}
+    	}
+    	);
+     
     }
 
     @Override
