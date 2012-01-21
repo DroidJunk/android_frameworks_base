@@ -27,29 +27,12 @@ public class TranqDataButton extends TranqToggleButton {
 	private View mIndicator;
 	private View mIcon;
 	private WifiManager mWifiManager; 
-	private Cursor dataCursor;
 	private ConnectivityManager mConnectivityManager; 
 	Handler mHandler = new Handler();
 	final DataModeObserver mDataModeObserver = new DataModeObserver(mHandler) ;
 
 	
-
 	
-	// Rotate settings observer
-	class RotateModeObserver extends ContentObserver{
-		
-		public RotateModeObserver(Handler handler) {
-			super(handler);
-		}
-
-	    @Override
-	    public void onChange(boolean selfChange){
-
-	    	updateResources();
-	    }
-	}	
-	
-
 	
 	// Data Mode observer
 	class DataModeObserver extends ContentObserver{
@@ -64,7 +47,6 @@ public class TranqDataButton extends TranqToggleButton {
 	    	updateResources();
 	    }
 	}	
-
 	
 	
 	
@@ -74,8 +56,6 @@ public class TranqDataButton extends TranqToggleButton {
 		
 		mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		
-		
 	}
 
 	
@@ -87,14 +67,13 @@ public class TranqDataButton extends TranqToggleButton {
 		
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_9);
 		mIcon = (View) getRootView().findViewById(R.id.data_icon);
+		
+		
+		getContext().getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.MOBILE_DATA), true,
+                mDataModeObserver);
+       
 
- 
-		dataCursor =  getContext().getContentResolver().query(Settings.Secure.CONTENT_URI, null,
-                "(" + Settings.System.NAME + "=?)",
-                new String[]{Settings.Secure.MOBILE_DATA},
-                null);		
-        
-		dataCursor.registerContentObserver(mDataModeObserver);
 		updateResources();
 	}
 

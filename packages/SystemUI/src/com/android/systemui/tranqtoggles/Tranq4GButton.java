@@ -1,8 +1,6 @@
 package com.android.systemui.tranqtoggles;
 
 import com.android.systemui.R;
-import com.android.systemui.tranqtoggles.TranqGpsButton.GpsObserver;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
@@ -21,6 +19,7 @@ public class Tranq4GButton extends TranqToggleButton {
 	
 	private View mIndicator;
 	private View mIcon;
+	private View mDivider;
 	Handler mHandler = new Handler();
 	final NetworkModeObserver mNetworkModeObserver = new NetworkModeObserver(mHandler) ;
 
@@ -54,6 +53,7 @@ public class Tranq4GButton extends TranqToggleButton {
 		
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_0);
 		mIcon = (View) getRootView().findViewById(R.id.fourg_icon);
+		mDivider = (View) getRootView().findViewById(R.id.divider_0);
 		
 		getContext().getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.PREFERRED_NETWORK_MODE), true,
@@ -90,6 +90,7 @@ public class Tranq4GButton extends TranqToggleButton {
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
 		
+		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
 

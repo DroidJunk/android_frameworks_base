@@ -21,7 +21,6 @@ public class TranqGpsButton extends TranqToggleButton {
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
-	private Cursor gpsCursor;
 	Handler mHandler = new Handler();
 	final GpsObserver mGpsObserver = new GpsObserver(mHandler) ;
 
@@ -56,19 +55,20 @@ public class TranqGpsButton extends TranqToggleButton {
 		mIcon = (View) getRootView().findViewById(R.id.gps_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_2);
 
-        gpsCursor = getContext().getContentResolver().query(Settings.Secure.CONTENT_URI, null,
-                "(" + Settings.System.NAME + "=?)",
-                new String[]{Settings.Secure.LOCATION_PROVIDERS_ALLOWED},
-                null);
-
-		gpsCursor.registerContentObserver(mGpsObserver);		
+	
+		
+		getContext().getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.LOCATION_PROVIDERS_ALLOWED), true,
+                mGpsObserver);
+		
+		
 		updateResources();
 	}
 
 	
 	protected void onDetachedFromWindow(){
 
-		gpsCursor.unregisterContentObserver(mGpsObserver);
+		getContext().getContentResolver().unregisterContentObserver(mGpsObserver);
 	}
 
 	
