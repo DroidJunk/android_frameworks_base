@@ -92,22 +92,30 @@
   
 		<RelativeLayout  android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="52dp" > 
  
-      	<FrameLayout android:id="@+id/button_0" android:layout_width="55dp" android:layout_height="52dp" android:layout_weight="0" >   
+      	<FrameLayout android:id="@+id/settings_button" android:layout_width="55dp" android:layout_height="52dp" android:layout_weight="0" >   
 			<com.android.systemui.tranqtoggles.TranqSettingsButton android:id="@+id/settings_button" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/ic_notify_quicksettings" android:contentDescription="@string/accessibility_settings_button" />    
         </FrameLayout>    
         
- 		<LinearLayout android:layout_toRightOf="@id/button_0" android:layout_width="wrap_content" android:layout_height="52dip"  >
+ 		<LinearLayout android:layout_toRightOf="@id/settings_button" android:layout_width="wrap_content" android:layout_height="52dip"  >
  
    		<HorizontalScrollView  android:scrollbars="none" android:fadingEdge="vertical" android:fadingEdgeLength="20.0px" android:layout_width="wrap_content" android:layout_height="52dip" >
 
 		<RelativeLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="52dip" > 
 
-      	<FrameLayout android:id="@+id/button_1" android:layout_width="60dip" android:layout_height="52.0dip" android:layout_weight="1.0" >
+      	<FrameLayout android:id="@+id/button_0" android:layout_width="60dip" android:layout_height="52.0dip" android:layout_weight="1.0" >
+     		<ImageView android:id="@+id/fourg_icon" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dip" android:layout_marginRight="1.5dip" android:background="@drawable/tranqtoggle_fourg_off" />
+     		<com.android.systemui.tranqtoggles.Tranq4GButton android:id="@+id/tranq_4g_butt" android:text="@string/but0" android:textSize="9dip" android:textStyle="normal" android:layout_marginRight="2.5dip" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="65dip" android:shadowDx="1.0" android:shadowDy="1.0" />
+     		<ImageView android:id="@+id/indicator_0" android:layout_gravity="bottom|center" android:layout_width="fill_parent" android:layout_height="2dip" android:layout_marginBottom="0.5dip" android:layout_marginLeft="2dip" android:layout_marginRight="2.5dip" android:background="#ff696969" android:scaleType="fitXY" android:shadowDx="1.0" android:shadowDy="1.0" />
+     		<ImageView android:layout_gravity="right" android:id="@+id/divider_0" android:layout_width="1.25dip" android:layout_height="fill_parent" android:layout_marginTop="4.5dip" android:layout_marginBottom="3.5dip" android:background="#ff757575" />   
+     	</FrameLayout>
+     	
+      	<FrameLayout android:id="@+id/button_1" android:layout_toRightOf="@id/button_0" android:layout_width="60dip" android:layout_height="52.0dip" android:layout_weight="1.0" >
      		<ImageView android:id="@+id/wifi_icon" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dip" android:layout_marginRight="1.5dip" android:background="@drawable/tranqtoggle_wifi_off" />
-     		<com.android.systemui.tranqtoggles.Tranq4GButton android:id="@+id/tranq_wifi_butt" android:text="@string/but1" android:textSize="9dip" android:textStyle="normal" android:layout_marginRight="2.5dip" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="65dip" android:shadowDx="1.0" android:shadowDy="1.0" />
+     		<com.android.systemui.tranqtoggles.TranqWifiButton android:id="@+id/tranq_wifi_butt" android:text="@string/but1" android:textSize="9dip" android:textStyle="normal" android:layout_marginRight="2.5dip" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="65dip" android:shadowDx="1.0" android:shadowDy="1.0" />
      		<ImageView android:id="@+id/indicator_1" android:layout_gravity="bottom|center" android:layout_width="fill_parent" android:layout_height="2dip" android:layout_marginBottom="0.5dip" android:layout_marginLeft="2dip" android:layout_marginRight="2.5dip" android:background="#ff696969" android:scaleType="fitXY" android:shadowDx="1.0" android:shadowDy="1.0" />
      		<ImageView android:layout_gravity="right" android:id="@+id/divider_1" android:layout_width="1.25dip" android:layout_height="fill_parent" android:layout_marginTop="4.5dip" android:layout_marginBottom="3.5dip" android:background="#ff757575" />   
-     	</FrameLayout>
+     	</FrameLayout>     	
+
      	
    		<FrameLayout android:id="@+id/button_2" android:layout_toRightOf="@id/button_1" android:layout_width="60dip" android:layout_height="52.0dip" android:layout_weight="1.0">
         	<ImageView android:id="@+id/gps_icon" android:layout_gravity="center"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dip" android:layout_marginRight="1.5dip" android:background="@drawable/tranqtoggle_gps_off" />
