@@ -72,7 +72,7 @@ public final class DateView extends TextView {
             	Intent i = new Intent();
         	    i.setAction("android.intent.action.CLOSE_SYSTEM_DIALOGS");
         	    getContext().sendBroadcast(i);
-        	    i.setAction("android.settings.CUSTOM_SETTINGS");
+        	    i.setAction("android.settings.SETTINGS");
                 i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(i);
            	   	i = null;
