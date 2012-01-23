@@ -54,7 +54,7 @@ public class TranqToggleViewBottom extends LinearLayout {
 		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
 
    		mToggleColor = mPrefs.getInt("toggle_color", 0xff3b3b3b);
-   		
+   		TranqToggleViewTop.mTogglesTop = mPrefs.getBoolean("toggles_top", true);
    		
    		setBackgroundColor(mToggleColor);
    		
