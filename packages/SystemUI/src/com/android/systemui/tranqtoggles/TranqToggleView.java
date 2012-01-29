@@ -17,7 +17,7 @@ import com.android.systemui.R;
 
 
 public class TranqToggleView extends LinearLayout {
-	
+
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
 	private SharedPreferences mPrefs;
 	private int mToggleColor = 0xff3b3b3b;
@@ -42,18 +42,18 @@ public class TranqToggleView extends LinearLayout {
 
 	}
 
-	
+
 	protected void onFinishInflate(){
 		super.onFinishInflate();
 
 	}
 
-	
-	
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
-		
+
+
   		Context settingsContext = getContext();
 		try {
 			settingsContext = getContext().createPackageContext("com.android.settings",0);
@@ -64,7 +64,7 @@ public class TranqToggleView extends LinearLayout {
      		
 		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
 
-   		mToggleColor = mPrefs.getInt("toggle_color", 0xff3b3b3b);
+   		mToggleColor = mPrefs.getInt("toggle_color", 0xff000000);
    		mShowToggleInd = mPrefs.getBoolean("toggle_show_indicator", true);
    		mToggleIndOnColor = mPrefs.getInt("toggle_ind_on_color", 0xffffbb33);
    		mToggleIndOffColor = mPrefs.getInt("toggle_ind_off_color", 0xffba7b00);
@@ -94,9 +94,9 @@ public class TranqToggleView extends LinearLayout {
         filter.addAction(Tranq_Settings);
         getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
 	}	
-	
 
-	
+
+
 
     
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
@@ -122,8 +122,8 @@ public class TranqToggleView extends LinearLayout {
        
     
  
-	
-	
+
+
 }
 
 

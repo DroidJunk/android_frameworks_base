@@ -16,25 +16,25 @@ import android.provider.Settings;
 
 
 public class Tranq4GButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
 	Handler mHandler = new Handler();
 	final NetworkModeObserver mNetworkModeObserver = new NetworkModeObserver(mHandler) ;
 
-	
 
-	
-	
+
+
+
 	public Tranq4GButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
-	
+
 
 	// NetworkMode settings observer
 	class NetworkModeObserver extends ContentObserver{
-		
+
 		public NetworkModeObserver(Handler handler) {
 			super(handler);
 		}
@@ -45,65 +45,65 @@ public class Tranq4GButton extends TranqToggleButton {
 	    	updateResources();
 	    }
 	}	
-	
-	
-	
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_0);
 		mIcon = (View) getRootView().findViewById(R.id.fourg_icon);
 		mDivider = (View) getRootView().findViewById(R.id.divider_0);
-		
+
 		getContext().getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.PREFERRED_NETWORK_MODE), true,
                 mNetworkModeObserver);
-		
+
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
-		
+
 		getContext().getContentResolver().unregisterContentObserver(mNetworkModeObserver);
 	}
 
 
 	@Override
 	protected boolean getStatusOn(){
-		
+
 		return (Settings.Secure.getInt(getContext().getContentResolver(), Settings.Secure.PREFERRED_NETWORK_MODE, 4) == 7);
 
 	}
 
 	@Override
 	void updateResources() {
-		
+
 		if ((Settings.Secure.getInt(getContext().getContentResolver(), Settings.Secure.PREFERRED_NETWORK_MODE, 4) == 7)) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_fourg_on);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
-			
+
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_fourg_off);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
-		
+
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
 
 	@Override
 	void toggleOn() {
-		
+
 		Settings.Secure.putInt(getContext().getContentResolver(), Settings.Secure.PREFERRED_NETWORK_MODE, 7);
-	    
+
 		Intent i = new Intent();
 	    i.setAction("TRANQ_SETTINGS");
 	    i.putExtra("NetworkMode",7);
 	    getContext().sendBroadcast(i);
-	         
+
 		updateResources();
 	}
 
@@ -112,7 +112,7 @@ public class Tranq4GButton extends TranqToggleButton {
 	void toggleOff() {
 
 		Settings.Secure.putInt(getContext().getContentResolver(), Settings.Secure.PREFERRED_NETWORK_MODE, 4);
-	    
+
 		Intent i = new Intent();
 	    i.setAction("TRANQ_SETTINGS");
 	    i.putExtra("NetworkMode",4);
@@ -137,4 +137,4 @@ public class Tranq4GButton extends TranqToggleButton {
 
 
 
-}  // 
+}  //

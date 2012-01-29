@@ -616,6 +616,8 @@ public final class Settings {
     private static final String TAG = "Settings";
     private static final boolean LOCAL_LOGV = false || false;
 
+
+
     public static class SettingNotFoundException extends AndroidException {
         public SettingNotFoundException(String msg) {
             super(msg);
@@ -750,6 +752,8 @@ public final class Settings {
             }
         }
     }
+
+
 
     /**
      * System settings, containing miscellaneous system preferences.  This
@@ -1883,6 +1887,38 @@ public final class Settings {
          */
         public static final String POINTER_SPEED = "pointer_speed";
 
+ /**
+         * Setting to show alternative battery meter
+         * @hide
+         */
+        public static final String USE_ALT_METERS = "alt_meters";
+
+       /**
+         * @hide
+         */
+        public static final String BATTERY_ICON = "battery_icon";
+ 	
+	/**
+         * 0 = stock
+         * 1 = talk
+         * 2 = sms
+         * 
+         * @hide
+         */
+	public static final String ALT_LAYOUTS = "alt_layouts";
+
+        /**
+         * Whether to show the battery bar
+         * 
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR = "statusbar_battery_bar";
+
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR_COLOR = "statusbar_battery_bar_color";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
@@ -1893,6 +1929,7 @@ public final class Settings {
          *
          * @hide
          */
+        
         public static final String[] SETTINGS_TO_BACKUP = {
             STAY_ON_WHILE_PLUGGED_IN,
             WIFI_USE_STATIC_IP,
@@ -2183,6 +2220,12 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+
+
+
+
+
     }
 
     /**

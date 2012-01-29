@@ -17,17 +17,17 @@ import android.provider.Settings;
 
 
 public class TranqGpsButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
 	Handler mHandler = new Handler();
 	final GpsObserver mGpsObserver = new GpsObserver(mHandler) ;
 
-	
+
 	// Gps settings observer
 	class GpsObserver extends ContentObserver{
-		
+
 		public GpsObserver(Handler handler) {
 			super(handler);
 		}
@@ -43,46 +43,46 @@ public class TranqGpsButton extends TranqToggleButton {
 
 	public TranqGpsButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 	}
-	
-	
-	
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_2);
 		mIcon = (View) getRootView().findViewById(R.id.gps_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_2);
 
-	
-		
+
+
 		getContext().getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.LOCATION_PROVIDERS_ALLOWED), true,
                 mGpsObserver);
-		
-		
+
+
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
 
 		getContext().getContentResolver().unregisterContentObserver(mGpsObserver);
 	}
 
-	
+
 
 
 	@Override
 	protected boolean getStatusOn(){
-	
+
 		return Settings.Secure.isLocationProviderEnabled(getContext().getContentResolver(), LocationManager.GPS_PROVIDER);
 	}
 
 	@Override
 	void updateResources() {
-		
+
 		ContentResolver contentResolver = getContext().getContentResolver();
 	    boolean gpsStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.GPS_PROVIDER);
 	    if(gpsStatus){
@@ -95,7 +95,7 @@ public class TranqGpsButton extends TranqToggleButton {
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 
 	    }
-		
+
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
@@ -106,7 +106,7 @@ public class TranqGpsButton extends TranqToggleButton {
 
 		ContentResolver contentResolver = getContext().getContentResolver();
 	    Settings.Secure.setLocationProviderEnabled(contentResolver,"gps" ,true);
-	   
+
 		updateResources();
 	}
 
@@ -115,7 +115,7 @@ public class TranqGpsButton extends TranqToggleButton {
 	void toggleOff() {
 		ContentResolver contentResolver = getContext().getContentResolver();
 	     Settings.Secure.setLocationProviderEnabled(contentResolver,"gps" ,false);		
-		
+
 		updateResources();
 	}
 

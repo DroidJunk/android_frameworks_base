@@ -22,19 +22,19 @@ import android.provider.Settings.SettingNotFoundException;
 
 
 public class TranqRotateButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
 	private Context mContext; 
 	Handler mHandler = new Handler();
 	final RotateModeObserver mRotateModeObserver = new RotateModeObserver(mHandler) ;
-	
 
-	
+
+
 	// Rotate settings observer
 	class RotateModeObserver extends ContentObserver{
-		
+
 		public RotateModeObserver(Handler handler) {
 			super(handler);
 		}
@@ -50,19 +50,19 @@ public class TranqRotateButton extends TranqToggleButton {
 
 	public TranqRotateButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 		mContext = context;
 	}
-	
-	
-	
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_7);
 		mIcon = (View) getRootView().findViewById(R.id.rotate_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_7);
-		
+
         getContext().getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION), true,
                 mRotateModeObserver);
@@ -70,13 +70,13 @@ public class TranqRotateButton extends TranqToggleButton {
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
-		
+
         getContext().getContentResolver().unregisterContentObserver(mRotateModeObserver);
 
 	}
-	
+
 
 
 	@Override
@@ -91,8 +91,8 @@ public class TranqRotateButton extends TranqToggleButton {
 		return mTrue;
 	}
 
-	
-	
+
+
 	@Override
 	void updateResources() {
 
@@ -102,7 +102,7 @@ public class TranqRotateButton extends TranqToggleButton {
 		} catch (SettingNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 	    if(rotateStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_rotate_on);
@@ -112,7 +112,7 @@ public class TranqRotateButton extends TranqToggleButton {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 	      }
-		  
+
 		  mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
@@ -129,13 +129,13 @@ public class TranqRotateButton extends TranqToggleButton {
 
 	@Override
 	void toggleOff() {
-		
+
 		Settings.System.putInt(getContext().getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);	
 		updateResources();
 	}
 
 
-	
+
 
 	@Override
 	void showSettings() {
@@ -152,4 +152,4 @@ public class TranqRotateButton extends TranqToggleButton {
 
 
 
-}  // 
+}  //  

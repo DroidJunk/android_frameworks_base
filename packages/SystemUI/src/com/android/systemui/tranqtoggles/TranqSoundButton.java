@@ -15,7 +15,7 @@ import android.view.View;
 
 
 public class TranqSoundButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -27,19 +27,19 @@ public class TranqSoundButton extends TranqToggleButton {
 		super(context, attrs);
 
 		mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		
+
 	}
 
-	
-	
-	
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_4);
 		mIcon = (View) getRootView().findViewById(R.id.sound_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_4);
-		
+
 	    final IntentFilter mFilter = new IntentFilter();
 	    mFilter.addAction("android.media.RINGER_MODE_CHANGED");
 	    mBroadcastReciver = new BroadcastReceiver() {
@@ -53,7 +53,7 @@ public class TranqSoundButton extends TranqToggleButton {
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
 		getContext().unregisterReceiver(mBroadcastReciver);
 	}
@@ -66,7 +66,7 @@ public class TranqSoundButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
-		
+
 		if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_NORMAL) {
 
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
@@ -77,13 +77,13 @@ public class TranqSoundButton extends TranqToggleButton {
 				mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off_vibrate);
 				setTextColor(TranqToggleViewTop.mToggleTextOffColor);
-				
+
 			} else {
 				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off);
 				mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 				setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
-		
+
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
@@ -102,7 +102,7 @@ public class TranqSoundButton extends TranqToggleButton {
 
 	@Override
 	void toggleOff() {
-		
+
 		if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_NORMAL) {
 			mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
 		} else {

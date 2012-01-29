@@ -19,11 +19,17 @@ package com.android.systemui.statusbar.policy;
 import java.util.ArrayList;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.os.BatteryManager;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.Slog;
+import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,13 +41,43 @@ public class BatteryController extends BroadcastReceiver {
     private Context mContext;
     private ArrayList<ImageView> mIconViews = new ArrayList<ImageView>();
     private ArrayList<TextView> mLabelViews = new ArrayList<TextView>();
+    private int mBattIcon;
+    private int mChargeIcon;
+
+    private boolean mHide;
+    private boolean mStock;
+    private boolean mIcs;
+    private Handler mHandler;
 
     public BatteryController(Context context) {
         mContext = context;
 
+        mStock = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 1);
+        mIcs = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 2);
+        mHide = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 3);
+
+        mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         context.registerReceiver(this, filter);
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.BATTERY_ICON), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
     }
 
     public void addIconView(ImageView v) {
@@ -57,8 +93,15 @@ public class BatteryController extends BroadcastReceiver {
         if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             final int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             final boolean plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
-            final int icon = plugged ? R.drawable.stat_sys_battery_charge 
-                                     : R.drawable.stat_sys_battery;
+            if (mStock) {
+                mBattIcon = R.drawable.stat_sys_battery;
+                mChargeIcon = R.drawable.stat_sys_battery_charge;
+            } else if (mIcs) {
+                mBattIcon = R.drawable.stock_sys_battery;
+                mChargeIcon = R.drawable.stock_sys_battery_charge;
+            }
+            final int icon = plugged ? mChargeIcon 
+                                     : mBattIcon;
             int N = mIconViews.size();
             for (int i=0; i<N; i++) {
                 ImageView v = mIconViews.get(i);
@@ -66,6 +109,10 @@ public class BatteryController extends BroadcastReceiver {
                 v.setImageLevel(level);
                 v.setContentDescription(mContext.getString(R.string.accessibility_battery_level,
                         level));
+                if (mHide)
+                    v.setVisibility(View.GONE);
+                else
+                    v.setVisibility(View.VISIBLE);
             }
             N = mLabelViews.size();
             for (int i=0; i<N; i++) {
@@ -74,5 +121,12 @@ public class BatteryController extends BroadcastReceiver {
                         level));
             }
         }
+    }
+
+    private void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+        mStock = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 1);
+        mIcs = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 2);
+        mHide = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 3);
     }
 }

@@ -12,34 +12,34 @@ import android.net.wifi.WifiManager;
 
 
 public class TranqWifiButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
 	private WifiManager mWifiManager; 
 	private BroadcastReceiver mBroadcastReciver;
-	
+
 
 
 	public TranqWifiButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 		mContext = context;
-		
+
 		mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		
+
 	}
 
-	
-	
-	
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_1);
 		mIcon = (View) getRootView().findViewById(R.id.wifi_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_1);
-		
+
 	    final IntentFilter mFilter = new IntentFilter();
 	    mFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
 	    mBroadcastReciver = new BroadcastReceiver() {
@@ -53,7 +53,7 @@ public class TranqWifiButton extends TranqToggleButton {
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
 		mContext.unregisterReceiver(mBroadcastReciver);
 	}
@@ -66,18 +66,18 @@ public class TranqWifiButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
-		
+
 		if (mWifiManager.isWifiEnabled()) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_on);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
-			
+
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_off);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
-		
+
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
@@ -85,7 +85,7 @@ public class TranqWifiButton extends TranqToggleButton {
 
 	@Override
 	void toggleOn() {
-		
+
 		mWifiManager.setWifiEnabled(true);
 		updateResources();
 	}
@@ -93,7 +93,7 @@ public class TranqWifiButton extends TranqToggleButton {
 
 	@Override
 	void toggleOff() {
-		
+
 		mWifiManager.setWifiEnabled(false);
 		updateResources();
 	}

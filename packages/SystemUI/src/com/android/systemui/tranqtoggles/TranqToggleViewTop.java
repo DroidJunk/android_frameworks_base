@@ -17,7 +17,7 @@ import com.android.systemui.R;
 
 
 public class TranqToggleViewTop extends LinearLayout {
-	
+
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
 	private SharedPreferences mPrefs;
 	public static boolean mTogglesOn = true;
@@ -43,18 +43,18 @@ public class TranqToggleViewTop extends LinearLayout {
 		super(context, attrs);
 	}
 
-	
+
 	protected void onFinishInflate(){
 		super.onFinishInflate();
 
 	}
 
-	
-	
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
-		
+
+
   		Context settingsContext = getContext();
 		try {
 			settingsContext = getContext().createPackageContext("com.android.settings",0);
@@ -64,7 +64,7 @@ public class TranqToggleViewTop extends LinearLayout {
 		}
      		
 
-		
+
 		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
 
 		mTogglesOn = mPrefs.getBoolean("toggles_show_toggles", true);
@@ -102,9 +102,9 @@ public class TranqToggleViewTop extends LinearLayout {
         filter.addAction(Tranq_Settings);
         getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
 	}	
-	
 
-	
+
+
 
     
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
@@ -144,5 +144,3 @@ public class TranqToggleViewTop extends LinearLayout {
     		}
     }
 }
-
-

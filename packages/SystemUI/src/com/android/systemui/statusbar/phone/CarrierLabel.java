@@ -39,7 +39,7 @@ import android.widget.TextView;
  * minutes.
  */
 public class CarrierLabel extends TextView {
-	
+
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
     private boolean mAttached;
 	private SharedPreferences mPrefs;
@@ -65,7 +65,7 @@ public class CarrierLabel extends TextView {
 	       	   	i.putExtra("TogglesOn", true);
 	       	   	getContext().sendBroadcast(i);
 	       	   	i = null;
-	       	   	
+
 	        	i = new Intent();
 	            i.setAction(Tranq_Settings );
 	            i.putExtra("UpdateToggles", true);
@@ -199,5 +199,3 @@ public class CarrierLabel extends TextView {
     
     
 }
-
-

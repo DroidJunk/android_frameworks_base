@@ -31,6 +31,6 @@
     <color name="notification_list_shadow_top">#80000000</color>
     <drawable name="recents_callout_line">#99ffffff</drawable>
     <drawable name="notification_item_background_legacy_color">#ffaaaaaa</drawable>
-    <drawable name="toggle_background">#ff757575</drawable>
-    <drawable name="toggle_background_blue">#ff0030ff</drawable>
+    <drawable name="toggle_background">#ff000000</drawable>
+    <drawable name="toggle_background_blue">#ff000000</drawable>
 </resources>

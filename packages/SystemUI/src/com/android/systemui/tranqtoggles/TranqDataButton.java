@@ -23,7 +23,7 @@ import android.provider.Settings;
 
 
 public class TranqDataButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private WifiManager mWifiManager; 
@@ -31,12 +31,12 @@ public class TranqDataButton extends TranqToggleButton {
 	Handler mHandler = new Handler();
 	final DataModeObserver mDataModeObserver = new DataModeObserver(mHandler) ;
 
-	
-	
-	
+
+
+
 	// Data Mode observer
 	class DataModeObserver extends ContentObserver{
-		
+
 		public DataModeObserver(Handler handler) {
 			super(handler);
 		}
@@ -47,28 +47,28 @@ public class TranqDataButton extends TranqToggleButton {
 	    	updateResources();
 	    }
 	}	
-	
-	
-	
+
+
+
 
 	public TranqDataButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 		mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	}
 
-	
-	
-	
-	
+
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_9);
 		mIcon = (View) getRootView().findViewById(R.id.data_icon);
-		
-		
+
+
 		getContext().getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.MOBILE_DATA), true,
                 mDataModeObserver);
@@ -77,52 +77,52 @@ public class TranqDataButton extends TranqToggleButton {
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
-		
+
 		getContext().getContentResolver().unregisterContentObserver(mDataModeObserver);
 	}
 
 
 	@Override
 	protected boolean getStatusOn(){
-		
+
 		return mConnectivityManager.getMobileDataEnabled();
 	}
 
 	@Override
 	void updateResources() {
-		
+
 		if (mConnectivityManager.getMobileDataEnabled()) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_on);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
-			
+
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_off);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
-		
+
 	}
 
 
 	@Override
 	void toggleOn() {
-		
+
 		mConnectivityManager.setMobileDataEnabled(true);
 		updateResources();
-		
+
 	}
 
 
 	@Override
 	void toggleOff() {
-		
-		
+
+
 		mConnectivityManager.setMobileDataEnabled(false);
 		updateResources();
-	
+
 	}
 
 

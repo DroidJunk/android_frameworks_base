@@ -18,11 +18,11 @@ public abstract class TranqToggleButton extends TextView {
 
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
 	private SharedPreferences mPrefs;
-	
-	
+
+
 	public TranqToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(Tranq_Settings);
         getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
@@ -39,10 +39,10 @@ public abstract class TranqToggleButton extends TextView {
 		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
         
         
-		
+
 		setOnClickListener(new OnClickListener() { 
 			public void onClick (View v){
-				
+
 				if (getStatusOn()) {
 					toggleOff();
 				} else {
@@ -51,8 +51,8 @@ public abstract class TranqToggleButton extends TextView {
 			}
 		}
 		);
-		
-		
+
+
 		setOnLongClickListener(new OnLongClickListener() { 
 			public boolean onLongClick (View v){
 				showSettings();
@@ -60,10 +60,10 @@ public abstract class TranqToggleButton extends TextView {
 			}
 		}
 		);
-		
+
 	}
-	
-	
+
+
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -83,5 +83,6 @@ public abstract class TranqToggleButton extends TextView {
     
 
 } //
+
 
 

@@ -511,4 +511,47 @@
         <item>@null</item>
     </array>
 
+    <array name="alt1_lockscreen_targets_with_sms">
+        <item>@drawable/ic_lockscreen_unlock</item>
+        <item>@drawable/ic_lockscreen_soundon</item>
+        <item>@drawable/ic_lockscreen_camera</item>
+        <item>@drawable/ic_lockscreen_send_sms</item>
+    </array>
+    
+    <array name="alt1_lockscreen_target_descriptions_with_sms">
+        <item>@string/description_target_unlock</item>
+        <item>@string/description_target_soundon</item>
+        <item>@string/description_target_camera</item>
+        <item>@string/description_target_sendsms</item>
+    </array>
+
+    <array name="alt2_lockscreen_targets_with_talk">
+        <item>@drawable/ic_lockscreen_unlock</item>
+        <item>@drawable/ic_lockscreen_soundon</item>
+        <item>@drawable/ic_lockscreen_camera</item>
+        <item>@drawable/ic_lockscreen_talk</item>
+    </array>
+    
+    <array name="alt2_lockscreen_target_descriptions_with_talk">
+        <item>@string/description_target_unlock</item>
+        <item>@string/description_target_soundon</item>
+        <item>@string/description_target_camera</item>
+        <item>@string/description_target_talk</item>
+    </array>
+
+    <!-- Defines the shutdown options shown in the reboot dialog. -->
+    <array name="shutdown_reboot_options" translatable="false">
+        <item>@string/reboot_reboot</item>
+        <item>@string/reboot_recovery</item>
+        <item>@string/reboot_bootloader</item>
+    </array>
+
+    <!-- Do not translate. Defines the shutdown actions passed to the kernel.
+         The first item should be empty for regular reboot. -->
+    <string-array name="shutdown_reboot_actions" translatable="false">
+        <item></item>
+        <item>recovery</item>
+        <item>bootloader</item>
+    </string-array>
+
 </resources>

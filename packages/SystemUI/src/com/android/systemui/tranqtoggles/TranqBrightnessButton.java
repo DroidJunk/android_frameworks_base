@@ -22,19 +22,19 @@ import android.provider.Settings.SettingNotFoundException;
 
 
 public class TranqBrightnessButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
 	private Context mContext; 
 	Handler mHandler = new Handler();
 	final BrightnessModeObserver mBrightnessModeObserver = new BrightnessModeObserver(mHandler) ;
-	
 
-	
+
+
 	// Brightness settings observer
 	class BrightnessModeObserver extends ContentObserver{
-		
+
 		public BrightnessModeObserver(Handler handler) {
 			super(handler);
 		}
@@ -50,19 +50,19 @@ public class TranqBrightnessButton extends TranqToggleButton {
 
 	public TranqBrightnessButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 		mContext = context;
 	}
-	
-	
-	
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_6);
 		mIcon = (View) getRootView().findViewById(R.id.brightness_icon);
 		mDivider = (View) getRootView().findViewById(R.id.divider_6);		
-		
+
         getContext().getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE), true,
                 mBrightnessModeObserver);
@@ -70,13 +70,13 @@ public class TranqBrightnessButton extends TranqToggleButton {
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
-		
+
         getContext().getContentResolver().unregisterContentObserver(mBrightnessModeObserver);
 
 	}
-	
+
 
 
 	@Override
@@ -91,18 +91,18 @@ public class TranqBrightnessButton extends TranqToggleButton {
 		return mTrue;
 	}
 
-	
-	
+
+
 	@Override
 	void updateResources() {
-		
+
 	    boolean autoBrightnessStatus = true;
 		try {
 			autoBrightnessStatus = (Settings.System.getInt(getContext().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == 1);
 		} catch (SettingNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 	    if(autoBrightnessStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_brightness_on);
@@ -114,7 +114,7 @@ public class TranqBrightnessButton extends TranqToggleButton {
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 
 	      }
-		  
+
 		  mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
@@ -131,13 +131,13 @@ public class TranqBrightnessButton extends TranqToggleButton {
 
 	@Override
 	void toggleOff() {
-		
+
 		Settings.System.putInt(getContext().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, 0);	
 		updateResources();
 	}
 
 
-	
+
 	/*	
     private void setBrightness(int brightness) {
         try {

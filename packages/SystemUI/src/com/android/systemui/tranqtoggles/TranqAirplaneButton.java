@@ -15,7 +15,7 @@ import android.view.View;
 
 
 public class TranqAirplaneButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -25,20 +25,20 @@ public class TranqAirplaneButton extends TranqToggleButton {
 
 	public TranqAirplaneButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 	}
 
-	
-	
-	
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_5);
 		mIcon = (View) getRootView().findViewById(R.id.airplane_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_5);	
-		
-		
+
+
 	    final IntentFilter mFilter = new IntentFilter();
 	    mFilter.addAction("android.intent.action.AIRPLANE_MODE");
 	    mBroadcastReciver = new BroadcastReceiver() {
@@ -52,7 +52,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
 		getContext().unregisterReceiver(mBroadcastReciver);
 	}
@@ -65,13 +65,13 @@ public class TranqAirplaneButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
-		
+
 		if (Settings.System.getInt(getContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_on);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 			mState = true;
-			
+
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_off);
 
@@ -79,7 +79,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 			mState = false;
 		}
-		
+
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 
 	}
@@ -90,7 +90,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 	void toggleOn() {
 		Settings.System.putInt(getContext().getContentResolver(),Settings.System.AIRPLANE_MODE_ON, 1);
 		updateResources();
-		
+
 	    Intent i = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
 	    i.putExtra("state", mState);
 	    getContext().sendBroadcast(i);
@@ -100,10 +100,10 @@ public class TranqAirplaneButton extends TranqToggleButton {
 
 	@Override
 	void toggleOff() {
-		
+
 		Settings.System.putInt(getContext().getContentResolver(),Settings.System.AIRPLANE_MODE_ON, 0);
 		updateResources();
-		
+
 	    Intent i = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
 	    i.putExtra("state", mState);
 	    getContext().sendBroadcast(i);

@@ -20,7 +20,7 @@ import com.android.systemui.tranqtoggles.TranqGpsButton.GpsObserver;
 
 
 public class TranqSyncButton extends TranqToggleButton {
-	
+
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -28,8 +28,8 @@ public class TranqSyncButton extends TranqToggleButton {
 	private Cursor syncCursor;
 	Handler mHandler = new Handler();
 
-	
-	
+
+
 	private SyncStatusObserver syncStatusObserver = new SyncStatusObserver() {
 
 	    @Override
@@ -39,42 +39,42 @@ public class TranqSyncButton extends TranqToggleButton {
                 	updateResources();;
                 }
             });
-	    	
-	    	
+
+
 	    }
 	};
 
-	
-	
-	
-	
+
+
+
+
 	public TranqSyncButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 	}
-	
-	
 
-	
-	
-	
+
+
+
+
+
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
-		
+
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_8);
 		mIcon = (View) getRootView().findViewById(R.id.sync_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_8);
-		
+
 		ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS , syncStatusObserver);
-		
+
 		updateResources();
 	}
 
-	
+
 	protected void onDetachedFromWindow(){
-		
+
 		ContentResolver.removeStatusChangeListener(syncStatusObserver);
-		
+
 	}
 
 
@@ -87,19 +87,19 @@ public class TranqSyncButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
-		
-		
+
+
 		if (ContentResolver.getMasterSyncAutomatically()) {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_on);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
-			
+
 		} else {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_off);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
-		
+
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}
 
@@ -110,7 +110,7 @@ public class TranqSyncButton extends TranqToggleButton {
 
 		ContentResolver.setMasterSyncAutomatically(true);
 		updateResources();
-		
+
 	}
 
 

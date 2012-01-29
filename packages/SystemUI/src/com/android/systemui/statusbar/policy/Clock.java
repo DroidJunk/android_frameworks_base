@@ -259,4 +259,3 @@ public class Clock extends TextView {
 
     }
 }
-
