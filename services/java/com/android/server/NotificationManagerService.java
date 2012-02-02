@@ -31,11 +31,13 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Binder;
@@ -60,6 +62,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 /** {@hide} */
 public class NotificationManagerService extends INotificationManager.Stub
@@ -96,6 +99,22 @@ public class NotificationManagerService extends INotificationManager.Stub
     private NotificationPlayer mSound;
     private boolean mSystemReady;
     private int mDisabledNotifications;
+    
+    // Tranq
+    private SharedPreferences mPrefs;
+    private boolean useQuietTime = false;
+    private int mStartHour = 0;
+    private int mStartMin = 0;
+    private int mStopHour = 0;
+    private int mStopMin = 0;
+    private boolean mUseLed = true;
+    private boolean mUseVibrate = true;
+    private boolean mUseSound = true;
+    private int mDefaultLed = 0xffffff00;
+    private int mDefaultLedOnMs = 200;
+    private int mDefaultLedOffMs = 200;
+    //
+    
 
     private NotificationRecord mVibrateNotification;
     private Vibrator mVibrator = new Vibrator();
@@ -442,6 +461,9 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         SettingsObserver observer = new SettingsObserver(mHandler);
         observer.observe();
+        
+        getQuietTimeSettings();
+        
     }
 
     void systemReady() {
@@ -815,30 +837,33 @@ public class NotificationManagerService extends INotificationManager.Stub
                     mSoundNotification = r;
                     // do not play notifications if stream volume is 0
                     // (typically because ringer mode is silent).
-                    if (audioManager.getStreamVolume(audioStreamType) != 0) {
-                        long identity = Binder.clearCallingIdentity();
-                        try {
-                            mSound.play(mContext, uri, looping, audioStreamType);
-                        }
-                        finally {
-                            Binder.restoreCallingIdentity(identity);
-                        }
-                    }
-                }
+                    if (!inQuietTime()) {
+                    	if (audioManager.getStreamVolume(audioStreamType) != 0) {
+                    		long identity = Binder.clearCallingIdentity();
+                    		try {
+                    			mSound.play(mContext, uri, looping, audioStreamType);
+                    		}
+                    		finally {
+                    			Binder.restoreCallingIdentity(identity);
+                    		}
+                    	}
+                    	}
+                	}
 
                 // vibrate
-                final boolean useDefaultVibrate =
-                    (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
-                if ((useDefaultVibrate || notification.vibrate != null)
+                if (!inQuietTime()) {
+                	final boolean useDefaultVibrate =
+                		(notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
+                	if ((useDefaultVibrate || notification.vibrate != null)
                         && audioManager.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
-                    mVibrateNotification = r;
+                    	mVibrateNotification = r;
 
-                    mVibrator.vibrate(useDefaultVibrate ? DEFAULT_VIBRATE_PATTERN
-                                                        : notification.vibrate,
-                              ((notification.flags & Notification.FLAG_INSISTENT) != 0) ? 0: -1);
+                    	mVibrator.vibrate(useDefaultVibrate ? DEFAULT_VIBRATE_PATTERN
+                    		: notification.vibrate,
+                            ((notification.flags & Notification.FLAG_INSISTENT) != 0) ? 0: -1);
+                	}
                 }
             }
-
             // this option doesn't shut off the lights
 
             // light
@@ -859,9 +884,69 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             }
         }
+        
+    	if (Notification.DEFAULT_LIGHTS == (notification.flags & Notification.DEFAULT_LIGHTS)) {
+    		notification.ledARGB = mDefaultLed;
+    		notification.ledOnMS = mDefaultLedOnMs;
+    		notification.ledOnMS = mDefaultLedOffMs;
+    	}
+        
+    	if (useQuietTime) {
+    		Log.v("Quiet Time","Quiet Time Enabled");
+    		
+    		if (inQuietTime()) {
+    			
+    			Log.v("Quiet Time","Within Quiet Time Hours");
+    		    Log.v("Quiet Time","Use Led - " + String.valueOf(mUseLed) );
+    		    Log.v("Quiet Time","Use Sound - " + String.valueOf(mUseSound) );
+    		    Log.v("Quiet Time","Use Vibrate - " + String.valueOf(mUseVibrate) );
+				
+				if (!mUseLed) {
+					mNotificationLight.turnOff();
+				}
+    		}
+    	}
+        
+        
+        
 
         idOut[0] = id;
     }
+    
+    
+    private boolean inQuietTime() {
+    	
+    	getQuietTimeSettings();
+    	Calendar calendar = Calendar.getInstance();
+        int nowMins = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
+        int startMins = mStartHour * 60 + mStartMin;
+        int stopMins = mStopHour * 60 + mStopMin;
+        
+        if (stopMins < startMins) {
+        	return (nowMins > startMins) || (nowMins < stopMins);
+           	} else {
+           		return (nowMins > startMins) && (nowMins < stopMins);
+           	}     		
+
+    }
+    
+    
+    private void getQuietTimeSettings(){
+        Cursor cur = Settings.QuietTime.getCursor(mContext.getContentResolver());
+        useQuietTime = cur.getInt(1) == 1;
+        mStartHour = cur.getInt(2);
+        mStartMin = cur.getInt(3);
+        mStopHour = cur.getInt(4);
+        mStopMin = cur.getInt(5);
+        mUseLed = cur.getInt(6) == 1;
+        mUseSound = cur.getInt(7) == 1;
+        mUseVibrate = cur.getInt(8) == 1;
+
+    }
+    
+    
+    
+    
 
     private void sendAccessibilityEvent(Notification notification, CharSequence packageName) {
         AccessibilityManager manager = AccessibilityManager.getInstance(mContext);
