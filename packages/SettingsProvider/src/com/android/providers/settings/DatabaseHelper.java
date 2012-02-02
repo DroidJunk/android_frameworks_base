@@ -63,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 74;
+    private static final int DATABASE_VERSION = 75;
 
     private Context mContext;
 
@@ -129,6 +129,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE INDEX bookmarksIndex1 ON bookmarks (folder);");
         db.execSQL("CREATE INDEX bookmarksIndex2 ON bookmarks (shortcut);");
+        
+        
+        db.execSQL("CREATE TABLE quiet_time (" +
+                "_id INTEGER PRIMARY KEY," +
+                "qtEnabled INTEGER, " +
+                "qtStartHour INTEGER, " +
+                "qtStartMin INTEGER, " +
+                "qtStopHour INTEGER, " +
+                "qtStopMin INTEGER, " +
+                "qtLedOn INTEGER, " +
+                "qtSoundOn INTEGER, " +
+                "qtVibrateOn INTEGER);");
+
+        // insert default values
+        String insertMe = "INSERT INTO quiet_time " +
+             "(qtEnabled, qtStartHour, qtStartMin, qtStopHour, qtStopMin, qtLedOn, " +
+             " qtSoundOn, qtVibrateOn) VALUES ";
+        db.execSQL(insertMe + "(0, 21, 0, 7, 0, 1, 1, 1);");
+        
 
         // Populate bookmarks table with initial bookmarks
         loadBookmarks(db);
@@ -991,6 +1010,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVibrateSettingFromNone(db);
             upgradeVersion = 74;
         }
+        
+        
+        if (upgradeVersion == 74) {
+            // add quiet_time table
+            db.execSQL("CREATE TABLE quiet_time (" +
+                    "_id INTEGER PRIMARY KEY," +
+                    "qtEnabled INTEGER, " +
+                    "qtStartHour INTEGER, " +
+                    "qtStartMin INTEGER, " +
+                    "qtStopHour INTEGER, " +
+                    "qtStopMin INTEGER, " +
+                    "qtLedOn INTEGER, " +
+                    "qtSoundOn INTEGER, " +
+                    "qtVibrateOn INTEGER);");
+
+            // insert default values
+            String insertMe = "INSERT INTO quiet_time " +
+                 "(qtEnabled, qtStartHour, qtStartMin, qtStopHour, qtStopMin, qtLedOn, " +
+                 " qtSoundOn, qtVibrateOn) VALUES ";
+            db.execSQL(insertMe + "(0, 21, 0, 7, 0, 1, 1, 1);");   
+        	
+            upgradeVersion = 75;
+        }           
+        
+        
 
         // *** Remember to update DATABASE_VERSION above!
 
