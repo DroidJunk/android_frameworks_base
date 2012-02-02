@@ -17417,6 +17417,22 @@ package android.provider {
     field public static final java.lang.String VALUE = "value";
   }
 
+  public static final class Settings.QuietTime implements android.provider.BaseColumns {
+    ctor public Settings.QuietTime();
+    method public static android.database.Cursor getCursor(android.content.ContentResolver);
+    method public static java.lang.Boolean updateQT(android.content.ContentResolver, android.content.ContentValues);
+    field public static final android.net.Uri CONTENT_URI;
+    field public static final java.lang.String ID = "_id";
+    field public static final java.lang.String QT_ENABLED = "qtEnabled";
+    field public static final java.lang.String QT_LED_ON = "qtLedOn";
+    field public static final java.lang.String QT_SOUND_ON = "qtSoundOn";
+    field public static final java.lang.String QT_START_HOUR = "qtStartHour";
+    field public static final java.lang.String QT_START_MIN = "qtStartMin";
+    field public static final java.lang.String QT_STOP_HOUR = "qtStopHour";
+    field public static final java.lang.String QT_STOP_MIN = "qtStopMin";
+    field public static final java.lang.String QT_VIBRATE_ON = "qtVibrateOn";
+  }
+
   public static final class Settings.Secure extends android.provider.Settings.NameValueTable {
     ctor public Settings.Secure();
     method public static float getFloat(android.content.ContentResolver, java.lang.String, float);
