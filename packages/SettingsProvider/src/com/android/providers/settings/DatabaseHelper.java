@@ -74,7 +74,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mValidTables.add("secure");
         mValidTables.add("bluetooth_devices");
         mValidTables.add("bookmarks");
-
+        mValidTables.add("quiet_time");
+        
         // These are old.
         mValidTables.add("favorites");
         mValidTables.add("gservices");
