@@ -837,31 +837,38 @@ public class NotificationManagerService extends INotificationManager.Stub
                     mSoundNotification = r;
                     // do not play notifications if stream volume is 0
                     // (typically because ringer mode is silent).
-                    if (!inQuietTime()) {
-                    	if (audioManager.getStreamVolume(audioStreamType) != 0) {
-                    		long identity = Binder.clearCallingIdentity();
-                    		try {
-                    			mSound.play(mContext, uri, looping, audioStreamType);
+                    if (inQuietTime() & (!mUseSound)) {
+                    	//No sound
+                    	} else {
+                    	
+                    		if (audioManager.getStreamVolume(audioStreamType) != 0) {
+                    			long identity = Binder.clearCallingIdentity();
+                    			try {
+                    				mSound.play(mContext, uri, looping, audioStreamType);
+                    			}
+                    			finally {
+                    				Binder.restoreCallingIdentity(identity);
+                    			}
                     		}
-                    		finally {
-                    			Binder.restoreCallingIdentity(identity);
-                    		}
-                    	}
-                    	}
+                    	
                 	}
-
+                }
                 // vibrate
-                if (!inQuietTime()) {
-                	final boolean useDefaultVibrate =
-                		(notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
-                	if ((useDefaultVibrate || notification.vibrate != null)
-                        && audioManager.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
-                    	mVibrateNotification = r;
+                if (inQuietTime() & (!mUseVibrate)) {
+                	// No vibrate
+                	} else {
+                	
+                		final boolean useDefaultVibrate =
+                				(notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
+                		if ((useDefaultVibrate || notification.vibrate != null)
+                				&& audioManager.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
+                			mVibrateNotification = r;
 
-                    	mVibrator.vibrate(useDefaultVibrate ? DEFAULT_VIBRATE_PATTERN
-                    		: notification.vibrate,
-                            ((notification.flags & Notification.FLAG_INSISTENT) != 0) ? 0: -1);
-                	}
+                			mVibrator.vibrate(useDefaultVibrate ? DEFAULT_VIBRATE_PATTERN
+                					: notification.vibrate,
+                					((notification.flags & Notification.FLAG_INSISTENT) != 0) ? 0: -1);
+                		}
+                	
                 }
             }
             // this option doesn't shut off the lights
@@ -884,8 +891,8 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             }
         }
-        
-    	if (Notification.DEFAULT_LIGHTS == (notification.flags & Notification.DEFAULT_LIGHTS)) {
+                
+    	if ((notification.flags & Notification.DEFAULT_LIGHTS) != 0) {
     		notification.ledARGB = mDefaultLed;
     		notification.ledOnMS = mDefaultLedOnMs;
     		notification.ledOnMS = mDefaultLedOffMs;
@@ -895,20 +902,17 @@ public class NotificationManagerService extends INotificationManager.Stub
     		Log.v("Quiet Time","Quiet Time Enabled");
     		
     		if (inQuietTime()) {
-    			
     			Log.v("Quiet Time","Within Quiet Time Hours");
     		    Log.v("Quiet Time","Use Led - " + String.valueOf(mUseLed) );
     		    Log.v("Quiet Time","Use Sound - " + String.valueOf(mUseSound) );
     		    Log.v("Quiet Time","Use Vibrate - " + String.valueOf(mUseVibrate) );
-				
-				if (!mUseLed) {
-					mNotificationLight.turnOff();
-				}
+				if (!mUseLed) mNotificationLight.turnOff();
+
     		}
     	}
         
         
-        
+                
 
         idOut[0] = id;
     }
@@ -917,10 +921,12 @@ public class NotificationManagerService extends INotificationManager.Stub
     private boolean inQuietTime() {
     	
     	getQuietTimeSettings();
+    	if (!useQuietTime) return false;
     	Calendar calendar = Calendar.getInstance();
         int nowMins = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
         int startMins = mStartHour * 60 + mStartMin;
         int stopMins = mStopHour * 60 + mStopMin;
+        
         
         if (stopMins < startMins) {
         	return (nowMins > startMins) || (nowMins < stopMins);
