@@ -706,7 +706,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         checkIncomingCall(pkg);
         // Tranq
         getDefaultLedSettings();
-        //insertPackage(pkg);
+        insertPackage(pkg);
         //
         
         // Limit the number of notifications that any given package except the android

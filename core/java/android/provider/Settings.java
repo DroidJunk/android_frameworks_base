@@ -4625,17 +4625,27 @@ public final class Settings {
             
         	Boolean updated = false;
         	Cursor c = null;
+        	Boolean exists = true;
         	
+        	Log.e("Insert Package","Testing - "+pkg+"  ***************************************************************");
         	try {
-            	c = cr.query(CONTENT_URI, null, "pkgName", new String[]{pkg}, null);
+            	c = cr.query(CONTENT_URI, new String[]{"pkgName"}, "pkgName=?", new String[]{pkg}, null);
             	
             } catch (NumberFormatException e) {
             	
-            	Log.e("Insert Package","Package exists - not added");
-                if (c != null) return false;
+            	Log.e("Insert Package","Error testing existance");
+            	c.close();
+                if (c.getCount() != 0) return false;
             }
-        
-        	if (c == null) {
+            
+            exists = c.getCount() > 0;
+            c.close();
+            
+            if (exists) Log.e("Insert Package","Package exists - not added");
+            
+            
+        	if (!exists) {
+        		Log.d("Insert Package","Trying to insert *********************************************" + pkg);
         		try {
         			updated = cr.insert(CONTENT_URI, values)  != null;
         		} catch (NumberFormatException e) {
@@ -4643,7 +4653,8 @@ public final class Settings {
         		}
         		Log.d("Insert Package","Package added - " + pkg);
         	}
-        
+        	
+        	
             return updated;
         }        
     }
