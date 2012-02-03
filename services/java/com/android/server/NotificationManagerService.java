@@ -17,13 +17,11 @@
 package com.android.server;
 
 import com.android.internal.statusbar.StatusBarNotification;
-
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
@@ -42,7 +40,6 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -58,7 +55,6 @@ import android.util.Slog;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -710,7 +706,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         checkIncomingCall(pkg);
         // Tranq
         getDefaultLedSettings();
-        insertPackage(pkg);
+        //insertPackage(pkg);
         //
         
         // Limit the number of notifications that any given package except the android
@@ -976,7 +972,7 @@ public class NotificationManagerService extends INotificationManager.Stub
 		values.put(Settings.NotifOptions.LED_ON_MS, 3);
 		values.put(Settings.NotifOptions.LED_OFF_MS, 3);
     	
-    	Settings.NotifOptions.insertPackage(mContext.getContentResolver(),values,pkg);
+    	Settings.NotifOptions.insertPackage(mContext.getContentResolver(), values, pkg);
     }
     
     

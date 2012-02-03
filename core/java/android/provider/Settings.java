@@ -4624,17 +4624,18 @@ public final class Settings {
         public static Boolean insertPackage (ContentResolver cr, ContentValues values, String pkg) {
             
         	Boolean updated = false;
-        	Boolean exists = true;
+        	Cursor c = null;
         	
         	try {
-            	exists = cr.query(CONTENT_URI, null, "_pkgName=" + pkg, null, null) != null;
+            	c = cr.query(CONTENT_URI, null, "pkgName", new String[]{pkg}, null);
+            	
             } catch (NumberFormatException e) {
             	
             	Log.e("Insert Package","Package exists - not added");
-                return false;
+                if (c != null) return false;
             }
         
-        	if (!exists) {
+        	if (c == null) {
         		try {
         			updated = cr.insert(CONTENT_URI, values)  != null;
         		} catch (NumberFormatException e) {
