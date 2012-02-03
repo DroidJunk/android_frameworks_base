@@ -75,6 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mValidTables.add("bluetooth_devices");
         mValidTables.add("bookmarks");
         mValidTables.add("quiet_time");
+        mValidTables.add("notif_options");
         
         // These are old.
         mValidTables.add("favorites");
@@ -144,12 +145,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "qtVibrateOn INTEGER);");
 
         // insert default values
-        String insertMe = "INSERT INTO quiet_time " +
+        String insertQT = "INSERT INTO quiet_time " +
              "(qtEnabled, qtStartHour, qtStartMin, qtStopHour, qtStopMin, qtLedOn, " +
              " qtSoundOn, qtVibrateOn) VALUES ";
-        db.execSQL(insertMe + "(0, 21, 0, 7, 0, 1, 1, 1);");
+        db.execSQL(insertQT + "(0, 21, 0, 7, 0, 1, 1, 1);");
         
 
+        db.execSQL("CREATE TABLE notif_options (" +
+                "_id INTEGER PRIMARY KEY," +
+                "Name TEXT, " +
+                "pkgName TEXT, " +
+                "ledColor INTEGER, " +
+                "ledOnMs INTEGER, " +
+        		"ledOffMs INTEGER);");
+         
+        // insert default values
+        String insertNotifOp = "INSERT INTO notif_options " +
+             "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+        db.execSQL(insertNotifOp + "('Default','', -1, 3, 3);");        
+        
         // Populate bookmarks table with initial bookmarks
         loadBookmarks(db);
 
@@ -1027,10 +1041,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "qtVibrateOn INTEGER);");
 
             // insert default values
-            String insertMe = "INSERT INTO quiet_time " +
+            String insertQT = "INSERT INTO quiet_time " +
                  "(qtEnabled, qtStartHour, qtStartMin, qtStopHour, qtStopMin, qtLedOn, " +
                  " qtSoundOn, qtVibrateOn) VALUES ";
-            db.execSQL(insertMe + "(0, 21, 0, 7, 0, 1, 1, 1);");   
+            db.execSQL(insertQT + "(0, 21, 0, 7, 0, 1, 1, 1);");   
+            
+            db.execSQL("CREATE TABLE notif_options (" +
+                    "_id INTEGER PRIMARY KEY," +
+                    "Name TEXT, " +
+                    "pkgName TEXT, " +
+                    "ledColor INTEGER, " +
+                    "ledOnMs INTEGER, " +
+            		"ledOffMs INTEGER);");
+             
+            // insert default values
+            String insertNotifOp = "INSERT INTO notif_options " +
+                 "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+            db.execSQL(insertNotifOp + "('Default','', -1, 3, 3);");     
+            
         	
             upgradeVersion = 75;
         }           

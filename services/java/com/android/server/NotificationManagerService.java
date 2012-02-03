@@ -28,6 +28,7 @@ import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -110,9 +111,6 @@ public class NotificationManagerService extends INotificationManager.Stub
     private boolean mUseLed = true;
     private boolean mUseVibrate = true;
     private boolean mUseSound = true;
-    private int mDefaultLed = 0xffffff00;
-    private int mDefaultLedOnMs = 200;
-    private int mDefaultLedOffMs = 200;
     //
     
 
@@ -425,13 +423,19 @@ public class NotificationManagerService extends INotificationManager.Stub
         mNotificationLight = lights.getLight(LightsService.LIGHT_ID_NOTIFICATIONS);
         mAttentionLight = lights.getLight(LightsService.LIGHT_ID_ATTENTION);
 
-        Resources resources = mContext.getResources();
-        mDefaultNotificationColor = resources.getColor(
-                com.android.internal.R.color.config_defaultNotificationColor);
-        mDefaultNotificationLedOn = resources.getInteger(
-                com.android.internal.R.integer.config_defaultNotificationLedOn);
-        mDefaultNotificationLedOff = resources.getInteger(
-                com.android.internal.R.integer.config_defaultNotificationLedOff);
+        
+        //Tranq changes
+        getDefaultLedSettings();
+        
+        //Resources resources = mContext.getResources();
+        //mDefaultNotificationColor = resources.getColor(
+        //        com.android.internal.R.color.config_defaultNotificationColor);
+        //mDefaultNotificationLedOn = resources.getInteger(
+        //        com.android.internal.R.integer.config_defaultNotificationLedOn);
+        //mDefaultNotificationLedOff = resources.getInteger(
+        //        com.android.internal.R.integer.config_defaultNotificationLedOff);
+        //
+        
 
         // Don't start allowing notifications until the setup wizard has run once.
         // After that, including subsequent boots, init with notifications turned on.
@@ -704,7 +708,11 @@ public class NotificationManagerService extends INotificationManager.Stub
             String tag, int id, int priority, Notification notification, int[] idOut)
     {
         checkIncomingCall(pkg);
-
+        // Tranq
+        getDefaultLedSettings();
+        insertPackage(pkg);
+        //
+        
         // Limit the number of notifications that any given package except the android
         // package can enqueue.  Prevents DOS attacks and deals with leaks.
         if (!"android".equals(pkg)) {
@@ -892,11 +900,6 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
         }
                 
-    	if ((notification.flags & Notification.DEFAULT_LIGHTS) != 0) {
-    		notification.ledARGB = mDefaultLed;
-    		notification.ledOnMS = mDefaultLedOnMs;
-    		notification.ledOnMS = mDefaultLedOffMs;
-    	}
         
     	if (useQuietTime) {
     		Log.v("Quiet Time","Quiet Time Enabled");
@@ -938,7 +941,8 @@ public class NotificationManagerService extends INotificationManager.Stub
     
     
     private void getQuietTimeSettings(){
-        Cursor cur = Settings.QuietTime.getCursor(mContext.getContentResolver());
+
+    	Cursor cur = Settings.QuietTime.getCursor(mContext.getContentResolver());
         useQuietTime = cur.getInt(1) == 1;
         mStartHour = cur.getInt(2);
         mStartMin = cur.getInt(3);
@@ -947,10 +951,33 @@ public class NotificationManagerService extends INotificationManager.Stub
         mUseLed = cur.getInt(6) == 1;
         mUseSound = cur.getInt(7) == 1;
         mUseVibrate = cur.getInt(8) == 1;
-
     }
     
+    private void getDefaultLedSettings(){
+
+    	Cursor cur = Settings.NotifOptions.getDefaultLed(mContext.getContentResolver());
+        mDefaultNotificationColor = cur.getInt(3);
+        mDefaultNotificationLedOn = cur.getInt(4) * 100;
+        mDefaultNotificationLedOff = cur.getInt(5) * 100;
+        Log.v("**************************************************************************",
+        		"***************************************************************************");
+        Log.v("Default Led Options","Color = " + String.valueOf(mDefaultNotificationColor) );
+        Log.v("Default Led Options","ON Ms = " + String.valueOf(mDefaultNotificationLedOn) );
+        Log.v("Default Led Options","OFF Ms = " + String.valueOf(mDefaultNotificationLedOff) );
+    }
     
+    private void insertPackage(String pkg){
+
+    	ContentValues values = new ContentValues(5);
+        // Write the default led option values to the database
+		values.put(Settings.NotifOptions.NAME, pkg);
+		values.put(Settings.NotifOptions.PKG_NAME, pkg);
+		values.put(Settings.NotifOptions.LED_COLOR, -1);
+		values.put(Settings.NotifOptions.LED_ON_MS, 3);
+		values.put(Settings.NotifOptions.LED_OFF_MS, 3);
+    	
+    	Settings.NotifOptions.insertPackage(mContext.getContentResolver(),values,pkg);
+    }
     
     
 

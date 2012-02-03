@@ -4495,7 +4495,7 @@ public final class Settings {
         }
 
         /**
-         * Convenience function for retrieving a cursor for the only row
+         * Convenience function for updating Quiet Time settings
          *
          * @param cr The ContentResolver to access.
          *
@@ -4515,7 +4515,139 @@ public final class Settings {
         
     }    
     
+
+    public static final class NotifOptions implements BaseColumns
+    {
+        private static final String TAG = "NotifOptions";
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/notif_options");
+
+        /**
+         * The row ID.
+         * <p>Type: INTEGER</p>
+         */
+        public static final String ID = "_id";
+
+        /**
+         * Is Quiet Time enabled
+         * 
+         * Whether or not Quiet Time is enabled
+         * <P>
+         * Type: BOOLEAN
+         * </P>
+         */
+        public static final String NAME = "Name";
+
+        /**
+         * Quiet Time Start Hour
+         * 
+         * Start Hour for Quiet Time
+         *
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String PKG_NAME = "pkgName";
+        
+        /**
+         * Quiet Time Start Minutes
+         * 
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String LED_COLOR = "ledColor";
+
+        /**
+         * Stop Hour for Quiet Time
+         *
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String LED_ON_MS = "ledOnMs";
+       
+        /**
+         * Stop Minutes for Quiet Time
+         * 
+         * <P>Type: INTEGER</P>
+         */
+        public static final String LED_OFF_MS = "ledOffMs";
+        
    
+        
+        /**
+         * Convenience function for retrieving default led options (row 1)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getDefaultLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=1", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the default led options (row 1)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean updateDefaultLed (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=1", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }
+        
+        /**
+         * Convenience function for adding a new package to the default led options
+         * Checks to see if package exists before inserting
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean insertPackage (ContentResolver cr, ContentValues values, String pkg) {
+            
+        	Boolean updated = false;
+        	Boolean exists = true;
+        	
+        	try {
+            	exists = cr.query(CONTENT_URI, null, "_pkgName=" + pkg, null, null) != null;
+            } catch (NumberFormatException e) {
+            	
+            	Log.e("Insert Package","Package exists - not added");
+                return false;
+            }
+        
+        	if (!exists) {
+        		try {
+        			updated = cr.insert(CONTENT_URI, values)  != null;
+        		} catch (NumberFormatException e) {
+        			
+        		}
+        		Log.d("Insert Package","Package added - " + pkg);
+        	}
+        
+            return updated;
+        }        
+    }
+
+    
     
     /**
      * Returns the device ID that we should use when connecting to the mobile gtalk server.
