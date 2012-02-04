@@ -706,7 +706,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         checkIncomingCall(pkg);
         // Tranq
         getDefaultLedSettings();
-        insertPackage(pkg);
+       
         //
         
         // Limit the number of notifications that any given package except the android
@@ -955,26 +955,9 @@ public class NotificationManagerService extends INotificationManager.Stub
         mDefaultNotificationColor = cur.getInt(3);
         mDefaultNotificationLedOn = cur.getInt(4) * 100;
         mDefaultNotificationLedOff = cur.getInt(5) * 100;
-        Log.v("**************************************************************************",
-        		"***************************************************************************");
-        Log.v("Default Led Options","Color = " + String.valueOf(mDefaultNotificationColor) );
-        Log.v("Default Led Options","ON Ms = " + String.valueOf(mDefaultNotificationLedOn) );
-        Log.v("Default Led Options","OFF Ms = " + String.valueOf(mDefaultNotificationLedOff) );
     }
     
-    private void insertPackage(String pkg){
 
-    	ContentValues values = new ContentValues(5);
-        // Write the default led option values to the database
-		values.put(Settings.NotifOptions.NAME, pkg);
-		values.put(Settings.NotifOptions.PKG_NAME, pkg);
-		values.put(Settings.NotifOptions.LED_COLOR, -1);
-		values.put(Settings.NotifOptions.LED_ON_MS, 3);
-		values.put(Settings.NotifOptions.LED_OFF_MS, 3);
-    	
-    	Settings.NotifOptions.insertPackage(mContext.getContentResolver(), values, pkg);
-    }
-    
     
 
     private void sendAccessibilityEvent(Notification notification, CharSequence packageName) {
