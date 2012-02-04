@@ -104,9 +104,10 @@ public class NotificationManagerService extends INotificationManager.Stub
     private int mStartMin = 0;
     private int mStopHour = 0;
     private int mStopMin = 0;
-    private boolean mUseLed = true;
-    private boolean mUseVibrate = true;
-    private boolean mUseSound = true;
+    private boolean mUseLed = false;
+    private boolean mUseVibrate = false;
+    private boolean mUseSound = false;
+    private boolean mUseLedScreenOn = false;
     //
     
 
@@ -841,6 +842,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                     mSoundNotification = r;
                     // do not play notifications if stream volume is 0
                     // (typically because ringer mode is silent).
+                    // Tranq
                     if (inQuietTime() & (!mUseSound)) {
                     	//No sound
                     	} else {
@@ -854,10 +856,10 @@ public class NotificationManagerService extends INotificationManager.Stub
                     				Binder.restoreCallingIdentity(identity);
                     			}
                     		}
-                    	
                 	}
                 }
                 // vibrate
+                // Tranq
                 if (inQuietTime() & (!mUseVibrate)) {
                 	// No vibrate
                 	} else {
@@ -872,7 +874,6 @@ public class NotificationManagerService extends INotificationManager.Stub
                 					: notification.vibrate,
                 					((notification.flags & Notification.FLAG_INSISTENT) != 0) ? 0: -1);
                 		}
-                	
                 }
             }
             // this option doesn't shut off the lights
@@ -895,8 +896,8 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             }
         }
-                
         
+        // Tranq
     	if (useQuietTime) {
     		Log.v("Quiet Time","Quiet Time Enabled");
     		
@@ -909,14 +910,12 @@ public class NotificationManagerService extends INotificationManager.Stub
 
     		}
     	}
-        
-        
-                
 
         idOut[0] = id;
     }
     
-    
+    // Tranq
+    // Are we within the Quiet Time hours    
     private boolean inQuietTime() {
     	
     	getQuietTimeSettings();
@@ -926,16 +925,15 @@ public class NotificationManagerService extends INotificationManager.Stub
         int startMins = mStartHour * 60 + mStartMin;
         int stopMins = mStopHour * 60 + mStopMin;
         
-        
         if (stopMins < startMins) {
         	return (nowMins > startMins) || (nowMins < stopMins);
            	} else {
            		return (nowMins > startMins) && (nowMins < stopMins);
            	}     		
-
     }
     
-    
+    // Tranq
+    // Get the settings    
     private void getQuietTimeSettings(){
 
     	Cursor cur = Settings.QuietTime.getCursor(mContext.getContentResolver());
@@ -949,9 +947,13 @@ public class NotificationManagerService extends INotificationManager.Stub
         mUseVibrate = cur.getInt(8) == 1;
     }
     
+    // Tranq
+    // Get the settings
     private void getDefaultLedSettings(){
 
     	Cursor cur = Settings.NotifOptions.getDefaultLed(mContext.getContentResolver());
+    	
+    	mUseLedScreenOn = cur.getString(2).equals("PulseScreenOn=true");
         mDefaultNotificationColor = cur.getInt(3);
         mDefaultNotificationLedOn = cur.getInt(4) * 100;
         mDefaultNotificationLedOff = cur.getInt(5) * 100;
@@ -1170,6 +1172,10 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
 
         // Don't flash while we are in a call or screen is on
+        // Can flash with screen on if setting enabled
+        // Tranq
+        getDefaultLedSettings();
+        if (mUseLedScreenOn) mScreenOn = false;
         if (mLedNotification == null || mInCall || mScreenOn) {
             mNotificationLight.turnOff();
         } else {
