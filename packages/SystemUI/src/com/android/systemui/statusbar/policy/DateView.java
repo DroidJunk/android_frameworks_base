@@ -42,7 +42,7 @@ public final class DateView extends TextView {
     
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
 	private SharedPreferences mPrefs;
-    private int mDateColor = 0xff33b5e5;
+    private int mDateColor = 0xff3F9BBF;
     
     
     
@@ -100,7 +100,7 @@ public final class DateView extends TextView {
 		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
  		
  		
-		mDateColor = mPrefs.getInt("date_color", 0xff33b5e5);
+		mDateColor = mPrefs.getInt("date_color", 0xff3F9BBF);
         
         setUpdates();
         

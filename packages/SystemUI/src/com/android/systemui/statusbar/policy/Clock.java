@@ -55,9 +55,9 @@ public class Clock extends TextView {
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
 	private SharedPreferences mPrefs;
     private boolean mShowClock = true;
-    private boolean mClockAmPm = true;
-    private int mClockColor = 0xff33b5e5;
-    private int mClockSize = 15;
+    private boolean mClockAmPm = false;
+    private int mClockColor = 0xff3F9BBF;
+    private int mClockSize = 17;
 	
 	
     private boolean mAttached;
@@ -103,9 +103,9 @@ public class Clock extends TextView {
 			mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
      		
      		mShowClock = mPrefs.getBoolean("show_clock", true);
-     		mClockAmPm = mPrefs.getBoolean("clock_ampm", true);
-    		mClockColor = mPrefs.getInt("clock_color", 0xff33b5e5);
-    		mClockSize = mPrefs.getInt("clock_size", 15);
+     		mClockAmPm = mPrefs.getBoolean("clock_ampm", false);
+    		mClockColor = mPrefs.getInt("clock_color", 0xff3F9BBF);
+    		mClockSize = mPrefs.getInt("clock_size", 17);
     		
             IntentFilter filter = new IntentFilter();
 
