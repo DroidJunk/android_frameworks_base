@@ -4533,27 +4533,26 @@ public final class Settings {
         public static final String ID = "_id";
 
         /**
-         * Is Quiet Time enabled
+         * Package Short Name - Row 1 is used for default led settings
          * 
-         * Whether or not Quiet Time is enabled
-         * <P>
-         * Type: BOOLEAN
-         * </P>
+         * Short name of package for led settings
+         * 
+         * <P>Type: STRING</P>
          */
         public static final String NAME = "Name";
 
         /**
-         * Quiet Time Start Hour
+         * Package Name - Row 1 is used for default led settings
          * 
-         * Start Hour for Quiet Time
+         * Name of package for led settings
          *
-         * <P>Type: INTEGER</P>
+         * <P>Type: STRING</P>
          *
          */
         public static final String PKG_NAME = "pkgName";
         
         /**
-         * Quiet Time Start Minutes
+         * Led Color - Row 1 is used for default led settings
          * 
          * <P>Type: INTEGER</P>
          *
@@ -4561,7 +4560,7 @@ public final class Settings {
         public static final String LED_COLOR = "ledColor";
 
         /**
-         * Stop Hour for Quiet Time
+         * Led On Ms - Row 1 is used for default led settings
          *
          * <P>Type: INTEGER</P>
          *
@@ -4569,7 +4568,7 @@ public final class Settings {
         public static final String LED_ON_MS = "ledOnMs";
        
         /**
-         * Stop Minutes for Quiet Time
+         * Led off Ms - Row 1 is used for default led settings
          * 
          * <P>Type: INTEGER</P>
          */
@@ -4627,7 +4626,7 @@ public final class Settings {
         	Cursor c = null;
         	Boolean exists = true;
         	
-        	Log.e("Insert Package","Testing - "+pkg+"  ***************************************************************");
+        	Log.e("Insert Package","Testing - "+pkg+"  ************************************************");
         	try {
             	c = cr.query(CONTENT_URI, new String[]{"pkgName"}, "pkgName=?", new String[]{pkg}, null);
             	
