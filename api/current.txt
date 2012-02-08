@@ -17420,6 +17420,7 @@ package android.provider {
   public static final class Settings.NotifOptions implements android.provider.BaseColumns {
     ctor public Settings.NotifOptions();
     method public static android.database.Cursor getDefaultLed(android.content.ContentResolver);
+    method public static java.lang.Boolean insertPackage(android.content.ContentResolver, android.content.ContentValues, java.lang.String);
     method public static java.lang.Boolean updateDefaultLed(android.content.ContentResolver, android.content.ContentValues);
     field public static final android.net.Uri CONTENT_URI;
     field public static final java.lang.String ID = "_id";
