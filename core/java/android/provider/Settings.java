@@ -1920,6 +1920,11 @@ public final class Settings {
         public static final String STATUSBAR_BATTERY_BAR_COLOR = "statusbar_battery_bar_color";
 
         /**
+         * @hide
+         */
+	public static final String NAVIGATION_BAR_TINT = "navigation_bar_tint";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4389,6 +4394,277 @@ public final class Settings {
         }
     }
 
+    
+    public static final class QuietTime implements BaseColumns
+    {
+        private static final String TAG = "QuietTime";
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/quiet_time");
+
+        /**
+         * The row ID.
+         * <p>Type: INTEGER</p>
+         */
+        public static final String ID = "_id";
+
+        /**
+         * Is Quiet Time enabled
+         * 
+         * Whether or not Quiet Time is enabled
+         * <P>
+         * Type: BOOLEAN
+         * </P>
+         */
+        public static final String QT_ENABLED = "qtEnabled";
+
+        /**
+         * Quiet Time Start Hour
+         * 
+         * Start Hour for Quiet Time
+         *
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String QT_START_HOUR = "qtStartHour";
+        
+        /**
+         * Quiet Time Start Minutes
+         * 
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String QT_START_MIN = "qtStartMin";
+
+        /**
+         * Stop Hour for Quiet Time
+         *
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String QT_STOP_HOUR = "qtStopHour";
+       
+        /**
+         * Stop Minutes for Quiet Time
+         * 
+         * <P>Type: INTEGER</P>
+         */
+        public static final String QT_STOP_MIN = "qtStopMin";
+        
+        /**
+         * Quiet Time use led
+         * 
+         * <P>Type: BOOLEAN</P>
+         *
+         */
+        public static final String QT_LED_ON = "qtLedOn";
+        
+        /**
+         * Quiet Time use sound
+         * 
+         * <P>Type: BOOLEAN</P>
+         *
+         */
+        public static final String QT_SOUND_ON = "qtSoundOn";
+        
+        /**
+         * Quiet Time use vibrate
+         * 
+         * <P>Type: BOOLEAN</P>
+         *
+         */
+        public static final String QT_VIBRATE_ON = "qtVibrateOn";
+        
+    
+        
+        /**
+         * Convenience function for retrieving a cursor for the only row
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getCursor(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=1", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating Quiet Time settings
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Boolean updateQT (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=1", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }
+        
+        
+    }    
+    
+
+    public static final class NotifOptions implements BaseColumns
+    {
+        private static final String TAG = "NotifOptions";
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/notif_options");
+
+        /**
+         * The row ID.
+         * <p>Type: INTEGER</p>
+         */
+        public static final String ID = "_id";
+
+        /**
+         * Package Short Name - Row 1 is used for default led settings
+         * 
+         * Short name of package for led settings
+         * 
+         * <P>Type: STRING</P>
+         */
+        public static final String NAME = "Name";
+
+        /**
+         * Package Name - Row 1 is used for default led settings
+         * 
+         * Name of package for led settings
+         *
+         * <P>Type: STRING</P>
+         *
+         */
+        public static final String PKG_NAME = "pkgName";
+        
+        /**
+         * Led Color - Row 1 is used for default led settings
+         * 
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String LED_COLOR = "ledColor";
+
+        /**
+         * Led On Ms - Row 1 is used for default led settings
+         *
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String LED_ON_MS = "ledOnMs";
+       
+        /**
+         * Led off Ms - Row 1 is used for default led settings
+         * 
+         * <P>Type: INTEGER</P>
+         */
+        public static final String LED_OFF_MS = "ledOffMs";
+        
+   
+        
+        /**
+         * Convenience function for retrieving default led options (row 1)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getDefaultLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=1", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the default led options (row 1)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean updateDefaultLed (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=1", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }
+        
+        /**
+         * Convenience function for adding a new package to the default led options
+         * Checks to see if package exists before inserting
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean insertPackage (ContentResolver cr, ContentValues values, String pkg) {
+            
+        	Boolean updated = false;
+        	Cursor c = null;
+        	Boolean exists = true;
+        	
+        	Log.e("Insert Package","Testing - "+pkg+"  ************************************************");
+        	try {
+            	c = cr.query(CONTENT_URI, new String[]{"pkgName"}, "pkgName=?", new String[]{pkg}, null);
+            	
+            } catch (NumberFormatException e) {
+            	
+            	Log.e("Insert Package","Error testing existance");
+            	c.close();
+                if (c.getCount() != 0) return false;
+            }
+            
+            exists = c.getCount() > 0;
+            c.close();
+            
+            if (exists) Log.e("Insert Package","Package exists - not added");
+            
+            
+        	if (!exists) {
+        		Log.d("Insert Package","Trying to insert *********************************************" + pkg);
+        		try {
+        			updated = cr.insert(CONTENT_URI, values)  != null;
+        		} catch (NumberFormatException e) {
+        			
+        		}
+        		Log.d("Insert Package","Package added - " + pkg);
+        	}
+        	
+        	
+            return updated;
+        }        
+    }
+
+    
+    
     /**
      * Returns the device ID that we should use when connecting to the mobile gtalk server.
      * This is a string like "android-0x1242", where the hex string is the Android ID obtained

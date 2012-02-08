@@ -13,6 +13,7 @@ import android.net.wifi.WifiManager;
 
 public class TranqWifiButton extends TranqToggleButton {
 
+	private View showWifi;
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -36,6 +37,7 @@ public class TranqWifiButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
+		showWifi = (View) getRootView().findViewById(R.id.button_1);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_1);
 		mIcon = (View) getRootView().findViewById(R.id.wifi_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_1);
@@ -76,6 +78,12 @@ public class TranqWifiButton extends TranqToggleButton {
 			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_off);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
+		}
+		
+		if (TranqToggleButton.mShowWifi) {
+			showWifi.setVisibility(View.VISIBLE);
+		} else {
+			showWifi.setVisibility(View.GONE);
 		}
 
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);

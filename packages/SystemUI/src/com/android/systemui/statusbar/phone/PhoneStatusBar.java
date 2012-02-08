@@ -1035,7 +1035,10 @@ public class PhoneStatusBar extends StatusBar {
     public void showClock(boolean show) {
         View clock = mStatusBarView.findViewById(R.id.clock);
         if (clock != null) {
-            clock.setVisibility(show ? View.VISIBLE : View.GONE);
+        	// Tranq we will no longer be hiding the clock
+        	//while charging
+            
+        	// clock.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
 

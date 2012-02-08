@@ -23,6 +23,7 @@ import android.provider.Settings.SettingNotFoundException;
 
 public class TranqBrightnessButton extends TranqToggleButton {
 
+	private View showBrightness;
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -59,6 +60,7 @@ public class TranqBrightnessButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
+		showBrightness = (View) getRootView().findViewById(R.id.button_6);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_6);
 		mIcon = (View) getRootView().findViewById(R.id.brightness_icon);
 		mDivider = (View) getRootView().findViewById(R.id.divider_6);		
@@ -116,6 +118,13 @@ public class TranqBrightnessButton extends TranqToggleButton {
 	      }
 
 		  mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
+		  
+		  if (TranqToggleButton.mShowBrightness) {
+			  showBrightness.setVisibility(View.VISIBLE);
+		  } else {
+			  showBrightness.setVisibility(View.GONE);
+		  }
+		  
 	}
 
 
