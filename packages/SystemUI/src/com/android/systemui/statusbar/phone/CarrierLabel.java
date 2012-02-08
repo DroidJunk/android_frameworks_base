@@ -45,7 +45,7 @@ public class CarrierLabel extends TextView {
 	private SharedPreferences mPrefs;
     private boolean mShowCarrier = true;
     private int mCarrierColor = 0xff33b5e5;
-    private boolean mCustomCarrier = false;
+    private boolean mCustomCarrier = true;
     private String mCustomCarrierText = "Tranquil Ice";
     private int mCarrierSize = 15;
     private String mDefaultCarrierText = "";
@@ -104,7 +104,7 @@ public class CarrierLabel extends TextView {
      		
      		mShowCarrier = mPrefs.getBoolean("show_carrier", true);
     		mCarrierColor = mPrefs.getInt("carrier_color", 0xff33b5e5);
-    		mCustomCarrier = mPrefs.getBoolean("carrier_custom", false);
+    		mCustomCarrier = mPrefs.getBoolean("carrier_custom", true);
     		mCustomCarrierText = mPrefs.getString("carrier_custom_text", "Tranquil Ice");
     		mCarrierSize = mPrefs.getInt("carrier_size", 15);
     		

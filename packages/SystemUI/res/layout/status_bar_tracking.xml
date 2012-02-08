@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_gravity="bottom"
             android:gravity="center"
-            android:paddingBottom="12dip"
+            android:paddingBottom="20dp"
             />
     </FrameLayout>
 
@@ -146,7 +146,7 @@
         
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="42dip"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:scaleType="fitXY"
             android:src="@drawable/status_bar_close_on"

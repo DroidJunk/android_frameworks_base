@@ -151,7 +151,6 @@ public class BatteryBar extends LinearLayout implements Animatable, Runnable {
         } else {
             stop();
         }
-        invalidate();
     }
 
     @Override

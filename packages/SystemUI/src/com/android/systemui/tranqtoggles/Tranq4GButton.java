@@ -17,13 +17,12 @@ import android.provider.Settings;
 
 public class Tranq4GButton extends TranqToggleButton {
 
-	private View showFourg;
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
 	Handler mHandler = new Handler();
 	final NetworkModeObserver mNetworkModeObserver = new NetworkModeObserver(mHandler) ;
-	
+
 
 
 
@@ -52,7 +51,6 @@ public class Tranq4GButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
-		showFourg = (View) getRootView().findViewById(R.id.button_0);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_0);
 		mIcon = (View) getRootView().findViewById(R.id.fourg_icon);
 		mDivider = (View) getRootView().findViewById(R.id.divider_0);
@@ -91,16 +89,8 @@ public class Tranq4GButton extends TranqToggleButton {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
-		
+
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
-
-		if (TranqToggleButton.mShowFourg) {
-			showFourg.setVisibility(View.VISIBLE);
-		} else {
-			showFourg.setVisibility(View.GONE);
-		}
-
-		
 	}
 
 

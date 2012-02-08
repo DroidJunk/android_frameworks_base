@@ -16,7 +16,6 @@ import android.view.View;
 
 public class TranqSoundButton extends TranqToggleButton {
 
-	private View showSound;
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -37,7 +36,6 @@ public class TranqSoundButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
-		showSound = (View) getRootView().findViewById(R.id.button_4);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_4);
 		mIcon = (View) getRootView().findViewById(R.id.sound_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_4);
@@ -87,13 +85,6 @@ public class TranqSoundButton extends TranqToggleButton {
 		}
 
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
-		
-		if (TranqToggleButton.mShowSound) {
-			showSound.setVisibility(View.VISIBLE);
-		} else {
-			showSound.setVisibility(View.GONE);
-		}
-		
 	}
 
 

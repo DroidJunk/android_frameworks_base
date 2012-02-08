@@ -23,7 +23,6 @@ import android.provider.Settings.SettingNotFoundException;
 
 public class TranqRotateButton extends TranqToggleButton {
 
-	private View showRotate;
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -60,7 +59,6 @@ public class TranqRotateButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
-		showRotate = (View) getRootView().findViewById(R.id.button_7);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_7);
 		mIcon = (View) getRootView().findViewById(R.id.rotate_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_7);
@@ -116,13 +114,6 @@ public class TranqRotateButton extends TranqToggleButton {
 	      }
 
 		  mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
-		  
-		  if (TranqToggleButton.mShowRotate) {
-			showRotate.setVisibility(View.VISIBLE);
-		  } else {
-			showRotate.setVisibility(View.GONE);
-		  }
-		  
 	}
 
 

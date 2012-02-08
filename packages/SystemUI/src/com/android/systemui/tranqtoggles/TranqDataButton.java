@@ -24,7 +24,6 @@ import android.provider.Settings;
 
 public class TranqDataButton extends TranqToggleButton {
 
-	private View showData;
 	private View mIndicator;
 	private View mIcon;
 	private WifiManager mWifiManager; 
@@ -66,7 +65,6 @@ public class TranqDataButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
-		showData = (View) getRootView().findViewById(R.id.button_9);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_9);
 		mIcon = (View) getRootView().findViewById(R.id.data_icon);
 
@@ -106,12 +104,6 @@ public class TranqDataButton extends TranqToggleButton {
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
 
-		if (TranqToggleButton.mShowData) {
-			showData.setVisibility(View.VISIBLE);
-		} else {
-			showData.setVisibility(View.GONE);
-		}
-		
 	}
 
 
