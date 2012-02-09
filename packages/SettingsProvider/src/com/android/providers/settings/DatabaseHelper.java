@@ -63,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 74;
+    private static final int DATABASE_VERSION = 75;
 
     private Context mContext;
 
@@ -74,7 +74,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mValidTables.add("secure");
         mValidTables.add("bluetooth_devices");
         mValidTables.add("bookmarks");
-
+        mValidTables.add("quiet_time");
+        mValidTables.add("notif_options");
+        
         // These are old.
         mValidTables.add("favorites");
         mValidTables.add("gservices");
@@ -129,7 +131,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE INDEX bookmarksIndex1 ON bookmarks (folder);");
         db.execSQL("CREATE INDEX bookmarksIndex2 ON bookmarks (shortcut);");
+        
+        
+        db.execSQL("CREATE TABLE quiet_time (" +
+                "_id INTEGER PRIMARY KEY," +
+                "qtEnabled INTEGER, " +
+                "qtStartHour INTEGER, " +
+                "qtStartMin INTEGER, " +
+                "qtStopHour INTEGER, " +
+                "qtStopMin INTEGER, " +
+                "qtLedOn INTEGER, " +
+                "qtSoundOn INTEGER, " +
+                "qtVibrateOn INTEGER);");
 
+        // insert default values
+        String insertQT = "INSERT INTO quiet_time " +
+             "(qtEnabled, qtStartHour, qtStartMin, qtStopHour, qtStopMin, qtLedOn, " +
+             " qtSoundOn, qtVibrateOn) VALUES ";
+        db.execSQL(insertQT + "(0, 21, 0, 7, 0, 1, 1, 1);");
+        
+
+        db.execSQL("CREATE TABLE notif_options (" +
+                "_id INTEGER PRIMARY KEY," +
+                "Name TEXT, " +
+                "pkgName TEXT, " +
+                "ledColor INTEGER, " +
+                "ledOnMs INTEGER, " +
+        		"ledOffMs INTEGER);");
+         
+        // insert default values
+        String insertNotifOp = "INSERT INTO notif_options " +
+             "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+        db.execSQL(insertNotifOp + "('Default','', -1, 3, 3);");        
+        
         // Populate bookmarks table with initial bookmarks
         loadBookmarks(db);
 
@@ -991,6 +1025,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVibrateSettingFromNone(db);
             upgradeVersion = 74;
         }
+        
+        
+        if (upgradeVersion == 74) {
+            // add quiet_time table
+            db.execSQL("CREATE TABLE quiet_time (" +
+                    "_id INTEGER PRIMARY KEY," +
+                    "qtEnabled INTEGER, " +
+                    "qtStartHour INTEGER, " +
+                    "qtStartMin INTEGER, " +
+                    "qtStopHour INTEGER, " +
+                    "qtStopMin INTEGER, " +
+                    "qtLedOn INTEGER, " +
+                    "qtSoundOn INTEGER, " +
+                    "qtVibrateOn INTEGER);");
+
+            // insert default values
+            String insertQT = "INSERT INTO quiet_time " +
+                 "(qtEnabled, qtStartHour, qtStartMin, qtStopHour, qtStopMin, qtLedOn, " +
+                 " qtSoundOn, qtVibrateOn) VALUES ";
+            db.execSQL(insertQT + "(0, 21, 0, 7, 0, 1, 1, 1);");   
+            
+            db.execSQL("CREATE TABLE notif_options (" +
+                    "_id INTEGER PRIMARY KEY," +
+                    "Name TEXT, " +
+                    "pkgName TEXT, " +
+                    "ledColor INTEGER, " +
+                    "ledOnMs INTEGER, " +
+            		"ledOffMs INTEGER);");
+             
+            // insert default values
+            String insertNotifOp = "INSERT INTO notif_options " +
+                 "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+            db.execSQL(insertNotifOp + "('Default','', -1, 3, 3);");     
+            
+        	
+            upgradeVersion = 75;
+        }           
+        
+        
 
         // *** Remember to update DATABASE_VERSION above!
 

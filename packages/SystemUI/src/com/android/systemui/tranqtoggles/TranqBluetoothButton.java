@@ -16,6 +16,7 @@ import android.view.View;
 
 public class TranqBluetoothButton extends TranqToggleButton {
 
+	private View showBluetooth;
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -36,6 +37,7 @@ public class TranqBluetoothButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
+		showBluetooth = (View) getRootView().findViewById(R.id.button_3);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_3);
 		mIcon = (View) getRootView().findViewById(R.id.bluetooth_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_3);	
@@ -81,6 +83,12 @@ public class TranqBluetoothButton extends TranqToggleButton {
 
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 
+		if (TranqToggleButton.mShowBluetooth) {
+			showBluetooth.setVisibility(View.VISIBLE);
+		} else {
+			showBluetooth.setVisibility(View.GONE);
+		}
+		
 	}
 
 

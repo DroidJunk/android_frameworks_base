@@ -16,6 +16,7 @@ import android.view.View;
 
 public class TranqAirplaneButton extends TranqToggleButton {
 
+	private View showAirplane;
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -34,6 +35,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
+		showAirplane = (View) getRootView().findViewById(R.id.button_5);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_5);
 		mIcon = (View) getRootView().findViewById(R.id.airplane_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_5);	
@@ -81,6 +83,13 @@ public class TranqAirplaneButton extends TranqToggleButton {
 		}
 
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
+		
+		if (TranqToggleButton.mShowAirplane) {
+			showAirplane.setVisibility(View.VISIBLE);
+		} else {
+			showAirplane.setVisibility(View.GONE);
+		}
+		
 
 	}
 

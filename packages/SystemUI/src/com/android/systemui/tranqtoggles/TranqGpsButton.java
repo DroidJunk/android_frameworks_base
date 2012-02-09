@@ -18,6 +18,7 @@ import android.provider.Settings;
 
 public class TranqGpsButton extends TranqToggleButton {
 
+	private View showGps;
 	private View mIndicator;
 	private View mIcon;
 	private View mDivider;
@@ -51,6 +52,7 @@ public class TranqGpsButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
+		showGps = (View) getRootView().findViewById(R.id.button_2);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_2);
 		mIcon = (View) getRootView().findViewById(R.id.gps_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_2);
@@ -95,6 +97,12 @@ public class TranqGpsButton extends TranqToggleButton {
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 
 	    }
+	    
+		if (TranqToggleButton.mShowGps) {
+			showGps.setVisibility(View.VISIBLE);
+		} else {
+			showGps.setVisibility(View.GONE);
+		}
 
 		mDivider.setBackgroundColor(TranqToggleViewTop.mToggleDivColor);
 	}

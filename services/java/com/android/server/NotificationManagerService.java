@@ -17,29 +17,29 @@
 package com.android.server;
 
 import com.android.internal.statusbar.StatusBarNotification;
-
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -55,11 +55,11 @@ import android.util.Slog;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 /** {@hide} */
 public class NotificationManagerService extends INotificationManager.Stub
@@ -96,6 +96,20 @@ public class NotificationManagerService extends INotificationManager.Stub
     private NotificationPlayer mSound;
     private boolean mSystemReady;
     private int mDisabledNotifications;
+    
+    // Tranq
+    private SharedPreferences mPrefs;
+    private boolean useQuietTime = false;
+    private int mStartHour = 0;
+    private int mStartMin = 0;
+    private int mStopHour = 0;
+    private int mStopMin = 0;
+    private boolean mUseLed = false;
+    private boolean mUseVibrate = false;
+    private boolean mUseSound = false;
+    private boolean mUseLedScreenOn = false;
+    //
+    
 
     private NotificationRecord mVibrateNotification;
     private Vibrator mVibrator = new Vibrator();
@@ -406,13 +420,19 @@ public class NotificationManagerService extends INotificationManager.Stub
         mNotificationLight = lights.getLight(LightsService.LIGHT_ID_NOTIFICATIONS);
         mAttentionLight = lights.getLight(LightsService.LIGHT_ID_ATTENTION);
 
-        Resources resources = mContext.getResources();
-        mDefaultNotificationColor = resources.getColor(
-                com.android.internal.R.color.config_defaultNotificationColor);
-        mDefaultNotificationLedOn = resources.getInteger(
-                com.android.internal.R.integer.config_defaultNotificationLedOn);
-        mDefaultNotificationLedOff = resources.getInteger(
-                com.android.internal.R.integer.config_defaultNotificationLedOff);
+        
+        //Tranq changes
+        getDefaultLedSettings();
+        
+        //Resources resources = mContext.getResources();
+        //mDefaultNotificationColor = resources.getColor(
+        //        com.android.internal.R.color.config_defaultNotificationColor);
+        //mDefaultNotificationLedOn = resources.getInteger(
+        //        com.android.internal.R.integer.config_defaultNotificationLedOn);
+        //mDefaultNotificationLedOff = resources.getInteger(
+        //        com.android.internal.R.integer.config_defaultNotificationLedOff);
+        //
+        
 
         // Don't start allowing notifications until the setup wizard has run once.
         // After that, including subsequent boots, init with notifications turned on.
@@ -442,6 +462,9 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         SettingsObserver observer = new SettingsObserver(mHandler);
         observer.observe();
+        
+        getQuietTimeSettings();
+        
     }
 
     void systemReady() {
@@ -682,7 +705,11 @@ public class NotificationManagerService extends INotificationManager.Stub
             String tag, int id, int priority, Notification notification, int[] idOut)
     {
         checkIncomingCall(pkg);
-
+        // Tranq
+        getDefaultLedSettings();
+       
+        //
+        
         // Limit the number of notifications that any given package except the android
         // package can enqueue.  Prevents DOS attacks and deals with leaks.
         if (!"android".equals(pkg)) {
@@ -815,30 +842,40 @@ public class NotificationManagerService extends INotificationManager.Stub
                     mSoundNotification = r;
                     // do not play notifications if stream volume is 0
                     // (typically because ringer mode is silent).
-                    if (audioManager.getStreamVolume(audioStreamType) != 0) {
-                        long identity = Binder.clearCallingIdentity();
-                        try {
-                            mSound.play(mContext, uri, looping, audioStreamType);
-                        }
-                        finally {
-                            Binder.restoreCallingIdentity(identity);
-                        }
-                    }
+                    // Tranq
+                    if (inQuietTime() & (!mUseSound)) {
+                    	//No sound
+                    	} else {
+                    	
+                    		if (audioManager.getStreamVolume(audioStreamType) != 0) {
+                    			long identity = Binder.clearCallingIdentity();
+                    			try {
+                    				mSound.play(mContext, uri, looping, audioStreamType);
+                    			}
+                    			finally {
+                    				Binder.restoreCallingIdentity(identity);
+                    			}
+                    		}
+                	}
                 }
-
                 // vibrate
-                final boolean useDefaultVibrate =
-                    (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
-                if ((useDefaultVibrate || notification.vibrate != null)
-                        && audioManager.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
-                    mVibrateNotification = r;
+                // Tranq
+                if (inQuietTime() & (!mUseVibrate)) {
+                	// No vibrate
+                	} else {
+                	
+                		final boolean useDefaultVibrate =
+                				(notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
+                		if ((useDefaultVibrate || notification.vibrate != null)
+                				&& audioManager.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
+                			mVibrateNotification = r;
 
-                    mVibrator.vibrate(useDefaultVibrate ? DEFAULT_VIBRATE_PATTERN
-                                                        : notification.vibrate,
-                              ((notification.flags & Notification.FLAG_INSISTENT) != 0) ? 0: -1);
+                			mVibrator.vibrate(useDefaultVibrate ? DEFAULT_VIBRATE_PATTERN
+                					: notification.vibrate,
+                					((notification.flags & Notification.FLAG_INSISTENT) != 0) ? 0: -1);
+                		}
                 }
             }
-
             // this option doesn't shut off the lights
 
             // light
@@ -859,9 +896,71 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             }
         }
+        
+        // Tranq
+    	if (useQuietTime) {
+    		Log.v("Quiet Time","Quiet Time Enabled");
+    		
+    		if (inQuietTime()) {
+    			Log.v("Quiet Time","Within Quiet Time Hours");
+    		    Log.v("Quiet Time","Use Led - " + String.valueOf(mUseLed) );
+    		    Log.v("Quiet Time","Use Sound - " + String.valueOf(mUseSound) );
+    		    Log.v("Quiet Time","Use Vibrate - " + String.valueOf(mUseVibrate) );
+				if (!mUseLed) mNotificationLight.turnOff();
+
+    		}
+    	}
 
         idOut[0] = id;
     }
+    
+    // Tranq
+    // Are we within the Quiet Time hours    
+    private boolean inQuietTime() {
+    	
+    	getQuietTimeSettings();
+    	if (!useQuietTime) return false;
+    	Calendar calendar = Calendar.getInstance();
+        int nowMins = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
+        int startMins = mStartHour * 60 + mStartMin;
+        int stopMins = mStopHour * 60 + mStopMin;
+        
+        if (stopMins < startMins) {
+        	return (nowMins > startMins) || (nowMins < stopMins);
+           	} else {
+           		return (nowMins > startMins) && (nowMins < stopMins);
+           	}     		
+    }
+    
+    // Tranq
+    // Get the settings    
+    private void getQuietTimeSettings(){
+
+    	Cursor cur = Settings.QuietTime.getCursor(mContext.getContentResolver());
+        useQuietTime = cur.getInt(1) == 1;
+        mStartHour = cur.getInt(2);
+        mStartMin = cur.getInt(3);
+        mStopHour = cur.getInt(4);
+        mStopMin = cur.getInt(5);
+        mUseLed = cur.getInt(6) == 1;
+        mUseSound = cur.getInt(7) == 1;
+        mUseVibrate = cur.getInt(8) == 1;
+    }
+    
+    // Tranq
+    // Get the settings
+    private void getDefaultLedSettings(){
+
+    	Cursor cur = Settings.NotifOptions.getDefaultLed(mContext.getContentResolver());
+    	
+    	mUseLedScreenOn = cur.getString(2).equals("PulseScreenOn=true");
+        mDefaultNotificationColor = cur.getInt(3);
+        mDefaultNotificationLedOn = cur.getInt(4) * 100;
+        mDefaultNotificationLedOff = cur.getInt(5) * 100;
+    }
+    
+
+    
 
     private void sendAccessibilityEvent(Notification notification, CharSequence packageName) {
         AccessibilityManager manager = AccessibilityManager.getInstance(mContext);
@@ -1073,6 +1172,10 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
 
         // Don't flash while we are in a call or screen is on
+        // Can flash with screen on if setting enabled
+        // Tranq
+        getDefaultLedSettings();
+        if (mUseLedScreenOn) mScreenOn = false;
         if (mLedNotification == null || mInCall || mScreenOn) {
             mNotificationLight.turnOff();
         } else {
