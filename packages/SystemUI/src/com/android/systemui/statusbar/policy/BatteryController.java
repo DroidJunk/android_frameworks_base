@@ -47,6 +47,9 @@ public class BatteryController extends BroadcastReceiver {
     private boolean mHide;
     private boolean mStock;
     private boolean mIcs;
+    private boolean mBall;
+    private boolean mVertical;
+    private boolean mAnimate;
     private Handler mHandler;
 
     public BatteryController(Context context) {
@@ -54,7 +57,10 @@ public class BatteryController extends BroadcastReceiver {
 
         mStock = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 1);
         mIcs = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 2);
-        mHide = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 3);
+        mVertical = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 3);
+        mBall = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 4);
+        mAnimate = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 5);
+        mHide = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 6);
 
         mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
@@ -99,6 +105,15 @@ public class BatteryController extends BroadcastReceiver {
             } else if (mIcs) {
                 mBattIcon = R.drawable.stock_sys_battery;
                 mChargeIcon = R.drawable.stock_sys_battery_charge;
+            } else if (mVertical) {
+                mBattIcon = R.drawable.stat_vertical_battery;
+                mChargeIcon = R.drawable.stat_vertical_battery_charge;
+            } else if (mBall) {
+                mBattIcon = R.drawable.stat_ball_battery;
+                mChargeIcon = R.drawable.stat_ball_battery_charge;
+            } else if (mAnimate) {
+                mBattIcon = R.drawable.stat_animate_battery;
+                mChargeIcon = R.drawable.stat_animate_battery_charge;
             }
             final int icon = plugged ? mChargeIcon 
                                      : mBattIcon;
@@ -127,6 +142,9 @@ public class BatteryController extends BroadcastReceiver {
         ContentResolver resolver = mContext.getContentResolver();
         mStock = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 1);
         mIcs = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 2);
-        mHide = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 3);
+        mVertical = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 3);
+        mBall = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 4);
+        mAnimate = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 5);
+        mHide = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 6);
     }
 }
