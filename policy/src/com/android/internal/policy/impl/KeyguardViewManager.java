@@ -26,6 +26,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Canvas;
 import android.os.IBinder;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,7 +146,8 @@ public class KeyguardViewManager implements KeyguardWindowController {
             mViewManager.addView(mKeyguardHost, lp);
         }
 
-        if (enableScreenRotation) {
+if (enableScreenRotation && Settings.System.getInt(mContext.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 1) == 1) {
+            if (DEBUG) Log.d(TAG, "Rotation sensor for lock screen On!");
             if (DEBUG) Log.d(TAG, "Rotation sensor for lock screen On!");
             mWindowLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
         } else {
