@@ -49,6 +49,7 @@ public class BatteryController extends BroadcastReceiver {
     private boolean mIcs;
     private boolean mBall;
     private boolean mVertical;
+    private boolean mBCircle;
     private boolean mAnimate;
     private Handler mHandler;
 
@@ -59,8 +60,9 @@ public class BatteryController extends BroadcastReceiver {
         mIcs = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 2);
         mVertical = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 3);
         mBall = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 4);
-        mAnimate = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 5);
-        mHide = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 6);
+        mBCircle = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 5);
+        mAnimate = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 6);
+        mHide = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.BATTERY_ICON, 1) == 7);
 
         mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
@@ -111,6 +113,9 @@ public class BatteryController extends BroadcastReceiver {
             } else if (mBall) {
                 mBattIcon = R.drawable.stat_ball_battery;
                 mChargeIcon = R.drawable.stat_ball_battery_charge;
+            } else if (mBCircle) {
+                mBattIcon = R.drawable.stat_bcircle_battery;
+                mChargeIcon = R.drawable.stat_bcircle_battery_charge;
             } else if (mAnimate) {
                 mBattIcon = R.drawable.stat_animate_battery;
                 mChargeIcon = R.drawable.stat_animate_battery_charge;
@@ -144,7 +149,8 @@ public class BatteryController extends BroadcastReceiver {
         mIcs = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 2);
         mVertical = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 3);
         mBall = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 4);
-        mAnimate = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 5);
-        mHide = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 6);
+        mBCircle = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 5);
+        mAnimate = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 6);
+        mHide = (Settings.System.getInt(resolver, Settings.System.BATTERY_ICON, 1) == 7);
     }
 }
