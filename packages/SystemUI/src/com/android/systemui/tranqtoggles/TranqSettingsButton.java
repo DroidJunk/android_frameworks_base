@@ -1,17 +1,16 @@
 package com.android.systemui.tranqtoggles;
 
-import com.android.systemui.R;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+
 
 
 
 public class TranqSettingsButton extends TranqToggleButton {
 
-	private ImageView mIcon;
+
 
 
 	public TranqSettingsButton(Context context, AttributeSet attrs) {
@@ -25,8 +24,6 @@ public class TranqSettingsButton extends TranqToggleButton {
 	protected void onAttachedToWindow(){
 		super.onAttachedToWindow();
 
-		mIcon = (ImageView) getRootView().findViewById(R.drawable.ic_notify_quicksettings);
-		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 		setTextColor(0xffffbb33);
 
 	}

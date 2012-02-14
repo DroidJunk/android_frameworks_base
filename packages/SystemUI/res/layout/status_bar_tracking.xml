@@ -53,7 +53,7 @@
 		<RelativeLayout  android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="52dp" > 
  
       	<FrameLayout android:id="@+id/button_0" android:layout_width="55dp" android:layout_height="52dp" >   
-			<com.android.systemui.tranqtoggles.TranqSettingsButton android:id="@+id/settings_button" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_notify_quicksettings" android:contentDescription="@string/accessibility_settings_button" />    
+			<com.android.systemui.tranqtoggles.TranqSettingsButton android:id="@+id/settings_button" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/ic_notify_quicksettings" android:contentDescription="@string/accessibility_settings_button" />    
         </FrameLayout>    
         
  		<LinearLayout android:layout_toRightOf="@id/button_0" android:layout_width="match_parent" android:layout_height="fill_parent"  >

@@ -65,7 +65,7 @@ public class TranqRotateButton extends TranqToggleButton {
 		showRotate = (View) getRootView().findViewById(R.id.button_7);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_7);
 		mIcon = (ImageView) getRootView().findViewById(R.id.rotate_icon);
-		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
+		mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_7);
 
         getContext().getContentResolver().registerContentObserver(
@@ -111,11 +111,11 @@ public class TranqRotateButton extends TranqToggleButton {
 	    if(rotateStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setImageResource(R.drawable.tranqtoggle_rotate_on);
-			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
+			mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	      }else{
 			mIcon.setImageResource(R.drawable.tranqtoggle_rotate_off);
-			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
+			mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 	      }

@@ -31,6 +31,10 @@ public abstract class TranqToggleButton extends TextView {
 	public static boolean mShowRotate = true;
 	public static boolean mShowSync = true;
 	public static boolean mShowData = true;
+	public static int mToggleIconOnColor = 0xff33b5e5;
+	public static int mToggleIconInterColor = 0xffff0000;
+	public static int mToggleIconOffColor = 0xff5d5d5d;
+
 	
 
 
@@ -61,6 +65,10 @@ public abstract class TranqToggleButton extends TextView {
 		mShowRotate = mPrefs.getBoolean("toggles_show_rotate", true);
 		mShowSync = mPrefs.getBoolean("toggles_show_sync", true);
 		mShowData = mPrefs.getBoolean("toggles_show_data", true);
+   		mToggleIconOnColor = mPrefs.getInt("toggle_icon_on_color", 0xff33b5e5);
+   		mToggleIconInterColor = mPrefs.getInt("toggle_icon_inter_color", 0xffff0000);
+   		mToggleIconOffColor = mPrefs.getInt("toggle_icon_off_color", 0xff5d5d5d);
+
         
 		
 
@@ -93,6 +101,17 @@ public abstract class TranqToggleButton extends TextView {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals("TRANQ_SETTINGS")) {
+            	
+            	if (intent.getIntExtra("ToggleIconOnColor", mToggleIconOnColor) != mToggleIconOnColor) {
+            		updateResources();
+            	}
+            	if (intent.getIntExtra("ToggleIconInterColor", mToggleIconInterColor) != mToggleIconInterColor) {
+            		updateResources();
+            	}
+            	if (intent.getIntExtra("ToggleIconOffColor", mToggleIconOffColor) != mToggleIconOffColor) {
+            		updateResources();
+            	}
+
             	if (intent.getBooleanExtra("UpdateToggles", false) == true) {
             		updateResources();
             	}

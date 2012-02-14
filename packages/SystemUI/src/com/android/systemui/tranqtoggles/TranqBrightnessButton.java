@@ -65,7 +65,7 @@ public class TranqBrightnessButton extends TranqToggleButton {
 		showBrightness = (View) getRootView().findViewById(R.id.button_6);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_6);
 		mIcon = (ImageView) getRootView().findViewById(R.id.brightness_icon);
-		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
+		mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_6);		
 
         getContext().getContentResolver().registerContentObserver(
@@ -111,11 +111,11 @@ public class TranqBrightnessButton extends TranqToggleButton {
 	    if(autoBrightnessStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setImageResource(R.drawable.tranqtoggle_brightness_on);
-			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
+			mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	      }else{
 			mIcon.setImageResource(R.drawable.tranqtoggle_brightness_off);
-			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
+			mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 

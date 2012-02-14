@@ -57,7 +57,7 @@ public class TranqGpsButton extends TranqToggleButton {
 		showGps = (View) getRootView().findViewById(R.id.button_2);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_2);
 		mIcon = (ImageView) getRootView().findViewById(R.id.gps_icon);	
-		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
+		mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_2);
 
 
@@ -93,11 +93,11 @@ public class TranqGpsButton extends TranqToggleButton {
 	    if(gpsStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setImageResource(R.drawable.tranqtoggle_gps_on);
-			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
+			mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	    }else{
 	    	mIcon.setImageResource(R.drawable.tranqtoggle_gps_off);
-	    	mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
+	    	mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 
