@@ -100,17 +100,19 @@ public abstract class TranqToggleButton extends TextView {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            int oldColor = 0;
+            
             if (action.equals("TRANQ_SETTINGS")) {
             	
-            	if (intent.getIntExtra("ToggleIconOnColor", mToggleIconOnColor) != mToggleIconOnColor) {
-            		updateResources();
-            	}
-            	if (intent.getIntExtra("ToggleIconInterColor", mToggleIconInterColor) != mToggleIconInterColor) {
-            		updateResources();
-            	}
-            	if (intent.getIntExtra("ToggleIconOffColor", mToggleIconOffColor) != mToggleIconOffColor) {
-            		updateResources();
-            	}
+            	oldColor = mToggleIconOnColor;
+                mToggleIconOnColor = intent.getIntExtra("ToggleIconOnColor", mToggleIconOnColor);
+            	if (oldColor != mToggleIconOnColor) updateResources();
+            	oldColor = mToggleIconInterColor;
+                mToggleIconInterColor = intent.getIntExtra("ToggleIconInterColor", mToggleIconInterColor);
+            	if (oldColor != mToggleIconInterColor) updateResources();
+            	oldColor = mToggleIconOffColor;
+                mToggleIconOffColor = intent.getIntExtra("ToggleIconOffColor", mToggleIconOffColor);
+            	if (oldColor != mToggleIconOffColor) updateResources();
 
             	if (intent.getBooleanExtra("UpdateToggles", false) == true) {
             		updateResources();
