@@ -65,9 +65,9 @@ public abstract class TranqToggleButton extends TextView {
 		mShowRotate = mPrefs.getBoolean("toggles_show_rotate", true);
 		mShowSync = mPrefs.getBoolean("toggles_show_sync", true);
 		mShowData = mPrefs.getBoolean("toggles_show_data", true);
-   		mToggleIconOnColor = mPrefs.getInt("toggle_icon_on_color", 0xff33b5e5);
-   		mToggleIconInterColor = mPrefs.getInt("toggle_icon_inter_color", 0xffff0000);
-   		mToggleIconOffColor = mPrefs.getInt("toggle_icon_off_color", 0xff5d5d5d);
+   		mToggleIconOnColor = mPrefs.getInt("toggles_icon_on_color", 0xff33b5e5);
+   		mToggleIconInterColor = mPrefs.getInt("toggles_icon_inter_color", 0xffff0000);
+   		mToggleIconOffColor = mPrefs.getInt("toggles_icon_off_color", 0xff5d5d5d);
 
         
 		
