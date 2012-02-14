@@ -8,8 +8,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 
 
 
@@ -18,7 +20,7 @@ public class TranqBluetoothButton extends TranqToggleButton {
 
 	private View showBluetooth;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	private BroadcastReceiver mBroadcastReciver;
 	private BluetoothAdapter mBluetoothAdaper;	
@@ -39,7 +41,7 @@ public class TranqBluetoothButton extends TranqToggleButton {
 
 		showBluetooth = (View) getRootView().findViewById(R.id.button_3);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_3);
-		mIcon = (View) getRootView().findViewById(R.id.bluetooth_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.bluetooth_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_3);	
 
 	    final IntentFilter mFilter = new IntentFilter();
@@ -71,12 +73,13 @@ public class TranqBluetoothButton extends TranqToggleButton {
 
 		if (mBluetoothAdaper.isEnabled()) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_bluetooth_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_bluetooth_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 
 		} else {
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_bluetooth_off);
-
+			mIcon.setImageResource(R.drawable.tranqtoggle_bluetooth_off);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

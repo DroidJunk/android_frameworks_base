@@ -6,10 +6,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 
 
 
@@ -18,7 +20,7 @@ public class TranqSoundButton extends TranqToggleButton {
 
 	private View showSound;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	private BroadcastReceiver mBroadcastReciver;
 	private AudioManager mAudioManager;	
@@ -39,7 +41,7 @@ public class TranqSoundButton extends TranqToggleButton {
 
 		showSound = (View) getRootView().findViewById(R.id.button_4);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_4);
-		mIcon = (View) getRootView().findViewById(R.id.sound_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.sound_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_4);
 
 	    final IntentFilter mFilter = new IntentFilter();
@@ -72,16 +74,19 @@ public class TranqSoundButton extends TranqToggleButton {
 		if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_NORMAL) {
 
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_sound_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 			} else 
 				if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_VIBRATE) {
 				mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
-				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off_vibrate);
+				mIcon.setImageResource(R.drawable.tranqtoggle_sound_off_vibrate);
+				mIcon.setColorFilter(TranqToggleViewTop.mToggleIconInterColor);
 				setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 
 			} else {
-				mIcon.setBackgroundResource(R.drawable.tranqtoggle_sound_off);
+				mIcon.setImageResource(R.drawable.tranqtoggle_sound_off);
+				mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 				mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 				setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

@@ -6,13 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.provider.Telephony;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
-import com.android.systemui.R;
 
 
 
@@ -23,6 +19,9 @@ public class TranqToggleViewTop extends LinearLayout {
 	public static boolean mTogglesOn = true;
 	public static boolean mTogglesTop = true;
 	private int mToggleColor = 0xff3b3b3b;
+	public static int mToggleIconOnColor = 0xff33b5e5;
+	public static int mToggleIconInterColor = 0xffff0000;
+	public static int mToggleIconOffColor = 0xff5d5d5d;
     private boolean mShowToggleInd = true;
     public static int mToggleIndOnColor = 0xffffbb33;
     public static int mToggleIndOffColor = 0xffba7b00;
@@ -70,6 +69,9 @@ public class TranqToggleViewTop extends LinearLayout {
 		mTogglesOn = mPrefs.getBoolean("toggles_show_toggles", true);
 		mTogglesTop = mPrefs.getBoolean("toggles_top", true);
    		mToggleColor = mPrefs.getInt("toggle_color", 0xff3b3b3b);
+   		mToggleIconOnColor = mPrefs.getInt("toggle_color", 0xff33b5e5);
+   		mToggleIconInterColor = mPrefs.getInt("toggle_color", 0xffff0000);
+   		mToggleIconOffColor = mPrefs.getInt("toggle_color", 0xff5d5d5d);
    		mShowToggleInd = mPrefs.getBoolean("toggle_show_indicator", true);
    		mToggleIndOnColor = mPrefs.getInt("toggle_ind_on_color", 0xffffbb33);
    		mToggleIndOffColor = mPrefs.getInt("toggle_ind_off_color", 0xffba7b00);
@@ -116,6 +118,9 @@ public class TranqToggleViewTop extends LinearLayout {
             	mTogglesOn = intent.getBooleanExtra("TogglesOn", mTogglesOn);	
             	mTogglesTop = intent.getBooleanExtra("TogglesTop", mTogglesTop);
             	mToggleColor = intent.getIntExtra("ToggleColor", mToggleColor);	
+            	mToggleIconOnColor = intent.getIntExtra("ToggleIconOnColor", mToggleIconOnColor);	
+            	mToggleIconInterColor = intent.getIntExtra("ToggleIconInterColor", mToggleIconInterColor);	
+            	mToggleIconOffColor = intent.getIntExtra("ToggleIconOffColor", mToggleIconOffColor);	
 				mShowToggleInd = intent.getBooleanExtra("ToggleShowIndicator", mShowToggleInd);
             	mToggleIndOnColor = intent.getIntExtra("ToggleIndOnColor", mToggleIndOnColor);
             	mToggleIndOffColor = intent.getIntExtra("ToggleIndOffColor", mToggleIndOffColor);

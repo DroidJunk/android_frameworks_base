@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.provider.Settings;
@@ -20,7 +22,7 @@ public class TranqGpsButton extends TranqToggleButton {
 
 	private View showGps;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	Handler mHandler = new Handler();
 	final GpsObserver mGpsObserver = new GpsObserver(mHandler) ;
@@ -54,7 +56,7 @@ public class TranqGpsButton extends TranqToggleButton {
 
 		showGps = (View) getRootView().findViewById(R.id.button_2);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_2);
-		mIcon = (View) getRootView().findViewById(R.id.gps_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.gps_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_2);
 
 
@@ -89,10 +91,12 @@ public class TranqGpsButton extends TranqToggleButton {
 	    boolean gpsStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.GPS_PROVIDER);
 	    if(gpsStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_gps_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_gps_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	    }else{
-	    	mIcon.setBackgroundResource(R.drawable.tranqtoggle_gps_off);
+	    	mIcon.setImageResource(R.drawable.tranqtoggle_gps_off);
+	    	mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 

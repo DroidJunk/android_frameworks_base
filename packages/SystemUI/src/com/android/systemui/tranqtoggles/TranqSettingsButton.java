@@ -1,22 +1,8 @@
 package com.android.systemui.tranqtoggles;
 
-import com.android.systemui.R;
-import com.android.systemui.tranqtoggles.TranqRotateButton.RotateModeObserver;
-
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.ContentObserver;
-import android.database.Cursor;
 import android.util.AttributeSet;
-import android.view.View;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
-import android.os.Handler;
-import android.provider.Settings;
 
 
 

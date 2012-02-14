@@ -6,8 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.net.wifi.WifiManager;
 
 
@@ -15,7 +17,7 @@ public class TranqWifiButton extends TranqToggleButton {
 
 	private View showWifi;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	private WifiManager mWifiManager; 
 	private BroadcastReceiver mBroadcastReciver;
@@ -39,7 +41,7 @@ public class TranqWifiButton extends TranqToggleButton {
 
 		showWifi = (View) getRootView().findViewById(R.id.button_1);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_1);
-		mIcon = (View) getRootView().findViewById(R.id.wifi_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.wifi_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_1);
 
 	    final IntentFilter mFilter = new IntentFilter();
@@ -71,11 +73,13 @@ public class TranqWifiButton extends TranqToggleButton {
 
 		if (mWifiManager.isWifiEnabled()) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_wifi_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 
 		} else {
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_wifi_off);
+			mIcon.setImageResource(R.drawable.tranqtoggle_wifi_off);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

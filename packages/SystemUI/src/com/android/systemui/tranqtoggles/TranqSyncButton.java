@@ -10,11 +10,14 @@ import android.content.IntentFilter;
 import android.content.SyncStatusObserver;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+
 import com.android.systemui.R;
 import com.android.systemui.tranqtoggles.TranqGpsButton.GpsObserver;
 
@@ -23,7 +26,7 @@ public class TranqSyncButton extends TranqToggleButton {
 
 	private View showSync;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	private BroadcastReceiver mBroadcastReciver;
 	private Cursor syncCursor;
@@ -64,7 +67,7 @@ public class TranqSyncButton extends TranqToggleButton {
 
 		showSync = (View) getRootView().findViewById(R.id.button_8);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_8);
-		mIcon = (View) getRootView().findViewById(R.id.sync_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.sync_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_8);
 
 		ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS , syncStatusObserver);
@@ -92,12 +95,14 @@ public class TranqSyncButton extends TranqToggleButton {
 
 
 		if (ContentResolver.getMasterSyncAutomatically()) {
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_sync_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 
 		} else {
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_sync_off);
+			mIcon.setImageResource(R.drawable.tranqtoggle_sync_off);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

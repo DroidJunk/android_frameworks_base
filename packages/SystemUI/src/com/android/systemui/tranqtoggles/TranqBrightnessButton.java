@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IPowerManager;
@@ -25,7 +27,7 @@ public class TranqBrightnessButton extends TranqToggleButton {
 
 	private View showBrightness;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	private Context mContext; 
 	Handler mHandler = new Handler();
@@ -62,7 +64,7 @@ public class TranqBrightnessButton extends TranqToggleButton {
 
 		showBrightness = (View) getRootView().findViewById(R.id.button_6);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_6);
-		mIcon = (View) getRootView().findViewById(R.id.brightness_icon);
+		mIcon = (ImageView) getRootView().findViewById(R.id.brightness_icon);
 		mDivider = (View) getRootView().findViewById(R.id.divider_6);		
 
         getContext().getContentResolver().registerContentObserver(
@@ -107,11 +109,12 @@ public class TranqBrightnessButton extends TranqToggleButton {
 
 	    if(autoBrightnessStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_brightness_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_brightness_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	      }else{
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_brightness_off);
-
+			mIcon.setImageResource(R.drawable.tranqtoggle_brightness_off);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 

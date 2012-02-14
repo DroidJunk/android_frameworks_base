@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IPowerManager;
@@ -25,7 +27,7 @@ public class TranqRotateButton extends TranqToggleButton {
 
 	private View showRotate;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	private Context mContext; 
 	Handler mHandler = new Handler();
@@ -62,7 +64,7 @@ public class TranqRotateButton extends TranqToggleButton {
 
 		showRotate = (View) getRootView().findViewById(R.id.button_7);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_7);
-		mIcon = (View) getRootView().findViewById(R.id.rotate_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.rotate_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_7);
 
         getContext().getContentResolver().registerContentObserver(
@@ -107,10 +109,12 @@ public class TranqRotateButton extends TranqToggleButton {
 
 	    if(rotateStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_rotate_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_rotate_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	      }else{
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_rotate_off);
+			mIcon.setImageResource(R.drawable.tranqtoggle_rotate_off);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 	      }

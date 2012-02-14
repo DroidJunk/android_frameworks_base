@@ -10,8 +10,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -26,7 +28,7 @@ public class TranqDataButton extends TranqToggleButton {
 
 	private View showData;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private WifiManager mWifiManager; 
 	private ConnectivityManager mConnectivityManager; 
 	Handler mHandler = new Handler();
@@ -68,7 +70,7 @@ public class TranqDataButton extends TranqToggleButton {
 
 		showData = (View) getRootView().findViewById(R.id.button_9);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_9);
-		mIcon = (View) getRootView().findViewById(R.id.data_icon);
+		mIcon = (ImageView) getRootView().findViewById(R.id.data_icon);
 
 
 		getContext().getContentResolver().registerContentObserver(
@@ -97,11 +99,13 @@ public class TranqDataButton extends TranqToggleButton {
 
 		if (mConnectivityManager.getMobileDataEnabled()) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_data_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 
 		} else {
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_data_off);
+			mIcon.setImageResource(R.drawable.tranqtoggle_data_off);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

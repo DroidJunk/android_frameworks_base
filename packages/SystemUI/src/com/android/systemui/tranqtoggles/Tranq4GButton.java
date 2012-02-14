@@ -4,8 +4,10 @@ import com.android.systemui.R;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.os.Handler;
 import android.provider.Settings;
 
@@ -19,7 +21,7 @@ public class Tranq4GButton extends TranqToggleButton {
 
 	private View showFourg;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	Handler mHandler = new Handler();
 	final NetworkModeObserver mNetworkModeObserver = new NetworkModeObserver(mHandler) ;
@@ -54,7 +56,7 @@ public class Tranq4GButton extends TranqToggleButton {
 
 		showFourg = (View) getRootView().findViewById(R.id.button_0);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_0);
-		mIcon = (View) getRootView().findViewById(R.id.fourg_icon);
+		mIcon = (ImageView) getRootView().findViewById(R.id.fourg_icon);
 		mDivider = (View) getRootView().findViewById(R.id.divider_0);
 
 		getContext().getContentResolver().registerContentObserver(
@@ -83,11 +85,12 @@ public class Tranq4GButton extends TranqToggleButton {
 
 		if ((Settings.Secure.getInt(getContext().getContentResolver(), Settings.Secure.PREFERRED_NETWORK_MODE, 4) == 7)) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_fourg_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_fourg_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
-
 		} else {
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_fourg_off);
+			mIcon.setImageResource(R.drawable.tranqtoggle_fourg_off);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

@@ -6,10 +6,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 
 
@@ -18,7 +20,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 
 	private View showAirplane;
 	private View mIndicator;
-	private View mIcon;
+	private ImageView mIcon;
 	private View mDivider;
 	private BroadcastReceiver mBroadcastReciver;
 	private boolean mState;
@@ -37,7 +39,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 
 		showAirplane = (View) getRootView().findViewById(R.id.button_5);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_5);
-		mIcon = (View) getRootView().findViewById(R.id.airplane_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.airplane_icon);	
 		mDivider = (View) getRootView().findViewById(R.id.divider_5);	
 
 
@@ -70,13 +72,14 @@ public class TranqAirplaneButton extends TranqToggleButton {
 
 		if (Settings.System.getInt(getContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_on);
+			mIcon.setImageResource(R.drawable.tranqtoggle_airplane_on);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 			mState = true;
 
 		} else {
-			mIcon.setBackgroundResource(R.drawable.tranqtoggle_airplane_off);
-
+			mIcon.setImageResource(R.drawable.tranqtoggle_airplane_off);
+			mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 			mState = false;
