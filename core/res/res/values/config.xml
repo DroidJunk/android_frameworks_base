@@ -281,7 +281,7 @@
 
     <!-- If true, the screen can be rotated via the accelerometer in all 4
          rotations as the default behavior. -->
-    <bool name="config_allowAllRotations">false</bool>
+    <bool name="config_allowAllRotations">true</bool>
 
     <!-- If true, the direction rotation is applied to get to an application's requested
          orientation is reversed.  Normally, the model is that landscape is
@@ -447,8 +447,8 @@
     <!-- Don't show lock screen before unlock screen (PIN/pattern/password) -->
     <bool name="config_enableLockBeforeUnlockScreen">false</bool>
 
-    <!-- Diable lockscreen rotation by default -->
-    <bool name="config_enableLockScreenRotation">false</bool>
+    <!-- Disable lockscreen rotation by default -->
+    <bool name="config_enableLockScreenRotation">true</bool>
 
     <!-- Enable puk unlockscreen by default.
          If unlock screen is disabled, the puk should be unlocked through Emergency Dialer -->
@@ -550,7 +550,7 @@
     <integer name="config_datause_threshold_bytes">0</integer>
 
     <!-- The default reduced-datarate value in kilobits per sec -->
-    <integer name="config_datause_throttle_kbitsps">300</integer>
+    <integer name="config_datause_throttle_kbitsps">0</integer>
 
     <!-- The default iface on which to monitor data use -->
     <string name="config_datause_iface">rmnet0</string>

@@ -1919,6 +1919,13 @@ public final class Settings {
          */
         public static final String STATUSBAR_BATTERY_BAR_COLOR = "statusbar_battery_bar_color";
 
+
+        /**
+         * @hide
+         */
+	public static final String NAVIGATION_ORDER = "navigation_button_order";
+
+
         /**
          * @hide
          */

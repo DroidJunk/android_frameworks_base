@@ -3299,6 +3299,9 @@
     <string name="description_target_calendar">Calendar</string>
     <!-- Description of the talk target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
     <string name="description_target_talk">Google Talk</string>
+    <!-- Description of the phone target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
+    <string name="description_target_phone">Phone</string>
+
 
     <!-- Description of the unlock handle in the Slide unlock screen for tablets. [CHAR LIMIT=NONE] -->
     <string name="description_target_unlock_tablet">Swipe to unlock.</string>

@@ -59,6 +59,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
     public static final int STOCK = 0;
     public static final int TALK = 1;
     public static final int SMS = 2;
+    public static final int PHONE = 3;
     
     private int mLockscreen = STOCK;
 
@@ -213,9 +214,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         public void updateResources() {
             int resId;
             if (mLockscreen == TALK) {
-                resId = R.array.alt2_lockscreen_targets_with_talk;
+                resId = R.array.alt_lockscreen_targets_with_talk;
             } else if (mLockscreen == SMS) {
-                resId = R.array.alt1_lockscreen_targets_with_sms;
+                resId = R.array.alt_lockscreen_targets_with_sms;
+            } else if (mLockscreen == PHONE) {
+                resId = R.array.alt_lockscreen_targets_with_phone;
             } else if (mCameraDisabled) {
                 // Fall back to showing ring/silence if camera is disabled by DPM...
                 resId = mSilentMode ? R.array.lockscreen_targets_when_silent
@@ -269,6 +272,37 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                 mContext.startActivity(talkIntent);
                 mCallback.goToUnlockScreen();
             } else if (target == 3) { // left = Camera
+                    Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent);
+                    mCallback.goToUnlockScreen();
+                    }
+                }
+           if (mLockscreen == PHONE) {
+                if (target == 0) { // right = Unlock
+                    mCallback.goToUnlockScreen();
+            } else if (target == 1) { // up/left = Talk
+		Intent mmsIntent = new Intent(Intent.ACTION_MAIN);
+                mmsIntent.setClassName("com.android.mms",
+                        "com.android.mms.ui.ConversationList");
+                mmsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(mmsIntent);
+                mCallback.goToUnlockScreen();
+            } else if (target == 2) { // up/left = Talk
+                Intent phoneIntent = new Intent(Intent.ACTION_MAIN);
+                phoneIntent.setClassName("com.android.contacts",
+                        "com.android.contacts.activities.DialtactsActivity");
+                phoneIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(phoneIntent);
+                mCallback.goToUnlockScreen();
+            } else if (target == 3) { // up/left = Talk
+                Intent talkIntent = new Intent(Intent.ACTION_MAIN);
+                talkIntent.setClassName("com.google.android.talk",
+                        "com.google.android.talk.SigningInActivity");
+                talkIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(talkIntent);
+                mCallback.goToUnlockScreen();
+            } else if (target == 4) { // left = Camera
                     Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);
@@ -394,37 +428,39 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         final LayoutInflater inflater = LayoutInflater.from(context);
         if (DBG) Log.v(TAG, "Creation orientation = " + mCreationOrientation);
             
-/*        boolean landscape = mCreationOrientation == Configuration.ORIENTATION_LANDSCAPE;
+        boolean landscape = mCreationOrientation == Configuration.ORIENTATION_LANDSCAPE;
         
-		switch (mLockscreen) {
+	switch (mLockscreen) {
+                default:
 		case STOCK:
 		case TALK:
 			if (landscape)
-				inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this,
+				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock_land, this,
 						true);
 			else
-				inflater.inflate(R.layout.keyguard_screen_tab_unlock, this,
+				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock, this,
 						true);
 			break;
 		case SMS:
 			if (landscape)
-				inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this,
+				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock_land, this,
 						true);
 			else
-				inflater.inflate(R.layout.keyguard_screen_tab_unlock, this,
+				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock, this,
+						true);
+			break;
+		case PHONE:
+			if (landscape)
+				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock_land, this,
+						true);
+			else
+				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock, this,
 						true);
 			break;
 		}
 
         mStatusViewManager = new KeyguardStatusViewManager(this, mUpdateMonitor, mLockPatternUtils,
                 mCallback, false);
-*/
-
- if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
-            inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);
-        } else {
-            inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
-        }
 
         mStatusViewManager = new KeyguardStatusViewManager(this, mUpdateMonitor, mLockPatternUtils,
                 mCallback, false);
