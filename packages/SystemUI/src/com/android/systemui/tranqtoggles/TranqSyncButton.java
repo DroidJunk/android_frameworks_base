@@ -68,6 +68,7 @@ public class TranqSyncButton extends TranqToggleButton {
 		showSync = (View) getRootView().findViewById(R.id.button_8);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_8);
 		mIcon = (ImageView) getRootView().findViewById(R.id.sync_icon);	
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_8);
 
 		ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS , syncStatusObserver);

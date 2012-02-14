@@ -57,6 +57,7 @@ public class Tranq4GButton extends TranqToggleButton {
 		showFourg = (View) getRootView().findViewById(R.id.button_0);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_0);
 		mIcon = (ImageView) getRootView().findViewById(R.id.fourg_icon);
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_0);
 
 		getContext().getContentResolver().registerContentObserver(

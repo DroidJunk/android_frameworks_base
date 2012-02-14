@@ -40,6 +40,7 @@ public class TranqAirplaneButton extends TranqToggleButton {
 		showAirplane = (View) getRootView().findViewById(R.id.button_5);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_5);
 		mIcon = (ImageView) getRootView().findViewById(R.id.airplane_icon);	
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_5);	
 
 

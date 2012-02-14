@@ -65,6 +65,7 @@ public class TranqBrightnessButton extends TranqToggleButton {
 		showBrightness = (View) getRootView().findViewById(R.id.button_6);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_6);
 		mIcon = (ImageView) getRootView().findViewById(R.id.brightness_icon);
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_6);		
 
         getContext().getContentResolver().registerContentObserver(

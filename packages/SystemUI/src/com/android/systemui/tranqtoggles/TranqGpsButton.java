@@ -57,6 +57,7 @@ public class TranqGpsButton extends TranqToggleButton {
 		showGps = (View) getRootView().findViewById(R.id.button_2);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_2);
 		mIcon = (ImageView) getRootView().findViewById(R.id.gps_icon);	
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_2);
 
 

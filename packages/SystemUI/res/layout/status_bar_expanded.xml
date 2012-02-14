@@ -71,7 +71,7 @@
 		<RelativeLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="52dip" > 
 
       	<FrameLayout android:id="@+id/button_0" android:layout_width="60dip" android:layout_height="52.0dip" android:layout_weight="1.0" >
-     		<ImageView android:id="@+id/fourg_icon" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dip" android:layout_marginRight="1.5dip" android:src="@drawable/tranqtoggle_fourg_on_test" />
+     		<ImageView android:id="@+id/fourg_icon" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dip" android:layout_marginRight="1.5dip" android:src="@drawable/tranqtoggle_fourg_on" />
      		<com.android.systemui.tranqtoggles.Tranq4GButton android:id="@+id/tranq_4g_butt" android:text="@string/but0" android:textSize="9dip" android:textStyle="normal" android:layout_marginRight="2.5dip" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="65dip" android:shadowDx="1.0" android:shadowDy="1.0" />
      		<ImageView android:id="@+id/indicator_0" android:layout_gravity="bottom|center" android:layout_width="fill_parent" android:layout_height="2dip" android:layout_marginBottom="0.5dip" android:layout_marginLeft="2dip" android:layout_marginRight="2.5dip" android:background="#ff696969" android:scaleType="fitXY" android:shadowDx="1.0" android:shadowDy="1.0" />
      		<ImageView android:layout_gravity="right" android:id="@+id/divider_0" android:layout_width="1.25dip" android:layout_height="fill_parent" android:layout_marginTop="4.5dip" android:layout_marginBottom="3.5dip" android:background="#ff757575" />   

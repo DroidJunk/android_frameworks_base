@@ -41,7 +41,8 @@ public class TranqBluetoothButton extends TranqToggleButton {
 
 		showBluetooth = (View) getRootView().findViewById(R.id.button_3);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_3);
-		mIcon = (ImageView) getRootView().findViewById(R.id.bluetooth_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.bluetooth_icon);
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_3);	
 
 	    final IntentFilter mFilter = new IntentFilter();

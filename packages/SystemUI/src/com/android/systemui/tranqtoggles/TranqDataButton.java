@@ -71,6 +71,7 @@ public class TranqDataButton extends TranqToggleButton {
 		showData = (View) getRootView().findViewById(R.id.button_9);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_9);
 		mIcon = (ImageView) getRootView().findViewById(R.id.data_icon);
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 
 
 		getContext().getContentResolver().registerContentObserver(

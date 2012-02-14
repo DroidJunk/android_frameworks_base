@@ -41,7 +41,8 @@ public class TranqSoundButton extends TranqToggleButton {
 
 		showSound = (View) getRootView().findViewById(R.id.button_4);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_4);
-		mIcon = (ImageView) getRootView().findViewById(R.id.sound_icon);	
+		mIcon = (ImageView) getRootView().findViewById(R.id.sound_icon);
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_4);
 
 	    final IntentFilter mFilter = new IntentFilter();

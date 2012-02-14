@@ -42,6 +42,7 @@ public class TranqWifiButton extends TranqToggleButton {
 		showWifi = (View) getRootView().findViewById(R.id.button_1);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_1);
 		mIcon = (ImageView) getRootView().findViewById(R.id.wifi_icon);	
+		mIcon.setColorFilter(TranqToggleViewTop.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_1);
 
 	    final IntentFilter mFilter = new IntentFilter();
