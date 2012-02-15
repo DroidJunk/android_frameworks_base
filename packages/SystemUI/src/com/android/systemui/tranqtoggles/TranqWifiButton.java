@@ -42,7 +42,7 @@ public class TranqWifiButton extends TranqToggleButton {
 		showWifi = (View) getRootView().findViewById(R.id.button_1);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_1);
 		mIcon = (ImageView) getRootView().findViewById(R.id.wifi_icon);	
-		mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+		if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_1);
 
 	    final IntentFilter mFilter = new IntentFilter();
@@ -72,15 +72,17 @@ public class TranqWifiButton extends TranqToggleButton {
 	@Override
 	void updateResources() {
 
+		mIcon.clearColorFilter();
+		
 		if (mWifiManager.isWifiEnabled()) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setImageResource(R.drawable.tranqtoggle_wifi_on);
-			mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
+			if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 
 		} else {
 			mIcon.setImageResource(R.drawable.tranqtoggle_wifi_off);
-			mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+			if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

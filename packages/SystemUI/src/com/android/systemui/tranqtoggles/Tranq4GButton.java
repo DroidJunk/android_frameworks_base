@@ -57,7 +57,7 @@ public class Tranq4GButton extends TranqToggleButton {
 		showFourg = (View) getRootView().findViewById(R.id.button_0);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_0);
 		mIcon = (ImageView) getRootView().findViewById(R.id.fourg_icon);
-		mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+		if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_0);
 
 		getContext().getContentResolver().registerContentObserver(
@@ -83,15 +83,17 @@ public class Tranq4GButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
+		
+		mIcon.clearColorFilter();
 
 		if ((Settings.Secure.getInt(getContext().getContentResolver(), Settings.Secure.PREFERRED_NETWORK_MODE, 4) == 7)) {
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setImageResource(R.drawable.tranqtoggle_fourg_on);
-			mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
+			if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 		} else {
 			mIcon.setImageResource(R.drawable.tranqtoggle_fourg_off);
-			mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+			if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

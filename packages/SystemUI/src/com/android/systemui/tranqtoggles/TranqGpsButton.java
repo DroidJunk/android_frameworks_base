@@ -57,7 +57,7 @@ public class TranqGpsButton extends TranqToggleButton {
 		showGps = (View) getRootView().findViewById(R.id.button_2);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_2);
 		mIcon = (ImageView) getRootView().findViewById(R.id.gps_icon);	
-		mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+		if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_2);
 
 
@@ -87,17 +87,19 @@ public class TranqGpsButton extends TranqToggleButton {
 
 	@Override
 	void updateResources() {
+		
+		mIcon.clearColorFilter();
 
 		ContentResolver contentResolver = getContext().getContentResolver();
 	    boolean gpsStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.GPS_PROVIDER);
 	    if(gpsStatus){
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setImageResource(R.drawable.tranqtoggle_gps_on);
-			mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
+			if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 	    }else{
 	    	mIcon.setImageResource(R.drawable.tranqtoggle_gps_off);
-	    	mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+	    	if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 

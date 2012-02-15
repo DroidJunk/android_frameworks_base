@@ -31,6 +31,7 @@ public abstract class TranqToggleButton extends TextView {
 	public static boolean mShowRotate = true;
 	public static boolean mShowSync = true;
 	public static boolean mShowData = true;
+	public static boolean mCustomIconColors = false;
 	public static int mToggleIconOnColor = 0xff33b5e5;
 	public static int mToggleIconInterColor = 0xffff0000;
 	public static int mToggleIconOffColor = 0xff5d5d5d;
@@ -65,6 +66,7 @@ public abstract class TranqToggleButton extends TextView {
 		mShowRotate = mPrefs.getBoolean("toggles_show_rotate", true);
 		mShowSync = mPrefs.getBoolean("toggles_show_sync", true);
 		mShowData = mPrefs.getBoolean("toggles_show_data", true);
+		mCustomIconColors = mPrefs.getBoolean("toggles_custom_icon_colors", false);
    		mToggleIconOnColor = mPrefs.getInt("toggles_icon_on_color", 0xff33b5e5);
    		mToggleIconInterColor = mPrefs.getInt("toggles_icon_inter_color", 0xffff0000);
    		mToggleIconOffColor = mPrefs.getInt("toggles_icon_off_color", 0xff5d5d5d);
@@ -104,6 +106,14 @@ public abstract class TranqToggleButton extends TextView {
             
             if (action.equals("TRANQ_SETTINGS")) {
             	
+
+            	if (intent.getBooleanExtra("ToggleCustomIconColors", mCustomIconColors) == false) {
+            		mCustomIconColors = false;
+            		updateResources();
+            	} else {
+            		mCustomIconColors = true;
+            		updateResources();
+            	}
             	oldColor = mToggleIconOnColor;
                 mToggleIconOnColor = intent.getIntExtra("ToggleIconOnColor", mToggleIconOnColor);
             	if (oldColor != mToggleIconOnColor) updateResources();
@@ -113,7 +123,7 @@ public abstract class TranqToggleButton extends TextView {
             	oldColor = mToggleIconOffColor;
                 mToggleIconOffColor = intent.getIntExtra("ToggleIconOffColor", mToggleIconOffColor);
             	if (oldColor != mToggleIconOffColor) updateResources();
-
+            	
             	if (intent.getBooleanExtra("UpdateToggles", false) == true) {
             		updateResources();
             	}

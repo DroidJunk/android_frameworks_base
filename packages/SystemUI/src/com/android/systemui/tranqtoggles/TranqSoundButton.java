@@ -42,7 +42,7 @@ public class TranqSoundButton extends TranqToggleButton {
 		showSound = (View) getRootView().findViewById(R.id.button_4);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_4);
 		mIcon = (ImageView) getRootView().findViewById(R.id.sound_icon);
-		mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+		if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_4);
 
 	    final IntentFilter mFilter = new IntentFilter();
@@ -72,22 +72,24 @@ public class TranqSoundButton extends TranqToggleButton {
 	@Override
 	void updateResources() {
 
+		mIcon.clearColorFilter();
+		
 		if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_NORMAL) {
 
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			mIcon.setImageResource(R.drawable.tranqtoggle_sound_on);
-			mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
+			if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 			} else 
 				if (mAudioManager.getRingerMode() == mAudioManager.RINGER_MODE_VIBRATE) {
 				mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 				mIcon.setImageResource(R.drawable.tranqtoggle_sound_off_vibrate);
-				mIcon.setColorFilter(TranqToggleButton.mToggleIconInterColor);
+				if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconInterColor);
 				setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 
 			} else {
 				mIcon.setImageResource(R.drawable.tranqtoggle_sound_off);
-				mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+				if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 				mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 				setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}

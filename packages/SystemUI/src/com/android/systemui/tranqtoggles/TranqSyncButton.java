@@ -68,7 +68,7 @@ public class TranqSyncButton extends TranqToggleButton {
 		showSync = (View) getRootView().findViewById(R.id.button_8);
 		mIndicator = (View) getRootView().findViewById(R.id.indicator_8);
 		mIcon = (ImageView) getRootView().findViewById(R.id.sync_icon);	
-		mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+		if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 		mDivider = (View) getRootView().findViewById(R.id.divider_8);
 
 		ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS , syncStatusObserver);
@@ -94,16 +94,17 @@ public class TranqSyncButton extends TranqToggleButton {
 	@Override
 	void updateResources() {
 
-
+		mIcon.clearColorFilter();
+		
 		if (ContentResolver.getMasterSyncAutomatically()) {
 			mIcon.setImageResource(R.drawable.tranqtoggle_sync_on);
-			mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
+			if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOnColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOnColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOnColor);
 
 		} else {
 			mIcon.setImageResource(R.drawable.tranqtoggle_sync_off);
-			mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
+			if (TranqToggleButton.mCustomIconColors) mIcon.setColorFilter(TranqToggleButton.mToggleIconOffColor);
 			mIndicator.setBackgroundColor(TranqToggleViewTop.mToggleIndOffColor);
 			setTextColor(TranqToggleViewTop.mToggleTextOffColor);
 		}
