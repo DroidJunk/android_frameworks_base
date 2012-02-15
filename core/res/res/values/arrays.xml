@@ -465,78 +465,122 @@
     <array name="lockscreen_targets_when_silent">
         <item>@drawable/ic_lockscreen_unlock</item>
         <item>@null</item>
+	<item>@null</item>
         <item>@drawable/ic_lockscreen_soundon</item>
+	<item>@null</item>
         <item>@null</item>
     </array>
 
     <array name="lockscreen_target_descriptions_when_silent">
         <item>@string/description_target_unlock</item>
+	<item>@null</item>
         <item>@null</item>
         <item>@string/description_target_soundon</item>
+	<item>@null</item>
         <item>@null</item>
     </array>
 
     <array name="lockscreen_direction_descriptions">
         <item>@string/description_direction_right</item>
         <item>@null</item>
+	<item>@null</item>
         <item>@string/description_direction_left</item>
+	<item>@null</item>
         <item>@null</item>
     </array>
 
     <array name="lockscreen_targets_when_soundon">
         <item>@drawable/ic_lockscreen_unlock</item>
+	<item>@null</item>
         <item>@null</item>
         <item>@drawable/ic_lockscreen_silent</item>
+	<item>@null</item>
         <item>@null</item>
     </array>
 
     <array name="lockscreen_target_descriptions_when_soundon">
         <item>@string/description_target_unlock</item>
-        <item>@null</item>
+	<item>@null</item>
+	<item>@null</item>
         <item>@string/description_target_silent</item>
+	<item>@null</item>
         <item>@null</item>
     </array>
 
     <array name="lockscreen_targets_with_camera">
         <item>@drawable/ic_lockscreen_unlock</item>
         <item>@null</item>
+	<item>@null</item>
         <item>@drawable/ic_lockscreen_camera</item>
         <item>@null</item>
+	<item>@null</item>
     </array>
 
     <array name="lockscreen_target_descriptions_with_camera">
         <item>@string/description_target_unlock</item>
         <item>@null</item>
+	<item>@null</item>
         <item>@string/description_target_camera</item>
         <item>@null</item>
+	<item>@null</item>
     </array>
 
-    <array name="alt1_lockscreen_targets_with_sms">
+    <array name="alt_lockscreen_targets_with_sms">
         <item>@drawable/ic_lockscreen_unlock</item>
         <item>@drawable/ic_lockscreen_soundon</item>
-        <item>@drawable/ic_lockscreen_camera</item>
         <item>@drawable/ic_lockscreen_send_sms</item>
+        <item>@drawable/ic_lockscreen_camera</item>
+	<item>@null</item>
+	<item>@null</item>
     </array>
     
-    <array name="alt1_lockscreen_target_descriptions_with_sms">
+    <array name="alt_lockscreen_target_descriptions_with_sms">
         <item>@string/description_target_unlock</item>
         <item>@string/description_target_soundon</item>
-        <item>@string/description_target_camera</item>
         <item>@string/description_target_sendsms</item>
+        <item>@string/description_target_camera</item>
+	<item>@null</item>
+	<item>@null</item>
     </array>
 
-    <array name="alt2_lockscreen_targets_with_talk">
+    <array name="alt_lockscreen_targets_with_talk">
         <item>@drawable/ic_lockscreen_unlock</item>
         <item>@drawable/ic_lockscreen_soundon</item>
-        <item>@drawable/ic_lockscreen_camera</item>
         <item>@drawable/ic_lockscreen_talk</item>
+        <item>@drawable/ic_lockscreen_camera</item>
+	<item>@null</item>
+	<item>@null</item>
     </array>
     
-    <array name="alt2_lockscreen_target_descriptions_with_talk">
+    <array name="alt_lockscreen_target_descriptions_with_talk">
         <item>@string/description_target_unlock</item>
         <item>@string/description_target_soundon</item>
-        <item>@string/description_target_camera</item>
         <item>@string/description_target_talk</item>
+        <item>@string/description_target_camera</item>
+	<item>@null</item>
+	<item>@null</item>
+    </array>
+
+    <array name="alt_lockscreen_targets_with_phone">
+        <item>@drawable/ic_lockscreen_unlock</item>
+        <item>@drawable/ic_lockscreen_send_sms</item>
+        <item>@drawable/ic_lockscreen_phone</item>
+        <item>@drawable/ic_lockscreen_talk</item>
+        <item>@drawable/ic_lockscreen_camera</item>
+	<item>@null</item>
+	<item>@null</item>
+	<item>@null</item>
+    </array>
+    
+    <array name="alt_lockscreen_target_descriptions_with_phone">
+        <item>@string/description_target_unlock</item>
+        <item>@string/description_target_sendsms</item>
+        <item>@string/description_target_phone</item>
+        <item>@string/description_target_talk</item>
+        <item>@string/description_target_camera</item>
+	<item>@null</item>
+	<item>@null</item>
+	<item>@null</item>
     </array>
 
     <!-- Defines the shutdown options shown in the reboot dialog. -->
