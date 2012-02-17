@@ -4625,49 +4625,123 @@ public final class Settings {
             return updated;
         }
         
+ 
         /**
-         * Convenience function for adding a new package to the default led options
-         * Checks to see if package exists before inserting
+         * Convenience function for retrieving incoming call led options (row 2)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getIncomingCallLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=2", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the incoming call led options (row 2)
+         *
          * @param cr The ContentResolver to access.
          *
          * @return BOOLEAN
          */
-        public static Boolean insertPackage (ContentResolver cr, ContentValues values, String pkg) {
+        public static Boolean updateIncomingCallLed (ContentResolver cr, ContentValues values) {
             
         	Boolean updated = false;
-        	Cursor c = null;
-        	Boolean exists = true;
-        	
-        	Log.e("Insert Package","Testing - "+pkg+"  ************************************************");
-        	try {
-            	c = cr.query(CONTENT_URI, new String[]{"pkgName"}, "pkgName=?", new String[]{pkg}, null);
-            	
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=2", null) == 1;
             } catch (NumberFormatException e) {
-            	
-            	Log.e("Insert Package","Error testing existance");
-            	c.close();
-                if (c.getCount() != 0) return false;
+                
             }
-            
-            exists = c.getCount() > 0;
-            c.close();
-            
-            if (exists) Log.e("Insert Package","Package exists - not added");
-            
-            
-        	if (!exists) {
-        		Log.d("Insert Package","Trying to insert *********************************************" + pkg);
-        		try {
-        			updated = cr.insert(CONTENT_URI, values)  != null;
-        		} catch (NumberFormatException e) {
-        			
-        		}
-        		Log.d("Insert Package","Package added - " + pkg);
-        	}
-        	
-        	
             return updated;
         }        
+        
+        
+        /**
+         * Convenience function for retrieving missed call led options (row 3)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getMissedCallLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=3", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the missed call led options (row 3)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean updateMissedCallLed (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=3", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }        
+        
+        
+        /**
+         * Convenience function for retrieving voice mail led options (row 4)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getVoiceMailLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=4", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the voice mail led options (row 4)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean updateVoiceMailLed (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=4", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }        
+        
+        
+        
+        
     }
 
     
