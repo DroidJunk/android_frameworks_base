@@ -1934,7 +1934,20 @@ public final class Settings {
         /**
          * @hide
          */
-	public static final String LOCKSCREEN_LANDSCAPE = "navigation_bar_tint";
+	public static final String LOCKSCREEN_LANDSCAPE = "lockscreen_orientation";
+
+       /**
+         * @hide
+         */
+	public static final String TORCH_MODE = "torch_setting";
+
+         /**
+         * Whether to control brightness from status bar
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_TOGGLE = "status_bar_brightness_toggle";
+
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

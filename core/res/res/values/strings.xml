@@ -3302,6 +3302,15 @@
     <!-- Description of the phone target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
     <string name="description_target_phone">Phone</string>
 
+     <!-- label for item that toggles torch -->
+    <string name="global_actions_toggle_torch">Torch flashlight</string>
+
+    <!-- status message in phone options dialog for when torch is on -->
+    <string name="global_actions_torch_on_status">Torch is ON</string>
+
+    <!-- status message in phone options dialog for when torch is off -->
+    <string name="global_actions_torch_off_status">Torch is OFF</string>
+
 
     <!-- Description of the unlock handle in the Slide unlock screen for tablets. [CHAR LIMIT=NONE] -->
     <string name="description_target_unlock_tablet">Swipe to unlock.</string>
