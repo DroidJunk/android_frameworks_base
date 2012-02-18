@@ -27,11 +27,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import android.widget.ImageView;
 import android.util.Log;
 import android.media.AudioManager;
 import android.provider.MediaStore;
@@ -50,16 +52,15 @@ import java.io.File;
 class LockScreen extends LinearLayout implements KeyguardScreen {
 
     private static final int ON_RESUME_PING_DELAY = 500; // delay first ping until the screen is on
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
     private static final String TAG = "LockScreen";
     private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
     private static final int WAIT_FOR_ANIMATION_TIMEOUT = 0;
     private static final int STAY_ON_WHILE_GRABBED_TIMEOUT = 30000;
 
     public static final int STOCK = 0;
-    public static final int TALK = 1;
-    public static final int SMS = 2;
-    public static final int PHONE = 3;
+    public static final int SOUNDS = 1;
+    public static final int PHONE = 2;
     
     private int mLockscreen = STOCK;
 
@@ -213,10 +214,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
         public void updateResources() {
             int resId;
-            if (mLockscreen == TALK) {
-                resId = R.array.alt_lockscreen_targets_with_talk;
-            } else if (mLockscreen == SMS) {
-                resId = R.array.alt_lockscreen_targets_with_sms;
+            if (mLockscreen == SOUNDS) {
+                resId = R.array.alt_lockscreen_targets_with_sounds;
             } else if (mLockscreen == PHONE) {
                 resId = R.array.alt_lockscreen_targets_with_phone;
             } else if (mCameraDisabled) {
@@ -257,21 +256,28 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     }
                 }
 	   }
-           if (mLockscreen == TALK) {
+           if (mLockscreen == SOUNDS) {
                 if (target == 0) { // right = Unlock
                     mCallback.goToUnlockScreen();
-            } else if (target == 1) { // up/right = Sound
+            } else if (target == 1) { // up/right = MMS
+		Intent mmsIntent = new Intent(Intent.ACTION_MAIN);
+                mmsIntent.setClassName("com.android.mms",
+                        "com.android.mms.ui.ConversationList");
+                mmsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(mmsIntent);
+                mCallback.goToUnlockScreen();
+            } else if (target == 2) { // up = Sound On/Off
 	            toggleRingMode();
                     mUnlockWidgetMethods.updateResources();
                     mCallback.pokeWakelock();
-            } else if (target == 2) { // up/left = Talk
+            } else if (target == 3) { // up/left = Talk
                 Intent talkIntent = new Intent(Intent.ACTION_MAIN);
                 talkIntent.setClassName("com.google.android.talk",
                         "com.google.android.talk.SigningInActivity");
                 talkIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(talkIntent);
                 mCallback.goToUnlockScreen();
-            } else if (target == 3) { // left = Camera
+            } else if (target == 4) { // left = Camera
                     Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);
@@ -281,14 +287,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
            if (mLockscreen == PHONE) {
                 if (target == 0) { // right = Unlock
                     mCallback.goToUnlockScreen();
-            } else if (target == 1) { // up/left = Talk
+            } else if (target == 1) { // up/left = MMS
 		Intent mmsIntent = new Intent(Intent.ACTION_MAIN);
                 mmsIntent.setClassName("com.android.mms",
                         "com.android.mms.ui.ConversationList");
                 mmsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(mmsIntent);
                 mCallback.goToUnlockScreen();
-            } else if (target == 2) { // up/left = Talk
+            } else if (target == 2) { // up = Phone
                 Intent phoneIntent = new Intent(Intent.ACTION_MAIN);
                 phoneIntent.setClassName("com.android.contacts",
                         "com.android.contacts.activities.DialtactsActivity");
@@ -309,27 +315,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     mCallback.goToUnlockScreen();
                     }
                 }
-       if (mLockscreen == SMS) {
-                if (target == 0) { // right = Unlock
-                    mCallback.goToUnlockScreen();
-            } else if (target == 1) { // up/right = Sound
-	            toggleRingMode();
-                    mUnlockWidgetMethods.updateResources();
-                    mCallback.pokeWakelock();
-            } else if (target == 2) { // up/left = Text messaging
-		Intent mmsIntent = new Intent(Intent.ACTION_MAIN);
-                mmsIntent.setClassName("com.android.mms",
-                        "com.android.mms.ui.ConversationList");
-                mmsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(mmsIntent);
-                mCallback.goToUnlockScreen();
-            } else if (target == 3) { // left = Camera
-                    Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(intent);
-                    mCallback.goToUnlockScreen();
-                    }
-                }
+
             }
 
         public void onGrabbedStateChange(View v, int handle) {
@@ -433,15 +419,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 	switch (mLockscreen) {
                 default:
 		case STOCK:
-		case TALK:
-			if (landscape)
-				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock_land, this,
-						true);
-			else
-				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock, this,
-						true);
-			break;
-		case SMS:
+		case SOUNDS:
 			if (landscape)
 				inflater.inflate(R.layout.keyguard_screen_alt_tab_unlock_land, this,
 						true);

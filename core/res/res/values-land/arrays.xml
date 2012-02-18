@@ -83,43 +83,30 @@
 	<item>@null</item>
     </array>
 
-    <array name="alt_lockscreen_targets_with_sms">
-        <item>@drawable/ic_lockscreen_unlock</item>
-        <item>@drawable/ic_lockscreen_soundon</item>
-        <item>@drawable/ic_lockscreen_send_sms</item>
-        <item>@drawable/ic_lockscreen_camera</item>
-	<item>@null</item>
-	<item>@null</item>
-    </array>
-    
-    <array name="alt_lockscreen_target_descriptions_with_sms">
-        <item>@string/description_target_unlock</item>
-        <item>@string/description_target_soundon</item>
-        <item>@string/description_target_sendsms</item>
-        <item>@string/description_target_camera</item>
-	<item>@null</item>
-	<item>@null</item>
-    </array>
 
-    <array name="alt_lockscreen_targets_with_talk">
+    <array name="alt_lockscreen_targets_with_sounds">
         <item>@drawable/ic_lockscreen_unlock</item>
+        <item>@drawable/ic_lockscreen_send_sms</item>
         <item>@drawable/ic_lockscreen_soundon</item>
         <item>@drawable/ic_lockscreen_talk</item>
         <item>@drawable/ic_lockscreen_camera</item>
 	<item>@null</item>
 	<item>@null</item>
+	<item>@null</item>
     </array>
     
-    <array name="alt_lockscreen_target_descriptions_with_talk">
+    <array name="alt_lockscreen_target_descriptions_with_sounds">
         <item>@string/description_target_unlock</item>
+        <item>@string/description_target_sendsms</item>
         <item>@string/description_target_soundon</item>
         <item>@string/description_target_talk</item>
         <item>@string/description_target_camera</item>
 	<item>@null</item>
 	<item>@null</item>
-</array>
+	<item>@null</item>
+    </array>
 
-   <array name="alt_lockscreen_targets_with_phone">
+    <array name="alt_lockscreen_targets_with_phone">
         <item>@drawable/ic_lockscreen_unlock</item>
         <item>@drawable/ic_lockscreen_send_sms</item>
         <item>@drawable/ic_lockscreen_phone</item>
@@ -140,5 +127,6 @@
 	<item>@null</item>
 	<item>@null</item>
     </array>
+
 
 </resources>
