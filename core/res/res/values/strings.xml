@@ -3303,13 +3303,13 @@
     <string name="description_target_phone">Phone</string>
 
      <!-- label for item that toggles torch -->
-    <string name="global_actions_toggle_torch">Torch flashlight</string>
+    <string name="global_actions_toggle_torch">Flashlight</string>
 
     <!-- status message in phone options dialog for when torch is on -->
-    <string name="global_actions_torch_on_status">Torch is ON</string>
+    <string name="global_actions_torch_on_status">Flashlight ON</string>
 
     <!-- status message in phone options dialog for when torch is off -->
-    <string name="global_actions_torch_off_status">Torch is OFF</string>
+    <string name="global_actions_torch_off_status">Flashlight OFF</string>
 
 
     <!-- Description of the unlock handle in the Slide unlock screen for tablets. [CHAR LIMIT=NONE] -->
