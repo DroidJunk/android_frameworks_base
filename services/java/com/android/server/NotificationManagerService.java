@@ -367,7 +367,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
                 
-                updateNotificationPulse();
+//                updateNotificationPulse();
                 
                 
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
@@ -942,6 +942,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         mUseLed = cur.getInt(6) == 1;
         mUseSound = cur.getInt(7) == 1;
         mUseVibrate = cur.getInt(8) == 1;
+        cur.close();
     }
     
     // Tranq
@@ -954,6 +955,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         mDefaultNotificationColor = cur.getInt(3);
         mDefaultNotificationLedOn = cur.getInt(4) * 100;
         mDefaultNotificationLedOff = cur.getInt(5) * 100;
+        cur.close();
     }
     
 
@@ -1175,12 +1177,13 @@ public class NotificationManagerService extends INotificationManager.Stub
         if (mUseLedScreenOn) mScreenOn = false;
         
         //  TESTING ********** Allows for missed called led
+        mScreenOn = false;
         mInCall = false;
         //
         
         if (mLedNotification == null || mInCall || mScreenOn) {
             mNotificationLight.turnOff();
-        } else {
+         } else {
             int ledARGB = mLedNotification.notification.ledARGB;
             int ledOnMS = mLedNotification.notification.ledOnMS;
             int ledOffMS = mLedNotification.notification.ledOffMS;
@@ -1191,7 +1194,6 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
-            	
                 mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
                         ledOnMS, ledOffMS);
             }
