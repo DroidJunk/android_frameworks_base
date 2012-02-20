@@ -1950,6 +1950,11 @@ public final class Settings {
 
 
         /**
+         * @hide
+         */
+	public static final String NAVIGATION_BAR_TINT = "navigation_bar_tint";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
