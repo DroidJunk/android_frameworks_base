@@ -304,8 +304,9 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
 
                 // light
-                mLights.clear();
-                mLedNotification = null;
+                // Tranq  TESTING ***********************
+                //mLights.clear();
+                //mLedNotification = null;
                 updateLightsLocked();
             }
         }
@@ -365,13 +366,17 @@ public class NotificationManagerService extends INotificationManager.Stub
                 mScreenOn = true;
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
+                
+//                updateNotificationPulse();
+                
+                
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(
                         TelephonyManager.EXTRA_STATE_OFFHOOK));
                 updateNotificationPulse();
             } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
                 // turn off LED when user passes through lock screen
-                mNotificationLight.turnOff();
+               // mNotificationLight.turnOff();
             }
         }
     };
@@ -424,14 +429,6 @@ public class NotificationManagerService extends INotificationManager.Stub
         //Tranq changes
         getDefaultLedSettings();
         
-        //Resources resources = mContext.getResources();
-        //mDefaultNotificationColor = resources.getColor(
-        //        com.android.internal.R.color.config_defaultNotificationColor);
-        //mDefaultNotificationLedOn = resources.getInteger(
-        //        com.android.internal.R.integer.config_defaultNotificationLedOn);
-        //mDefaultNotificationLedOff = resources.getInteger(
-        //        com.android.internal.R.integer.config_defaultNotificationLedOff);
-        //
         
 
         // Don't start allowing notifications until the setup wizard has run once.
@@ -945,6 +942,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         mUseLed = cur.getInt(6) == 1;
         mUseSound = cur.getInt(7) == 1;
         mUseVibrate = cur.getInt(8) == 1;
+        cur.close();
     }
     
     // Tranq
@@ -957,6 +955,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         mDefaultNotificationColor = cur.getInt(3);
         mDefaultNotificationLedOn = cur.getInt(4) * 100;
         mDefaultNotificationLedOff = cur.getInt(5) * 100;
+        cur.close();
     }
     
 
@@ -1176,9 +1175,15 @@ public class NotificationManagerService extends INotificationManager.Stub
         // Tranq
         getDefaultLedSettings();
         if (mUseLedScreenOn) mScreenOn = false;
+        
+        //  TESTING ********** Allows for missed called led
+        mScreenOn = false;
+        mInCall = false;
+        //
+        
         if (mLedNotification == null || mInCall || mScreenOn) {
             mNotificationLight.turnOff();
-        } else {
+         } else {
             int ledARGB = mLedNotification.notification.ledARGB;
             int ledOnMS = mLedNotification.notification.ledOnMS;
             int ledOffMS = mLedNotification.notification.ledOffMS;
