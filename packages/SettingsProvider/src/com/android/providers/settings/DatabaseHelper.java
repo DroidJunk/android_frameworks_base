@@ -63,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 75;
+    private static final int DATABASE_VERSION = 76;
 
     private Context mContext;
 
@@ -160,9 +160,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         		"ledOffMs INTEGER);");
          
         // insert default values
-        String insertNotifOp = "INSERT INTO notif_options " +
+        String insertNotifOp0 = "INSERT INTO notif_options " +
              "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
-        db.execSQL(insertNotifOp + "('Default','', -1, 3, 3);");        
+        db.execSQL(insertNotifOp0 + "('Default','', -1, 3, 3);");        
+        
+        // insert default values
+        String insertNotifOp1 = "INSERT INTO notif_options " +
+             "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+        db.execSQL(insertNotifOp1 + "('Incoming','', -1, 3, 3);");    
+        
+        // insert default values
+        String insertNotifOp2 = "INSERT INTO notif_options " +
+             "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+        db.execSQL(insertNotifOp2 + "('Missed','', -1, 3, 3);");    
+        
+        // insert default values
+        String insertNotifOp3 = "INSERT INTO notif_options " +
+             "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+        db.execSQL(insertNotifOp3 + "('VoiceMail','', -1, 3, 3);");    
+        
+        
         
         // Populate bookmarks table with initial bookmarks
         loadBookmarks(db);
@@ -1058,9 +1075,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String insertNotifOp = "INSERT INTO notif_options " +
                  "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
             db.execSQL(insertNotifOp + "('Default','', -1, 3, 3);");     
+ 
             
-        	
             upgradeVersion = 75;
+        }              
+            
+            
+            
+            
+        if (upgradeVersion == 75) {            
+            
+            //  Add new values to existing table
+            // insert default values
+            String insertNotifOp1 = "INSERT INTO notif_options " +
+                 "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+            db.execSQL(insertNotifOp1 + "('Incoming','', -1, 3, 3);");    
+            
+            // insert default values
+            String insertNotifOp2 = "INSERT INTO notif_options " +
+                 "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+            db.execSQL(insertNotifOp2 + "('Missed','', -1, 3, 3);");    
+            
+            // insert default values
+            String insertNotifOp3 = "INSERT INTO notif_options " +
+                 "(Name, pkgName, ledColor, ledOnMs, ledOffMs) VALUES ";
+            db.execSQL(insertNotifOp3 + "('VoiceMail','', -1, 3, 3);");    
+        	
+            upgradeVersion = 76;
         }           
         
         
