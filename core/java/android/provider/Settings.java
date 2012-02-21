@@ -1948,6 +1948,18 @@ public final class Settings {
          */
         public static final String STATUS_BAR_BRIGHTNESS_TOGGLE = "status_bar_brightness_toggle";
 
+/**
+        * Setting to show full menu button in nav bar
+        * @hide
+        */
+        public static final String SHOW_MENU_BUTTON = "show_menu_button";
+
+        /**
+        * Setting to show search button in nav bar
+        * @hide
+        */
+        public static final String SHOW_SEARCH_BUTTON = "show_search_button";
+
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

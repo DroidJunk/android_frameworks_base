@@ -351,7 +351,10 @@
 
     <!-- Content description of the clear button in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_clear_all">Clear all notifications.</string>
-    
+
+    <!-- Content description of the clear button in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_search">Search button</string>
+   
     
     <string name="but0">4G/3G</string>
     <string name="but1">Wifi</string>
