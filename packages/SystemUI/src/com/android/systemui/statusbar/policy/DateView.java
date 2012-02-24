@@ -43,6 +43,8 @@ public final class DateView extends TextView {
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
 	private SharedPreferences mPrefs;
     private int mDateColor = 0xff3F9BBF;
+    private int mDateSize = 17;
+    
     
     
     
@@ -58,6 +60,7 @@ public final class DateView extends TextView {
             
             if (action.equals("TRANQ_SETTINGS")) {
             	mDateColor = intent.getIntExtra("DateColor", mDateColor);	
+            	mDateSize = intent.getIntExtra("DateSize", mDateSize);
             	updateClock();
             }
         }
@@ -140,6 +143,7 @@ public final class DateView extends TextView {
         CharSequence date = DateFormat.getLongDateFormat(context).format(now);
         setText(context.getString(R.string.status_bar_date_formatter, dow, date));
         setTextColor(mDateColor);
+        setTextSize(mDateSize);
     }
 
     private boolean isVisible() {
