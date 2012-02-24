@@ -114,7 +114,11 @@ public class NavigationBarView extends LinearLayout {
         
         mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
-        
+        if (mShowSearchButton) { 
+        	adjustWidths(70); 
+        } else {
+        	adjustWidths(80);
+        }
         
     }
 
@@ -158,16 +162,20 @@ public class NavigationBarView extends LinearLayout {
         mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
         
-        adjustWidths();
+        if (mShowSearchButton) adjustWidths(70);
         
         getSearchButton().setVisibility(mShowSearchButton     ? View.VISIBLE : View.GONE);
     }
 
-    public void adjustWidths(){
+    public void adjustWidths(int adjust){
     	float scale = getResources().getDisplayMetrics().density;
-    	int width = (int) (scale / 80);
-    	if (mShowSearchButton) width = (int) (scale / 60);
+    	if (adjust == 0) adjust = 80;
+    	int width = (int) (scale * adjust);
+    	
     	getBackButton().getLayoutParams().width = width;
+    	getHomeButton().getLayoutParams().width = width;
+    	getRecentsButton().getLayoutParams().width = width;
+    	getSearchButton().getLayoutParams().width = width;
     }
     
     
@@ -180,8 +188,10 @@ public class NavigationBarView extends LinearLayout {
 
         mShowMenu = show;
 
-        getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.INVISIBLE);
-        getMenuButton1().setVisibility(mShowMenu ? View.VISIBLE : View.INVISIBLE);
+        getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
+        getMenuButton1().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
+        if (mShowMenu && mShowSearchButton) adjustWidths(60);
+        if (mShowMenu && !mShowSearchButton) adjustWidths(0);
        
     }
 

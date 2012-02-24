@@ -111,7 +111,7 @@
                 android:src="@drawable/ic_sysbar_search"
                 systemui:keyCode="84"
                 android:layout_weight="0"
-                android:visibility="invisible"
+                android:visibility="gone"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight"
                 />                
                 
