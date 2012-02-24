@@ -1060,6 +1060,8 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
     public void showClock(boolean show) {
         View clock = mStatusBarView.findViewById(R.id.clock);
         if (clock != null) {
+        	// Tranq will not hide the clock for charging and
+        	// screen off
             clock.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
