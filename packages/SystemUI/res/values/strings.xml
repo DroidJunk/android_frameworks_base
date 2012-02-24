@@ -355,7 +355,7 @@
     <!-- Content description of the clear button in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_search">Search button</string>
    
-    
+    <string name="battery_test">99</string>    
     <string name="but0">4G/3G</string>
     <string name="but1">Wifi</string>
     <string name="but2">Gps</string>
