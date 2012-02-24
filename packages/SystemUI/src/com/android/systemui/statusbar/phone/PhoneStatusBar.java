@@ -1062,7 +1062,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
         if (clock != null) {
         	// Tranq will not hide the clock for charging and
         	// screen off
-            clock.setVisibility(show ? View.VISIBLE : View.GONE);
+            //clock.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
 
