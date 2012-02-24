@@ -1,29 +1,26 @@
 /*
-* Copyright (C) 2008 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (C) 2008 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.android.systemui.statusbar.phone;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.Rect;
-import android.os.Handler;
 import android.os.ServiceManager;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -42,7 +39,6 @@ import java.io.PrintWriter;
 import java.lang.StringBuilder;
 
 import com.android.internal.statusbar.IStatusBarService;
-import com.android.systemui.statusbar.policy.KeyButtonView;
 
 import com.android.systemui.R;
 
@@ -56,11 +52,6 @@ public class NavigationBarView extends LinearLayout {
 
     final static boolean ANIMATE_HIDE_TRANSITION = false; // turned off because it introduces unsightly delay when videos goes to full screen
 
-    private boolean mShowMenuButton;
-    private boolean mShowSearchButton;
-    private int mLightsOut;
-    private Handler mHandler;
-
     protected IStatusBarService mBarService;
     final Display mDisplay;
     View mCurrentView = null;
@@ -72,6 +63,9 @@ public class NavigationBarView extends LinearLayout {
     boolean mHidden, mLowProfile, mShowMenu;
     int mDisabledFlags = 0;
 
+    private boolean mShowSearchButton = true;
+        
+    
     public View getRecentsButton() {
         return mCurrentView.findViewById(R.id.recent_apps);
     }
@@ -79,41 +73,24 @@ public class NavigationBarView extends LinearLayout {
     public View getMenuButton() {
         return mCurrentView.findViewById(R.id.menu);
     }
+    
+    public View getMenuButton1() {
+        return mCurrentView.findViewById(R.id.menu1);
+       
+   }
 
+    public View getSearchButton() {
+        return mCurrentView.findViewById(R.id.search_button);
+       
+   }
+    
+    
     public View getBackButton() {
         return mCurrentView.findViewById(R.id.back);
     }
 
     public View getHomeButton() {
         return mCurrentView.findViewById(R.id.home);
-    }
-
-    public View getSearchButton() {
-        return mCurrentView.findViewById(R.id.search);
-    }
-
-    public View getMenuStock() {
-        return mCurrentView.findViewById(R.id.menu_stock);
-    }
-
-    public View getOutsideSpacerSmall() {
-        return mCurrentView.findViewById(R.id.outside_spacer_small);
-    }
-
-    public View getOutsideSpacer() {
-        return mCurrentView.findViewById(R.id.outside_spacer);
-    }
-
-    public View getInsideSpacerOne() {
-        return mCurrentView.findViewById(R.id.inside_spacer_one);
-    }
-
-    public View getInsideSpacerTwo() {
-        return mCurrentView.findViewById(R.id.inside_spacer_two);
-    }
-
-    public View getMenuSpacer() {
-        return mCurrentView.findViewById(R.id.menu_spacer);
     }
 
     public NavigationBarView(Context context, AttributeSet attrs) {
@@ -130,6 +107,14 @@ public class NavigationBarView extends LinearLayout {
         mBarSize = res.getDimensionPixelSize(R.dimen.navigation_bar_size);
         mVertical = false;
         mShowMenu = false;
+        
+        
+        
+        
+        mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
+        
+        
     }
 
     View.OnTouchListener mLightsOutListener = new View.OnTouchListener() {
@@ -163,39 +148,32 @@ public class NavigationBarView extends LinearLayout {
         final boolean disableRecent = ((disabledFlags & View.STATUS_BAR_DISABLE_RECENT) != 0);
         final boolean disableBack = ((disabledFlags & View.STATUS_BAR_DISABLE_BACK) != 0);
 
-        getBackButton() .setVisibility(disableBack ? View.INVISIBLE : View.VISIBLE);
-        getHomeButton() .setVisibility(disableHome ? View.INVISIBLE : View.VISIBLE);
-        getRecentsButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
-
-        if (mShowSearchButton) {
-            getSearchButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
-        } else {
-            getSearchButton().setVisibility(View.GONE);
-        }
-
-        if (mShowMenuButton) {
-            getMenuButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
-        } else {
-            getMenuButton().setVisibility(View.GONE);
-        }
+        getBackButton()   .setVisibility(disableBack       ? View.INVISIBLE : View.VISIBLE);
+        getHomeButton()   .setVisibility(disableHome       ? View.INVISIBLE : View.VISIBLE);
+        getRecentsButton().setVisibility(disableRecent     ? View.INVISIBLE : View.VISIBLE);
+        
+        
+        
+        mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
+        
+        
+        
+        getSearchButton().setVisibility(mShowSearchButton     ? View.GONE : View.VISIBLE);
     }
 
     public void setMenuVisibility(final boolean show) {
         setMenuVisibility(show, false);
-    }
+    }    
 
     public void setMenuVisibility(final boolean show, final boolean force) {
         if (!force && mShowMenu == show) return;
 
         mShowMenu = show;
 
-        if (mShowMenuButton && mShowSearchButton) {
-            getMenuStock().setVisibility(View.GONE);
-        } else if (mShowMenuButton && !mShowSearchButton) {
-            getMenuStock().setVisibility(View.INVISIBLE);
-        } else {
-            getMenuStock().setVisibility(mShowMenu ? View.VISIBLE : View.INVISIBLE);
-        }
+        getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.INVISIBLE);
+        getMenuButton1().setVisibility(mShowMenu ? View.VISIBLE : View.INVISIBLE);
+       
     }
 
     public void setLowProfile(final boolean lightsOut) {
@@ -207,18 +185,10 @@ public class NavigationBarView extends LinearLayout {
 
         mLowProfile = lightsOut;
 
-        if (mShowMenuButton && mShowSearchButton) {
-            mLightsOut = R.id.lights_out_5;
-        } else if (!mShowMenuButton && !mShowSearchButton) {
-            mLightsOut = R.id.lights_out;
-        } else {
-            mLightsOut = R.id.lights_out_4;
-        }
-
         if (DEBUG) Slog.d(TAG, "setting lights " + (lightsOut?"out":"on"));
 
         final View navButtons = mCurrentView.findViewById(R.id.nav_buttons);
-        final View lowLights = mCurrentView.findViewById(mLightsOut);
+        final View lowLights = mCurrentView.findViewById(R.id.lights_out);
 
         // ok, everyone, stop it right there
         navButtons.animate().cancel();
@@ -267,7 +237,7 @@ public class NavigationBarView extends LinearLayout {
     }
 
     public void onFinishInflate() {
-        mRotatedViews[Surface.ROTATION_0] =
+        mRotatedViews[Surface.ROTATION_0] = 
         mRotatedViews[Surface.ROTATION_180] = findViewById(R.id.rot0);
 
         mRotatedViews[Surface.ROTATION_90] = findViewById(R.id.rot90);
@@ -277,7 +247,7 @@ public class NavigationBarView extends LinearLayout {
                                                 : findViewById(R.id.rot270);
 
         for (View v : mRotatedViews) {
-            // this helps avoid drawing artifacts with glowing navigation keys
+            // this helps avoid drawing artifacts with glowing navigation keys 
             ViewGroup group = (ViewGroup) v.findViewById(R.id.nav_buttons);
             group.setMotionEventSplittingEnabled(false);
         }
@@ -293,8 +263,6 @@ public class NavigationBarView extends LinearLayout {
         mCurrentView.setVisibility(View.VISIBLE);
         mVertical = (rot == Surface.ROTATION_90 || rot == Surface.ROTATION_270);
 
-        setNavButtonViews();
-
         // force the low profile & disabled states into compliance
         setLowProfile(mLowProfile, false, true /* force */);
         setDisabledFlags(mDisabledFlags, true /* force */);
@@ -306,38 +274,6 @@ public class NavigationBarView extends LinearLayout {
 
         if (DEBUG) {
             Slog.d(TAG, "reorient(): rot=" + mDisplay.getRotation());
-        }
-    }
-
-    public void setNavButtonViews() {
-        ContentResolver resolver = mContext.getContentResolver();
-        mShowMenuButton = (Settings.System.getInt(resolver,
-                Settings.System.SHOW_MENU_BUTTON, 0) == 1);
-        mShowSearchButton = (Settings.System.getInt(resolver,
-                Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
-
-        // Let's start clean
-        ViewGroup navButtonView = ((ViewGroup) mCurrentView.findViewById(R.id.nav_buttons));
-        for (int nb = 0; nb < navButtonView.getChildCount(); nb++) {
-            if (!(navButtonView.getChildAt(nb) instanceof KeyButtonView)) {
-                navButtonView.getChildAt(nb).setVisibility(View.GONE);
-            }
-        }
-
-        // Setup the optional buttons
-        getMenuButton().setVisibility(mShowMenuButton ? View.VISIBLE : View.GONE);
-        getSearchButton().setVisibility(mShowSearchButton ? View.VISIBLE : View.GONE);
-        getOutsideSpacer().setVisibility(mShowSearchButton && mShowMenuButton ? View.GONE : View.INVISIBLE);
-
-        // These are only used on the stock layout
-        getOutsideSpacerSmall().setVisibility(!mShowSearchButton && !mShowMenuButton ? View.INVISIBLE : View.GONE);
-        getInsideSpacerOne().setVisibility(!mShowSearchButton && !mShowMenuButton ? View.INVISIBLE : View.GONE);
-        getInsideSpacerTwo().setVisibility(!mShowSearchButton && !mShowMenuButton ? View.INVISIBLE : View.GONE);
-        getMenuSpacer().setVisibility(!mShowSearchButton && !mShowMenuButton ? View.INVISIBLE : View.GONE);
-
-        // Force the stock menu button gone on five button layouts
-        if (mShowMenuButton && mShowSearchButton) {
-            getMenuStock().setVisibility(View.GONE);
         }
     }
 
@@ -369,23 +305,23 @@ public class NavigationBarView extends LinearLayout {
         pw.println("NavigationBarView {");
         final Rect r = new Rect();
 
-        pw.println(String.format(" this: " + PhoneStatusBar.viewInfo(this)
-                        + " " + visibilityToString(getVisibility())));
+        pw.println(String.format("      this: " + PhoneStatusBar.viewInfo(this)
+                + " " + visibilityToString(getVisibility())));
 
         getWindowVisibleDisplayFrame(r);
         final boolean offscreen = r.right > mDisplay.getRawWidth()
             || r.bottom > mDisplay.getRawHeight();
-        pw.println(" window: "
+        pw.println("      window: " 
                 + r.toShortString()
                 + " " + visibilityToString(getWindowVisibility())
                 + (offscreen ? " OFFSCREEN!" : ""));
 
-        pw.println(String.format(" mCurrentView: id=%s (%dx%d) %s",
+        pw.println(String.format("      mCurrentView: id=%s (%dx%d) %s",
                         getResourceName(mCurrentView.getId()),
                         mCurrentView.getWidth(), mCurrentView.getHeight(),
                         visibilityToString(mCurrentView.getVisibility())));
 
-        pw.println(String.format(" disabled=0x%08x vertical=%s hidden=%s low=%s menu=%s",
+        pw.println(String.format("      disabled=0x%08x vertical=%s hidden=%s low=%s menu=%s",
                         mDisabledFlags,
                         mVertical ? "true" : "false",
                         mHidden ? "true" : "false",
@@ -396,23 +332,28 @@ public class NavigationBarView extends LinearLayout {
         final View home = getHomeButton();
         final View recent = getRecentsButton();
         final View menu = getMenuButton();
+        final View menu1 = getMenuButton1();
 
-        pw.println(" back: "
+        pw.println("      back: "
                 + PhoneStatusBar.viewInfo(back)
                 + " " + visibilityToString(back.getVisibility())
                 );
-        pw.println(" home: "
+        pw.println("      home: "
                 + PhoneStatusBar.viewInfo(home)
                 + " " + visibilityToString(home.getVisibility())
                 );
-        pw.println(" rcnt: "
+        pw.println("      rcnt: "
                 + PhoneStatusBar.viewInfo(recent)
                 + " " + visibilityToString(recent.getVisibility())
                 );
-        pw.println(" menu: "
+        pw.println("      menu: "
                 + PhoneStatusBar.viewInfo(menu)
                 + " " + visibilityToString(menu.getVisibility())
                 );
-        pw.println(" }");
+        pw.println("      menu: "
+                + PhoneStatusBar.viewInfo(menu1)
+                + " " + visibilityToString(menu1.getVisibility())
+                );
+        pw.println("    }");
     }
 }
