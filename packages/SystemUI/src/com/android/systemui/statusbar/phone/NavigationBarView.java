@@ -31,6 +31,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Surface;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
@@ -157,11 +158,19 @@ public class NavigationBarView extends LinearLayout {
         mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
         
+        adjustWidths();
         
-        
-        getSearchButton().setVisibility(mShowSearchButton     ? View.GONE : View.VISIBLE);
+        getSearchButton().setVisibility(mShowSearchButton     ? View.VISIBLE : View.GONE);
     }
 
+    public void adjustWidths(){
+    	float scale = getResources().getDisplayMetrics().density;
+    	int width = (int) (scale / 80);
+    	if (mShowSearchButton) width = (int) (scale / 60);
+    	getBackButton().getLayoutParams().width = width;
+    }
+    
+    
     public void setMenuVisibility(final boolean show) {
         setMenuVisibility(show, false);
     }    
