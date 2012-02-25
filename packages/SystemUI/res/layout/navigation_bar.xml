@@ -110,6 +110,7 @@
                 android:layout_weight="1"
                 android:visibility="invisible"
                 />
+                
             <com.android.systemui.statusbar.policy.KeyButtonView
             	android:id="@+id/search_button"
                 android:layout_width="80dp"
@@ -205,7 +206,17 @@
             >
             
             <!-- navigation controls -->
-            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/menu"
+ 
+        	<View
+            	android:id="@+id/left_pad_land"
+                android:layout_height="20dp"
+                android:layout_width="match_parent"
+                android:layout_weight="0"
+                android:visibility="invisible"
+                />
+            
+            <com.android.systemui.statusbar.policy.KeyButtonView 
+            	android:id="@+id/menu"
                 android:layout_height="40dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/ic_sysbar_menu_land"
@@ -215,7 +226,27 @@
                 android:contentDescription="@string/accessibility_menu"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
                 />
-            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/recent_apps"
+                
+ 			<com.android.systemui.statusbar.policy.KeyButtonView
+            	android:id="@+id/search_button"
+                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_sysbar_search_land"
+                systemui:keyCode="84"
+                android:layout_weight="0"
+                android:visibility="gone"
+                systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
+                />    
+                
+			<View 
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="invisible"
+                />     
+                
+            <com.android.systemui.statusbar.policy.KeyButtonView 
+            	android:id="@+id/recent_apps"
                 android:layout_height="80dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/ic_sysbar_recent_land"
@@ -229,7 +260,8 @@
                 android:layout_weight="1"
                 android:visibility="invisible"
                 />
-            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/home"
+            <com.android.systemui.statusbar.policy.KeyButtonView 
+            	android:id="@+id/home"
                 android:layout_height="80dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/ic_sysbar_home_land"
@@ -245,7 +277,8 @@
                 android:layout_weight="1"
                 android:visibility="invisible"
                 />
-            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/back"
+            <com.android.systemui.statusbar.policy.KeyButtonView 
+            	android:id="@+id/back"
                 android:layout_height="80dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/ic_sysbar_back_land"
@@ -253,8 +286,11 @@
                 android:layout_weight="0"
                 android:contentDescription="@string/accessibility_back"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
-                />                
-            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/menu1"
+                />    
+
+            
+            <com.android.systemui.statusbar.policy.KeyButtonView 
+            	android:id="@+id/menu1"
                 android:layout_height="40dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/ic_sysbar_menu_land"
@@ -265,12 +301,14 @@
                 systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
                 />
 
-            <View
-                android:layout_height="40dp"
+        	<View
+            	android:id="@+id/left_pad_land"
+                android:layout_height="20dp"
                 android:layout_width="match_parent"
                 android:layout_weight="0"
                 android:visibility="invisible"
                 />
+
  
         </LinearLayout>
 

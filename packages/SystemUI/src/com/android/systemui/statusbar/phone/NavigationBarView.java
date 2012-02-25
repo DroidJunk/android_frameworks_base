@@ -39,6 +39,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.StringBuilder;
 
+
 import com.android.internal.statusbar.IStatusBarService;
 
 import com.android.systemui.R;
@@ -64,8 +65,11 @@ public class NavigationBarView extends LinearLayout {
     boolean mHidden, mLowProfile, mShowMenu;
     int mDisabledFlags = 0;
 
+    // Tranq
+    private float scale = 0; 
     private boolean mShowSearchButton = true;
-        
+    private int mHorizAdjust = 0;
+    //    
     
     public View getRecentsButton() {
         return mCurrentView.findViewById(R.id.recent_apps);
@@ -86,6 +90,10 @@ public class NavigationBarView extends LinearLayout {
     public View getLeftPad() {
         return mCurrentView.findViewById(R.id.left_pad);
    }
+    
+    public View getLeftPadLand() {
+        return mCurrentView.findViewById(R.id.left_pad_land);
+   }    
 
     public View getBackButton() {
         return mCurrentView.findViewById(R.id.back);
@@ -112,7 +120,7 @@ public class NavigationBarView extends LinearLayout {
         
         
         
-        
+        scale = getResources().getDisplayMetrics().density;
         mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
 
@@ -154,30 +162,37 @@ public class NavigationBarView extends LinearLayout {
         getHomeButton()   .setVisibility(disableHome       ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent     ? View.INVISIBLE : View.VISIBLE);
         
-        
-        
         mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
         if (mShowSearchButton) { 
-        	adjustWidths(80); 
+        	getSearchButton().setVisibility(disableRecent    ? View.INVISIBLE : View.VISIBLE);
+        	adjustButtons(80, 80); 
         } else {
-        	adjustWidths(90);
+        	getSearchButton().setVisibility(GONE);
+        	adjustButtons(90, 90);
         }
-        
-       
-        
-        getSearchButton().setVisibility(mShowSearchButton     ? View.VISIBLE : View.GONE);
     }
 
-    public void adjustWidths(int adjust){
-    	float scale = getResources().getDisplayMetrics().density;
-    	if (adjust == 0) adjust = 80;
-    	int width = (int) (scale * adjust);
+    public void adjustButtons(int mWidth, int mHeight){
+    			
+    	if (mWidth == 0) mWidth = 80;
+    	int width = (int) (scale * mWidth);
+    	int height = (int) (scale * mHeight);
     	
-    	getBackButton().getLayoutParams().width = width;
-    	getHomeButton().getLayoutParams().width = width;
-    	getRecentsButton().getLayoutParams().width = width;
-    	getSearchButton().getLayoutParams().width = width;
+    	if (mVertical) {
+    		mHorizAdjust = 20;
+    		getLeftPadLand().getLayoutParams().height = height - 200;
+        	getBackButton().getLayoutParams().height = height - mHorizAdjust;
+        	getHomeButton().getLayoutParams().height = height - mHorizAdjust;
+        	getRecentsButton().getLayoutParams().height = height - mHorizAdjust;
+        	getSearchButton().getLayoutParams().height = height - mHorizAdjust;
+    	} else {
+    		mHorizAdjust = 0;
+    		getBackButton().getLayoutParams().width = width - mHorizAdjust;
+    		getHomeButton().getLayoutParams().width = width - mHorizAdjust;
+    		getRecentsButton().getLayoutParams().width = width - mHorizAdjust;
+    		getSearchButton().getLayoutParams().width = width - mHorizAdjust;
+    	}
     }
     
     
@@ -192,11 +207,12 @@ public class NavigationBarView extends LinearLayout {
 
         getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
         getMenuButton1().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
-        getLeftPad().setVisibility(mShowMenu ? View.GONE : View.VISIBLE);
-        
-        if (mShowMenu && mShowSearchButton) adjustWidths(65);
-        if (mShowMenu && !mShowSearchButton) adjustWidths(82);
-       
+        if (!mVertical) getLeftPad().setVisibility(mShowMenu ? View.GONE : View.VISIBLE);
+         
+        if (mShowMenu && mShowSearchButton) adjustButtons(65, 65);
+        if (mShowMenu && !mShowSearchButton) adjustButtons(82, 78);
+        if (!mShowMenu && mShowSearchButton) adjustButtons(80, 80);
+        if (!mShowMenu && !mShowSearchButton) adjustButtons(90, 90);
     }
 
     public void setLowProfile(final boolean lightsOut) {
