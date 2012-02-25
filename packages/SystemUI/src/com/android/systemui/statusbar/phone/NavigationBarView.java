@@ -77,15 +77,16 @@ public class NavigationBarView extends LinearLayout {
     
     public View getMenuButton1() {
         return mCurrentView.findViewById(R.id.menu1);
-       
    }
 
     public View getSearchButton() {
         return mCurrentView.findViewById(R.id.search_button);
-       
    }
     
-    
+    public View getLeftPad() {
+        return mCurrentView.findViewById(R.id.left_pad);
+   }
+
     public View getBackButton() {
         return mCurrentView.findViewById(R.id.back);
     }
@@ -114,11 +115,7 @@ public class NavigationBarView extends LinearLayout {
         
         mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
-        if (mShowSearchButton) { 
-        	adjustWidths(70); 
-        } else {
-        	adjustWidths(80);
-        }
+
         
     }
 
@@ -161,8 +158,13 @@ public class NavigationBarView extends LinearLayout {
         
         mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
+        if (mShowSearchButton) { 
+        	adjustWidths(80); 
+        } else {
+        	adjustWidths(90);
+        }
         
-        if (mShowSearchButton) adjustWidths(70);
+       
         
         getSearchButton().setVisibility(mShowSearchButton     ? View.VISIBLE : View.GONE);
     }
@@ -190,8 +192,10 @@ public class NavigationBarView extends LinearLayout {
 
         getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
         getMenuButton1().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
-        if (mShowMenu && mShowSearchButton) adjustWidths(60);
-        if (mShowMenu && !mShowSearchButton) adjustWidths(0);
+        getLeftPad().setVisibility(mShowMenu ? View.GONE : View.VISIBLE);
+        
+        if (mShowMenu && mShowSearchButton) adjustWidths(65);
+        if (mShowMenu && !mShowSearchButton) adjustWidths(82);
        
     }
 
