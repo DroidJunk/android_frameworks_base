@@ -20,7 +20,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.os.ServiceManager;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -34,17 +36,19 @@ import android.view.Surface;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.StringBuilder;
-
-
 import com.android.internal.statusbar.IStatusBarService;
-
 import com.android.systemui.R;
 
+
+
+
 public class NavigationBarView extends LinearLayout {
+
+	
+	
     final static boolean DEBUG = false;
     final static String TAG = "PhoneStatusBar/NavigationBarView";
 
@@ -68,6 +72,11 @@ public class NavigationBarView extends LinearLayout {
     // Tranq
     private float scale = 0; 
     private boolean mShowSearchButton = true;
+    private boolean mShowLeftMenuButton = true;
+    private boolean mShowRightMenuButton = true;
+    private boolean mShowSearchButtonLand = true;
+    private boolean mShowTopMenuButtonLand = true;
+    private boolean mShowBotMenuButtonLand = true;
     private int mHorizAdjust = 0;
     //    
     
@@ -121,12 +130,11 @@ public class NavigationBarView extends LinearLayout {
         
         
         scale = getResources().getDisplayMetrics().density;
-        mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
-
-        
+        updateSettings();
     }
 
+    
+    
     View.OnTouchListener mLightsOutListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent ev) {
@@ -162,20 +170,31 @@ public class NavigationBarView extends LinearLayout {
         getHomeButton()   .setVisibility(disableHome       ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent     ? View.INVISIBLE : View.VISIBLE);
         
-        mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
-        if (mShowSearchButton) { 
-        	getSearchButton().setVisibility(disableRecent    ? View.INVISIBLE : View.VISIBLE);
-        	adjustButtons(80, 80); 
+
+        if (!mVertical) {
+        	if (mShowSearchButton) {
+        		getSearchButton().setVisibility(disableRecent    ? View.INVISIBLE : View.VISIBLE);
+        	   	adjustButtons(80, 80);
+        	} else {
+        		getSearchButton().setVisibility(GONE);
+            	adjustButtons(90, 90);
+        	}
         } else {
-        	getSearchButton().setVisibility(GONE);
-        	adjustButtons(90, 90);
+        	if (mShowSearchButtonLand) {
+        		getSearchButton().setVisibility(disableRecent    ? View.INVISIBLE : View.VISIBLE);
+        	   	adjustButtons(80, 80);
+        	} else {
+        		getSearchButton().setVisibility(GONE);
+            	adjustButtons(90, 90);
+        	}
         }
+  
+
+        
     }
 
     public void adjustButtons(int mWidth, int mHeight){
     			
-    	if (mWidth == 0) mWidth = 80;
     	int width = (int) (scale * mWidth);
     	int height = (int) (scale * mHeight);
     	
@@ -194,6 +213,24 @@ public class NavigationBarView extends LinearLayout {
     		getSearchButton().getLayoutParams().width = width - mHorizAdjust;
     	}
     }
+ 
+    
+    public void updateSettings(){
+        
+    	mShowSearchButton = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_SEARCH_BUTTON, 0) == 1);
+        mShowLeftMenuButton = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_LEFT_MENU_BUTTON, 0) == 1);
+        mShowRightMenuButton = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_RIGHT_MENU_BUTTON, 0) == 1);
+    	mShowSearchButtonLand = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_SEARCH_BUTTON_LAND, 0) == 1);
+        mShowTopMenuButtonLand = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_TOP_MENU_BUTTON_LAND, 0) == 1);
+        mShowBotMenuButtonLand = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_BOT_MENU_BUTTON_LAND, 0) == 1);
+    }
+    
     
     
     public void setMenuVisibility(final boolean show) {
@@ -205,9 +242,14 @@ public class NavigationBarView extends LinearLayout {
 
         mShowMenu = show;
 
-        getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
-        getMenuButton1().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
-        if (!mVertical) getLeftPad().setVisibility(mShowMenu ? View.GONE : View.VISIBLE);
+        if (mVertical) {
+        	getMenuButton1().setVisibility(mShowMenu && mShowTopMenuButtonLand ? View.VISIBLE : View.GONE);
+        	getMenuButton().setVisibility(mShowMenu && mShowBotMenuButtonLand ? View.VISIBLE : View.GONE);
+        } else {
+        	getLeftPad().setVisibility(mShowMenu ? View.GONE : View.VISIBLE);
+        	getMenuButton1().setVisibility(mShowMenu && mShowLeftMenuButton ? View.VISIBLE : View.GONE);
+        	getMenuButton().setVisibility(mShowMenu && mShowRightMenuButton ? View.VISIBLE : View.GONE);
+        }
          
         if (mShowMenu && mShowSearchButton) adjustButtons(65, 65);
         if (mShowMenu && !mShowSearchButton) adjustButtons(82, 78);

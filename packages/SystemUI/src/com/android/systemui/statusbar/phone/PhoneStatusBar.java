@@ -389,8 +389,12 @@ public class PhoneStatusBar extends StatusBar {
 
         public void observe() {
             ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_MENU_BUTTON), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_SEARCH_BUTTON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_LEFT_MENU_BUTTON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_RIGHT_MENU_BUTTON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_SEARCH_BUTTON_LAND), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_TOP_MENU_BUTTON_LAND), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_BOT_MENU_BUTTON_LAND), false, this);
             onChange(true);
         }
 
@@ -468,10 +472,13 @@ public class PhoneStatusBar extends StatusBar {
     };
 
     private void prepareNavigationBarView() {
-        mNavigationBarView.reorient();
+    	
+    	mNavigationBarView.updateSettings();
+    	mNavigationBarView.reorient();
 
         mNavigationBarView.getRecentsButton().setOnClickListener(mRecentsClickListener);
         mNavigationBarView.getRecentsButton().setOnTouchListener(mRecentsPanel);
+        
     }
 
     // For small-screen devices (read: phones) that lack hardware navigation buttons

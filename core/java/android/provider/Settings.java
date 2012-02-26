@@ -1887,25 +1887,25 @@ public final class Settings {
          */
         public static final String POINTER_SPEED = "pointer_speed";
 
- /**
-         * Setting to show alternative battery meter
-         * @hide
-         */
+        /**
+        * Setting to show alternative battery meter
+        * @hide
+        */
         public static final String USE_ALT_METERS = "alt_meters";
 
-       /**
-         * @hide
-         */
+        /**
+        * @hide
+        */
         public static final String BATTERY_ICON = "battery_icon";
  	
-	/**
-         * 0 = stock
-         * 1 = talk
-         * 2 = sms
-         * 
-         * @hide
-         */
-	public static final String ALT_LAYOUTS = "alt_layouts";
+        /**
+        * 0 = stock
+        * 1 = talk
+        * 2 = sms
+        * 
+        * @hide
+        */
+        public static final String ALT_LAYOUTS = "alt_layouts";
 
         /**
          * Whether to show the battery bar
@@ -1921,46 +1921,75 @@ public final class Settings {
 
 
         /**
-         * @hide
-         */
-	public static final String NAVIGATION_ORDER = "navigation_button_order";
-
-
-        /**
-         * @hide
-         */
-	public static final String NAVIGATION_BAR_TINT = "navigation_bar_tint";
-
-        /**
-         * @hide
-         */
-	public static final String LOCKSCREEN_LANDSCAPE = "lockscreen_orientation";
-
-       /**
-         * @hide
-         */
-	public static final String TORCH_MODE = "torch_setting";
-
-         /**
-         * Whether to control brightness from status bar
-         *
-         * @hide
-         */
-        public static final String STATUS_BAR_BRIGHTNESS_TOGGLE = "status_bar_brightness_toggle";
-
-/**
-        * Setting to show full menu button in nav bar
         * @hide
         */
-        public static final String SHOW_MENU_BUTTON = "show_menu_button";
+        public static final String NAVIGATION_ORDER = "navigation_button_order";
+
 
         /**
-        * Setting to show search button in nav bar
+        * @hide
+        */
+		public static final String NAVIGATION_BAR_TINT = "navigation_bar_tint";
+
+        /**
+        * @hide
+        */
+		public static final String LOCKSCREEN_LANDSCAPE = "lockscreen_orientation";
+
+       	/**
+        * @hide
+       	*/
+		public static final String TORCH_MODE = "torch_setting";
+
+        /**
+        * Whether to control brightness from status bar
+        *
+        * @hide
+        */
+        public static final String STATUS_BAR_BRIGHTNESS_TOGGLE = "status_bar_brightness_toggle";
+
+        /**
+        * Setting to show search button in nav bar (Portrait)
         * @hide
         */
         public static final String SHOW_SEARCH_BUTTON = "show_search_button";
 
+        
+        /**
+        * Setting to show the left menu button in nav bar (Portrait)
+        * @hide
+        */
+        public static final String SHOW_LEFT_MENU_BUTTON = "show_left_menu_button";
+        
+        
+        /**
+        * Setting to show the right menu button in nav bar (Portrait)
+        * @hide
+        */
+        public static final String SHOW_RIGHT_MENU_BUTTON = "show_right_menu_button";
+        
+        /**
+        * Setting to show search button in nav bar (Landscape)
+        * @hide
+        */
+        public static final String SHOW_SEARCH_BUTTON_LAND = "show_search_button_land";
 
+        
+        /**
+        * Setting to show the left menu button in nav bar (Landscape)
+        * @hide
+        */
+        public static final String SHOW_TOP_MENU_BUTTON_LAND = "show_top_menu_button_land";
+        
+        
+        /**
+        * Setting to show the right menu button in nav bar (Landscape)
+        * @hide
+        */
+        public static final String SHOW_BOT_MENU_BUTTON_LAND = "show_bottom_menu_button_land";
+
+        
+        
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
