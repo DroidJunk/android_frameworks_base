@@ -243,8 +243,8 @@ public class NavigationBarView extends LinearLayout {
         mShowMenu = show;
 
         if (mVertical) {
-        	getMenuButton1().setVisibility(mShowMenu && mShowTopMenuButtonLand ? View.VISIBLE : View.GONE);
-        	getMenuButton().setVisibility(mShowMenu && mShowBotMenuButtonLand ? View.VISIBLE : View.GONE);
+        	getMenuButton().setVisibility(mShowMenu && mShowTopMenuButtonLand ? View.VISIBLE : View.GONE);
+        	getMenuButton1().setVisibility(mShowMenu && mShowBotMenuButtonLand ? View.VISIBLE : View.GONE);
         } else {
         	getLeftPad().setVisibility(mShowMenu ? View.GONE : View.VISIBLE);
         	getMenuButton1().setVisibility(mShowMenu && mShowLeftMenuButton ? View.VISIBLE : View.GONE);
