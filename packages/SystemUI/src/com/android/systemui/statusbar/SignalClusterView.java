@@ -16,8 +16,18 @@
 
 package com.android.systemui.statusbar;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +35,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import com.android.systemui.statusbar.policy.NetworkController;
 
 import com.android.systemui.R;
+
+
 
 // Intimately tied to the design of res/layout/signal_cluster_view.xml
 public class SignalClusterView
@@ -36,6 +49,14 @@ public class SignalClusterView
 
     static final boolean DEBUG = false;
     static final String TAG = "SignalClusterView";
+    
+    private final String Tranq_Settings = "TRANQ_SETTINGS";
+    private SharedPreferences mPrefs;
+    private int mIconColorHue = 0;
+    private int mHueIntens = 0;
+    private int mIconColorShade = 0xff33b5e5;
+    private int mShadeIntens = 0;
+    
     
     NetworkController mNC;
 
@@ -80,6 +101,26 @@ public class SignalClusterView
         mMobileType     = (ImageView) findViewById(R.id.mobile_type);
         mSpacer         =             findViewById(R.id.spacer);
 
+        
+  		Context settingsContext = getContext();
+		try {
+			settingsContext = getContext().createPackageContext("com.android.settings",0);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     		
+		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+   		mIconColorShade = mPrefs.getInt("icon_color", 0xff33b5e5);
+        
+        
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Tranq_Settings);
+        getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
+        
+        
+        
+        
         apply();
     }
 
@@ -95,6 +136,25 @@ public class SignalClusterView
 
         super.onDetachedFromWindow();
     }
+    
+    
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            
+            if (action.equals("TRANQ_SETTINGS")) {
+            	mIconColorHue = intent.getIntExtra("IconColorHue", mIconColorHue);
+            	mHueIntens = intent.getIntExtra("IconColorHueIntens", mHueIntens);
+            	mIconColorShade= intent.getIntExtra("IconColorShade", mIconColorShade);
+            	mShadeIntens = intent.getIntExtra("IconColorShadeIntens", mShadeIntens);
+            	Log.e("***************************************************  ", String.valueOf(mShadeIntens));
+            	apply();
+            }
+        }
+    };     
+    
+    
 
     public void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
             String contentDescription) {
@@ -131,6 +191,7 @@ public class SignalClusterView
             mWifi.setImageResource(mWifiStrengthId);
             mWifiActivity.setImageResource(mWifiActivityId);
             mWifiGroup.setContentDescription(mWifiDescription);
+            mWifi.setColorFilter(ColorFilterMaker.changeHue(mIconColorHue, mHueIntens));
         } else {
             mWifiGroup.setVisibility(View.GONE);
         }
@@ -146,6 +207,7 @@ public class SignalClusterView
             mMobileActivity.setImageResource(mMobileActivityId);
             mMobileType.setImageResource(mMobileTypeId);
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
+            mMobile.setColorFilter(ColorFilterMaker.shadeColor(mIconColorShade, mShadeIntens));
         } else {
             mMobileGroup.setVisibility(View.GONE);
         }
@@ -164,5 +226,132 @@ public class SignalClusterView
         mMobileType.setVisibility(
                 !mWifiVisible ? View.VISIBLE : View.GONE);
     }
+    
+    
+    public static class ColorFilterMaker
+    {
+        /**
+     * Makes a ColorFilter
+     * 
+     * @param newColor new color of image when filter is applied.
+     * @return
+     */    	
+    public ColorFilter changeColor(int newColor )
+    {
+        ColorMatrix cm = new ColorMatrix();
+
+        changeColor(cm, newColor);
+
+        return new ColorMatrixColorFilter(cm);
+    }
+  
+
+    public static ColorFilter shadeColor(int newColor, int intens )
+    {
+        ColorMatrix cm = new ColorMatrix();
+
+        changeExistingColor(cm, newColor, intens);
+
+        return new ColorMatrixColorFilter(cm);
+    }    
+
+    public static ColorFilter changeHue(int newHue, int intens )
+    {
+        ColorMatrix cm = new ColorMatrix();
+
+        changeHue(cm, newHue, intens);
+
+        return new ColorMatrixColorFilter(cm);
+    }        
+    
+    
+    // This works for a b/w or grayscale image
+    private static void changeColor(ColorMatrix cm, int newColor) {
+        
+    	float A = (float)Color.alpha(newColor);
+        float R = (float)Color.red(newColor);
+        float G = (float)Color.green(newColor);
+        float B =  (float)Color.blue(newColor);
+        
+        float[] matrix = new float[]
+            {       
+            R/255f		,0			,0			,0			,0    // Red
+            ,0			,G/255f		,0    		,0			,0    // Green
+            ,0   		,0			,B/255f		,0			,0    // Blue
+            ,0    		,0     		,0      	,A/255f 	,0f   // Alpha
+            };
+        
+        
+        cm.postConcat(new ColorMatrix(matrix));
+    }
+
+    private static void changeExistingColor(ColorMatrix cm, int newColor, int itens) {
+        
+    	float A = (float)Color.alpha(newColor) / 255;
+        float R = (float)Color.red(newColor) / 255;
+        float G = (float)Color.green(newColor) / 255;
+        float B =  (float)Color.blue(newColor) / 255;
+        
+    	
+        
+        float[] mat = new float[]
+                {       
+                R			,0			,0			,0		,itens  // Red
+                ,0			,G			,0    		,0		,itens  // Green
+                ,0   		,0			,B			,0		,itens	// Blue
+                ,0    		,0     		,0      	,1		,0  	// Alpha
+                };      
+        
+        float[] matrix = new float[]
+                {       
+        		.5f		,.5f	,.5f	,0			,0    // Red
+               ,.5f		,.5f	,.5f	,0			,0    // Green
+               ,.5f		,.5f	,.5f	,0			,0    // Blue
+               ,0   	,0 		,0 		,1			,0    // Alpha
+               };    
+        
+        cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
+        
+    
+    }
+    
+    
+    
+    public static void changeHue(ColorMatrix cm, int newHue, int intens)
+    {
+    	
+     
+           
+        float cosVal = (float) Math.cos(newHue);
+        float sinVal = (float) Math.sin(newHue);
+        float lumR = 0.212671f;
+        float lumG = 0.715160f;
+        float lumB = 0.072169f;  
+        newHue = newHue / 3;
+        
+        if (newHue > 180) newHue = 180 - newHue;
+        
+        Log.e("***********************************************    ", String.valueOf(newHue));
+       
+        
+        float[] mat = new float[]
+        { 
+                lumR + cosVal * (1 - lumR) + sinVal * (-lumR)		, lumG + cosVal * (-lumG) + sinVal * (-lumG)		, lumB + cosVal * (-lumB) + sinVal * (1 - lumB)		, 0		, intens, 
+                lumR + cosVal * (-lumR) + sinVal * (0.143f)			, lumG + cosVal * (1 - lumG) + sinVal * (0.140f)	, lumB + cosVal * (-lumB) + sinVal * (-0.283f)		, 0		, intens,
+                lumR + cosVal * (-lumR) + sinVal * (-(1 - lumR))	, lumG + cosVal * (-lumG) + sinVal * (lumG)			, lumB + cosVal * (1 - lumB) + sinVal * (lumB)		, 0		, intens, 
+                0f, 0f, 0f, 1f, 0f, 
+                0f, 0f, 0f, 0f, 1f };
+              
+        
+        cm.postConcat(new ColorMatrix(mat));
+        //cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
+    }
+
+    
+    
+    
+    
+    }  
+    
 }
 

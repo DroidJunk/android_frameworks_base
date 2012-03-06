@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 import android.content.BroadcastReceiver;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.RelativeSizeSpan;
@@ -33,6 +36,7 @@ import android.os.BatteryManager;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -40,6 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.systemui.R;
+import com.android.systemui.statusbar.SignalClusterView.ColorFilterMaker;
 
 public class BatteryController extends LinearLayout {
     private static final String TAG = "StatusBar.BatteryController";
@@ -52,6 +57,11 @@ public class BatteryController extends LinearLayout {
 
     private static int mBatteryStyle;
 
+    private final String Tranq_Settings = "TRANQ_SETTINGS";
+    private int mIconColorHue = 0;
+    private int mHueIntens = 0;
+    private int mIconColorShade = 0xff33b5e5;
+    private int mShadeIntens = 0;
 
     private int mLevel = -1;
     private boolean mPlugged = false;
@@ -86,6 +96,7 @@ public class BatteryController extends LinearLayout {
     private void init() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(Tranq_Settings);
         mContext.registerReceiver(mBatteryBroadcastReceiver, filter);
     }
 
@@ -109,9 +120,155 @@ public class BatteryController extends LinearLayout {
                         BatteryManager.EXTRA_PLUGGED, 0) != 0;
                 setBatteryIcon(level, plugged);
             }
+            
+            if (action.equals("TRANQ_SETTINGS")) {
+            	mIconColorHue = intent.getIntExtra("IconColorHue", mIconColorHue);
+            	mHueIntens = intent.getIntExtra("IconColorHueIntens", mHueIntens);
+            	mIconColorShade= intent.getIntExtra("IconColorShade", mIconColorShade);
+            	mShadeIntens = intent.getIntExtra("IconColorShadeIntens", mShadeIntens);
+            	updateSettings();
+            }
         }
     };
 
+    
+    public static class ColorFilterMaker
+    {
+        /**
+     * Makes a ColorFilter
+     * 
+     * @param newColor new color of image when filter is applied.
+     * @return
+     */    	
+    public ColorFilter changeColor(int newColor )
+    {
+        ColorMatrix cm = new ColorMatrix();
+
+        changeColor(cm, newColor);
+
+        return new ColorMatrixColorFilter(cm);
+    }
+  
+
+    public static ColorFilter changeExistingColor(int currentColor, int newColor )
+    {
+        ColorMatrix cm = new ColorMatrix();
+
+        changeExistingColor(cm, currentColor, newColor);
+
+        return new ColorMatrixColorFilter(cm);
+    }    
+
+    public static ColorFilter changeHue(int currentColor, int newColor )
+    {
+        ColorMatrix cm = new ColorMatrix();
+
+        changeHue(cm, currentColor, newColor);
+
+        return new ColorMatrixColorFilter(cm);
+    }        
+    
+    
+    // This works for a b/w or grayscale image
+    private static void changeColor(ColorMatrix cm, int newColor) {
+        
+    	float A = (float)Color.alpha(newColor);
+        float R = (float)Color.red(newColor);
+        float G = (float)Color.green(newColor);
+        float B =  (float)Color.blue(newColor);
+        
+        float[] matrix = new float[]
+            {       
+            R/255f		,0			,0			,0			,0    // Red
+            ,0			,G/255f		,0    		,0			,0    // Green
+            ,0   		,0			,B/255f		,0			,0    // Blue
+            ,0    		,0     		,0      	,A/255f 	,0f   // Alpha
+            };
+        
+        
+        cm.postConcat(new ColorMatrix(matrix));
+    }
+
+    private static void changeExistingColor(ColorMatrix cm, int c, int newColor) {
+        
+    	float A = (float)Color.alpha(newColor) / 255;
+        float R = (float)Color.red(newColor) / 255;
+        float G = (float)Color.green(newColor) / 255;
+        float B =  (float)Color.blue(newColor) / 255;
+        
+    	float cA = (float)Color.alpha(c) / 255;
+        float cR = (float)Color.red(c) / 255;
+        float cG = (float)Color.green(c) / 255;
+        float cB = (float)Color.blue(c) / 255;
+        
+
+        
+        float[] mat = new float[]
+                {       
+                R			,0			,0			,0		,c    // Red
+                ,0			,G			,0    		,0		,c    // Green
+                ,0   		,0			,B			,0		,c    // Blue
+                ,0    		,0     		,0      	,1		,0   // Alpha
+                //,c    		,c     		,c      	,0	 	,1   // ??
+                };      
+        
+        float[] matrix = new float[]
+                {       
+        		.5f	,.5f	,.5f	,0			,0    // Red
+               ,.5f	,.5f	,.5f	,0			,0    // Green
+               ,.5f	,.5f	,.5f	,0			,0    // Blue
+               ,0   	,0 		,0 		,1			,0    // Alpha
+               //,0		,0			,0			,0			,1
+               };    
+        
+
+        //cm.postConcat(new ColorMatrix(matrix));
+        //cm.set(new ColorMatrix(matrix));
+        cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
+        
+    
+    }
+    
+    
+    
+    public static void changeHue(ColorMatrix cm, int newHue, int intens)
+    {
+    	
+     
+           
+        float cosVal = (float) Math.cos(newHue);
+        float sinVal = (float) Math.sin(newHue);
+        float lumR = 0.212671f;
+        float lumG = 0.715160f;
+        float lumB = 0.072169f;  
+        newHue = newHue / 3;
+        
+        if (newHue > 180) newHue = 180 - newHue;
+        
+        Log.e("***********************************************    ", String.valueOf(newHue));
+       
+        
+        float[] mat = new float[]
+        { 
+                lumR + cosVal * (1 - lumR) + sinVal * (-lumR)		, lumG + cosVal * (-lumG) + sinVal * (-lumG)		, lumB + cosVal * (-lumB) + sinVal * (1 - lumB)		, 0		, intens, 
+                lumR + cosVal * (-lumR) + sinVal * (0.143f)			, lumG + cosVal * (1 - lumG) + sinVal * (0.140f)	, lumB + cosVal * (-lumB) + sinVal * (-0.283f)		, 0		, intens,
+                lumR + cosVal * (-lumR) + sinVal * (-(1 - lumR))	, lumG + cosVal * (-lumG) + sinVal * (lumG)			, lumB + cosVal * (1 - lumB) + sinVal * (lumB)		, 0		, intens, 
+                0f, 0f, 0f, 1f, 0f, 
+                0f, 0f, 0f, 0f, 1f };
+              
+        
+        cm.postConcat(new ColorMatrix(mat));
+        //cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
+    }
+
+   
+
+    
+    
+    
+    
+    }      
+    
     private void setBatteryIcon(int level, boolean plugged) {
         mLevel = level;
         mPlugged = plugged;
@@ -148,6 +305,7 @@ public class BatteryController extends LinearLayout {
             v.setImageLevel(level);
             v.setContentDescription(mContext.getString(
                     R.string.accessibility_battery_level, level));
+            v.setColorFilter(ColorFilterMaker.changeHue(mIconColorHue, mHueIntens));
         }
         N = mLabelViews.size();
         for (int i = 0; i < N; i++) {
