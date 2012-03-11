@@ -117,6 +117,7 @@ public class BatteryBar extends LinearLayout implements Animatable, Runnable {
                 mBatteryCharging = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0) == BatteryManager.BATTERY_STATUS_CHARGING;
                 if (mBatteryCharging && mBatteryLevel < 100) {
                     start();
+                    updateSettings();
                 } else {
                     stop();
                 }

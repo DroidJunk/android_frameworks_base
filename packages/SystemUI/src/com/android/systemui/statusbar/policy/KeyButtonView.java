@@ -47,6 +47,8 @@ import android.widget.ImageView;
 import com.android.systemui.R;
 //import com.android.systemui.statusbar.policy.Clock.SettingsObserver;
 
+import droidjunk.colorfitermaker.ColorFilterMaker;
+
 public class KeyButtonView extends ImageView {
     private static final String TAG = "StatusBar.KeyButtonView";
 
@@ -92,6 +94,17 @@ public class KeyButtonView extends ImageView {
         mSupportsLongpress = a.getBoolean(R.styleable.KeyButtonView_keyRepeat, true);
 
         mGlowBG = a.getDrawable(R.styleable.KeyButtonView_glowBackground);
+
+        mGlowBG.setColorFilter(null);
+        try {
+			mGlowBG.setColorFilter(ColorFilterMaker.changeColor(Settings.System.getInt(mContext.getContentResolver(),
+					Settings.System.NAVIGATION_BAR_TINT), 0));
+		} catch (SettingNotFoundException e) {
+			e.printStackTrace();
+		}        
+        
+        
+        
         if (mGlowBG != null) {
             mDrawingAlpha = BUTTON_QUIESCENT_ALPHA;
         }
@@ -312,14 +325,28 @@ public class KeyButtonView extends ImageView {
     }
 
     protected void updateSettings() {
-        ContentResolver resolver = mContext.getContentResolver();
 
+      
+        
         try {
             setColorFilter(null);
-            setColorFilter(Settings.System.getInt(resolver, Settings.System.NAVIGATION_BAR_TINT));
+            setColorFilter(ColorFilterMaker.changeColor(Settings.System.getInt(mContext.getContentResolver(),
+            		Settings.System.NAVIGATION_BAR_TINT), .45f));
         } catch (SettingNotFoundException e) {
         }
 
+        
+        try {
+        	mGlowBG.setColorFilter(null);
+			mGlowBG.setColorFilter(ColorFilterMaker.changeColor(Settings.System.getInt(mContext.getContentResolver(),
+					Settings.System.NAVIGATION_BAR_TINT), .6f));
+		} catch (SettingNotFoundException e) {
+			e.printStackTrace();
+		}          
+        
+        
+        
+        
     }
 }
 

@@ -22,23 +22,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
+import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.Slog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-
 import com.android.systemui.statusbar.policy.NetworkController;
-
 import com.android.systemui.R;
+
+import droidjunk.colorfitermaker.ColorFilterMaker;
 
 
 
@@ -50,25 +44,24 @@ public class SignalClusterView
     static final boolean DEBUG = false;
     static final String TAG = "SignalClusterView";
     
-    private final String Tranq_Settings = "TRANQ_SETTINGS";
+    private final String Tranq_Icon_Color = "tranq_icon_color";
     private SharedPreferences mPrefs;
-    private int mIconColorHue = 0;
-    private int mHueIntens = 0;
-    private int mIconColorShade = 0xff33b5e5;
-    private int mShadeIntens = 0;
+    private boolean mIconColorOn = false;
+    private int mIconColor = 0xff33b5e5;
+    private boolean mIconColorApply;
     
     
     NetworkController mNC;
 
     private boolean mWifiVisible = false;
-    private int mWifiStrengthId = 0, mWifiActivityId = 0;
+    private int mWifiStrengthId = 0,mWifiStrengthColorId, mWifiActivityId = 0;
     private boolean mMobileVisible = false;
-    private int mMobileStrengthId = 0, mMobileActivityId = 0, mMobileTypeId = 0;
+    private int mMobileStrengthId = 0, mMobileStrengthColorId = 0, mMobileActivityId = 0, mMobileTypeId = 0;
     private boolean mIsAirplaneMode = false;
     private String mWifiDescription, mMobileDescription, mMobileTypeDescription;
 
     ViewGroup mWifiGroup, mMobileGroup;
-    ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType;
+    ImageView mWifi, mWifiColor, mMobile, mMobileColor, mWifiActivity, mMobileActivity, mMobileType;
     View mSpacer;
 
     public SignalClusterView(Context context) {
@@ -94,9 +87,11 @@ public class SignalClusterView
 
         mWifiGroup      = (ViewGroup) findViewById(R.id.wifi_combo);
         mWifi           = (ImageView) findViewById(R.id.wifi_signal);
+        mWifiColor      = (ImageView) findViewById(R.id.wifi_signal_color);
         mWifiActivity   = (ImageView) findViewById(R.id.wifi_inout);
         mMobileGroup    = (ViewGroup) findViewById(R.id.mobile_combo);
         mMobile         = (ImageView) findViewById(R.id.mobile_signal);
+        mMobileColor         = (ImageView) findViewById(R.id.mobile_signal_color);
         mMobileActivity = (ImageView) findViewById(R.id.mobile_inout);
         mMobileType     = (ImageView) findViewById(R.id.mobile_type);
         mSpacer         =             findViewById(R.id.spacer);
@@ -111,11 +106,12 @@ public class SignalClusterView
 		}
      		
 		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
-   		mIconColorShade = mPrefs.getInt("icon_color", 0xff33b5e5);
-        
-        
+		mIconColorOn = mPrefs.getBoolean("color_icons", false);
+   		mIconColor = mPrefs.getInt("icon_color", 0xff33b5e5);
+   	    mIconColorApply = mPrefs.getBoolean("color_icons_apply", false);
+   		
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Tranq_Settings);
+        filter.addAction(Tranq_Icon_Color);
         getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
         
         
@@ -143,12 +139,10 @@ public class SignalClusterView
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             
-            if (action.equals("TRANQ_SETTINGS")) {
-            	mIconColorHue = intent.getIntExtra("IconColorHue", mIconColorHue);
-            	mHueIntens = intent.getIntExtra("IconColorHueIntens", mHueIntens);
-            	mIconColorShade= intent.getIntExtra("IconColorShade", mIconColorShade);
-            	mShadeIntens = intent.getIntExtra("IconColorShadeIntens", mShadeIntens);
-            	Log.e("***************************************************  ", String.valueOf(mShadeIntens));
+            if (action.equals(Tranq_Icon_Color)) {
+            	mIconColorOn = intent.getBooleanExtra("IconColorOn", mIconColorOn);
+            	mIconColor= intent.getIntExtra("IconColor", mIconColor);
+            	mIconColorApply = intent.getBooleanExtra("IconColorApply", mIconColorApply);
             	apply();
             }
         }
@@ -156,20 +150,22 @@ public class SignalClusterView
     
     
 
-    public void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
+    public void setWifiIndicators(boolean visible, int strengthIcon, int strengthIconColor,  int activityIcon,
             String contentDescription) {
         mWifiVisible = visible;
         mWifiStrengthId = strengthIcon;
+        mWifiStrengthColorId = strengthIconColor;
         mWifiActivityId = activityIcon;
         mWifiDescription = contentDescription;
 
         apply();
     }
 
-    public void setMobileDataIndicators(boolean visible, int strengthIcon, int activityIcon,
+    public void setMobileDataIndicators(boolean visible, int strengthIcon, int strengthIconColor, int activityIcon,
             int typeIcon, String contentDescription, String typeContentDescription) {
         mMobileVisible = visible;
         mMobileStrengthId = strengthIcon;
+        mMobileStrengthColorId = strengthIconColor;
         mMobileActivityId = activityIcon;
         mMobileTypeId = typeIcon;
         mMobileDescription = contentDescription;
@@ -189,9 +185,15 @@ public class SignalClusterView
         if (mWifiVisible) {
             mWifiGroup.setVisibility(View.VISIBLE);
             mWifi.setImageResource(mWifiStrengthId);
+            mWifiColor.setImageResource(mWifiStrengthColorId);
             mWifiActivity.setImageResource(mWifiActivityId);
             mWifiGroup.setContentDescription(mWifiDescription);
-            mWifi.setColorFilter(ColorFilterMaker.changeHue(mIconColorHue, mHueIntens));
+            if (mIconColorOn) {
+            	mWifiColor.setVisibility(View.VISIBLE);
+            	mWifiColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            } else {
+            	mWifiColor.setVisibility(View.INVISIBLE);
+            }
         } else {
             mWifiGroup.setVisibility(View.GONE);
         }
@@ -204,10 +206,16 @@ public class SignalClusterView
         if (mMobileVisible) {
             mMobileGroup.setVisibility(View.VISIBLE);
             mMobile.setImageResource(mMobileStrengthId);
+            mMobileColor.setImageResource(mMobileStrengthColorId);
             mMobileActivity.setImageResource(mMobileActivityId);
             mMobileType.setImageResource(mMobileTypeId);
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
-            mMobile.setColorFilter(ColorFilterMaker.shadeColor(mIconColorShade, mShadeIntens));
+            if (mIconColorOn) {
+            	mMobileColor.setVisibility(View.VISIBLE);
+            	mMobileColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            } else {
+            	mMobileColor.setVisibility(View.INVISIBLE);
+            }
         } else {
             mMobileGroup.setVisibility(View.GONE);
         }
@@ -228,130 +236,7 @@ public class SignalClusterView
     }
     
     
-    public static class ColorFilterMaker
-    {
-        /**
-     * Makes a ColorFilter
-     * 
-     * @param newColor new color of image when filter is applied.
-     * @return
-     */    	
-    public ColorFilter changeColor(int newColor )
-    {
-        ColorMatrix cm = new ColorMatrix();
 
-        changeColor(cm, newColor);
-
-        return new ColorMatrixColorFilter(cm);
-    }
-  
-
-    public static ColorFilter shadeColor(int newColor, int intens )
-    {
-        ColorMatrix cm = new ColorMatrix();
-
-        changeExistingColor(cm, newColor, intens);
-
-        return new ColorMatrixColorFilter(cm);
-    }    
-
-    public static ColorFilter changeHue(int newHue, int intens )
-    {
-        ColorMatrix cm = new ColorMatrix();
-
-        changeHue(cm, newHue, intens);
-
-        return new ColorMatrixColorFilter(cm);
-    }        
-    
-    
-    // This works for a b/w or grayscale image
-    private static void changeColor(ColorMatrix cm, int newColor) {
-        
-    	float A = (float)Color.alpha(newColor);
-        float R = (float)Color.red(newColor);
-        float G = (float)Color.green(newColor);
-        float B =  (float)Color.blue(newColor);
-        
-        float[] matrix = new float[]
-            {       
-            R/255f		,0			,0			,0			,0    // Red
-            ,0			,G/255f		,0    		,0			,0    // Green
-            ,0   		,0			,B/255f		,0			,0    // Blue
-            ,0    		,0     		,0      	,A/255f 	,0f   // Alpha
-            };
-        
-        
-        cm.postConcat(new ColorMatrix(matrix));
-    }
-
-    private static void changeExistingColor(ColorMatrix cm, int newColor, int itens) {
-        
-    	float A = (float)Color.alpha(newColor) / 255;
-        float R = (float)Color.red(newColor) / 255;
-        float G = (float)Color.green(newColor) / 255;
-        float B =  (float)Color.blue(newColor) / 255;
-        
-    	
-        
-        float[] mat = new float[]
-                {       
-                R			,0			,0			,0		,itens  // Red
-                ,0			,G			,0    		,0		,itens  // Green
-                ,0   		,0			,B			,0		,itens	// Blue
-                ,0    		,0     		,0      	,1		,0  	// Alpha
-                };      
-        
-        float[] matrix = new float[]
-                {       
-        		.5f		,.5f	,.5f	,0			,0    // Red
-               ,.5f		,.5f	,.5f	,0			,0    // Green
-               ,.5f		,.5f	,.5f	,0			,0    // Blue
-               ,0   	,0 		,0 		,1			,0    // Alpha
-               };    
-        
-        cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
-        
-    
-    }
-    
-    
-    
-    public static void changeHue(ColorMatrix cm, int newHue, int intens)
-    {
-    	
-     
-           
-        float cosVal = (float) Math.cos(newHue);
-        float sinVal = (float) Math.sin(newHue);
-        float lumR = 0.212671f;
-        float lumG = 0.715160f;
-        float lumB = 0.072169f;  
-        newHue = newHue / 3;
-        
-        if (newHue > 180) newHue = 180 - newHue;
-        
-        Log.e("***********************************************    ", String.valueOf(newHue));
-       
-        
-        float[] mat = new float[]
-        { 
-                lumR + cosVal * (1 - lumR) + sinVal * (-lumR)		, lumG + cosVal * (-lumG) + sinVal * (-lumG)		, lumB + cosVal * (-lumB) + sinVal * (1 - lumB)		, 0		, intens, 
-                lumR + cosVal * (-lumR) + sinVal * (0.143f)			, lumG + cosVal * (1 - lumG) + sinVal * (0.140f)	, lumB + cosVal * (-lumB) + sinVal * (-0.283f)		, 0		, intens,
-                lumR + cosVal * (-lumR) + sinVal * (-(1 - lumR))	, lumG + cosVal * (-lumG) + sinVal * (lumG)			, lumB + cosVal * (1 - lumB) + sinVal * (lumB)		, 0		, intens, 
-                0f, 0f, 0f, 1f, 0f, 
-                0f, 0f, 0f, 0f, 1f };
-              
-        
-        cm.postConcat(new ColorMatrix(mat));
-        //cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
-    }
-
-    
-    
-    
-    
-    }  
     
 }
 

@@ -31,6 +31,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.ContentObserver;
 import android.os.BatteryManager;
 import android.os.Handler;
@@ -44,7 +46,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.SignalClusterView.ColorFilterMaker;
+
+import droidjunk.colorfitermaker.ColorFilterMaker;
+
+
+
 
 public class BatteryController extends LinearLayout {
     private static final String TAG = "StatusBar.BatteryController";
@@ -54,14 +60,15 @@ public class BatteryController extends LinearLayout {
     private ArrayList<TextView> mLabelViews = new ArrayList<TextView>();
 
     private ImageView mBatteryIcon;
-
+    private ImageView mBatteryIconColor; // Tranq
+    private boolean mIconColorOn = false;
+    
     private static int mBatteryStyle;
 
-    private final String Tranq_Settings = "TRANQ_SETTINGS";
-    private int mIconColorHue = 0;
-    private int mHueIntens = 0;
-    private int mIconColorShade = 0xff33b5e5;
-    private int mShadeIntens = 0;
+    private final String Tranq_Icon_Color = "tranq_icon_color"; // Tranq
+    private SharedPreferences mPrefs; // Tranq 
+    private int mIconColor = 0xff33b5e5; // Tranq
+
 
     private int mLevel = -1;
     private boolean mPlugged = false;
@@ -85,7 +92,21 @@ public class BatteryController extends LinearLayout {
         super.onAttachedToWindow();
         init();
         mBatteryIcon = (ImageView) findViewById(R.id.battery);
+        mBatteryIconColor = (ImageView) findViewById(R.id.battery_color);  // Tranq
         addIconView(mBatteryIcon);
+
+        
+  		Context settingsContext = getContext();
+		try {
+			settingsContext = getContext().createPackageContext("com.android.settings",0);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+		mIconColorOn = mPrefs.getBoolean("color_icons", false);  // Tranq
+   		mIconColor = mPrefs.getInt("icon_color", 0xff33b5e5);
 
         SettingsObserver settingsObserver = new SettingsObserver(new Handler());
         settingsObserver.observe();
@@ -96,7 +117,7 @@ public class BatteryController extends LinearLayout {
     private void init() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        filter.addAction(Tranq_Settings);
+        filter.addAction(Tranq_Icon_Color);
         mContext.registerReceiver(mBatteryBroadcastReceiver, filter);
     }
 
@@ -121,153 +142,14 @@ public class BatteryController extends LinearLayout {
                 setBatteryIcon(level, plugged);
             }
             
-            if (action.equals("TRANQ_SETTINGS")) {
-            	mIconColorHue = intent.getIntExtra("IconColorHue", mIconColorHue);
-            	mHueIntens = intent.getIntExtra("IconColorHueIntens", mHueIntens);
-            	mIconColorShade= intent.getIntExtra("IconColorShade", mIconColorShade);
-            	mShadeIntens = intent.getIntExtra("IconColorShadeIntens", mShadeIntens);
+            if (action.equals(Tranq_Icon_Color)) {
+            	mIconColorOn = intent.getBooleanExtra("IconColorOn", mIconColorOn);
+            	mIconColor = intent.getIntExtra("IconColor", mIconColor);
             	updateSettings();
             }
         }
     };
 
-    
-    public static class ColorFilterMaker
-    {
-        /**
-     * Makes a ColorFilter
-     * 
-     * @param newColor new color of image when filter is applied.
-     * @return
-     */    	
-    public ColorFilter changeColor(int newColor )
-    {
-        ColorMatrix cm = new ColorMatrix();
-
-        changeColor(cm, newColor);
-
-        return new ColorMatrixColorFilter(cm);
-    }
-  
-
-    public static ColorFilter changeExistingColor(int currentColor, int newColor )
-    {
-        ColorMatrix cm = new ColorMatrix();
-
-        changeExistingColor(cm, currentColor, newColor);
-
-        return new ColorMatrixColorFilter(cm);
-    }    
-
-    public static ColorFilter changeHue(int currentColor, int newColor )
-    {
-        ColorMatrix cm = new ColorMatrix();
-
-        changeHue(cm, currentColor, newColor);
-
-        return new ColorMatrixColorFilter(cm);
-    }        
-    
-    
-    // This works for a b/w or grayscale image
-    private static void changeColor(ColorMatrix cm, int newColor) {
-        
-    	float A = (float)Color.alpha(newColor);
-        float R = (float)Color.red(newColor);
-        float G = (float)Color.green(newColor);
-        float B =  (float)Color.blue(newColor);
-        
-        float[] matrix = new float[]
-            {       
-            R/255f		,0			,0			,0			,0    // Red
-            ,0			,G/255f		,0    		,0			,0    // Green
-            ,0   		,0			,B/255f		,0			,0    // Blue
-            ,0    		,0     		,0      	,A/255f 	,0f   // Alpha
-            };
-        
-        
-        cm.postConcat(new ColorMatrix(matrix));
-    }
-
-    private static void changeExistingColor(ColorMatrix cm, int c, int newColor) {
-        
-    	float A = (float)Color.alpha(newColor) / 255;
-        float R = (float)Color.red(newColor) / 255;
-        float G = (float)Color.green(newColor) / 255;
-        float B =  (float)Color.blue(newColor) / 255;
-        
-    	float cA = (float)Color.alpha(c) / 255;
-        float cR = (float)Color.red(c) / 255;
-        float cG = (float)Color.green(c) / 255;
-        float cB = (float)Color.blue(c) / 255;
-        
-
-        
-        float[] mat = new float[]
-                {       
-                R			,0			,0			,0		,c    // Red
-                ,0			,G			,0    		,0		,c    // Green
-                ,0   		,0			,B			,0		,c    // Blue
-                ,0    		,0     		,0      	,1		,0   // Alpha
-                //,c    		,c     		,c      	,0	 	,1   // ??
-                };      
-        
-        float[] matrix = new float[]
-                {       
-        		.5f	,.5f	,.5f	,0			,0    // Red
-               ,.5f	,.5f	,.5f	,0			,0    // Green
-               ,.5f	,.5f	,.5f	,0			,0    // Blue
-               ,0   	,0 		,0 		,1			,0    // Alpha
-               //,0		,0			,0			,0			,1
-               };    
-        
-
-        //cm.postConcat(new ColorMatrix(matrix));
-        //cm.set(new ColorMatrix(matrix));
-        cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
-        
-    
-    }
-    
-    
-    
-    public static void changeHue(ColorMatrix cm, int newHue, int intens)
-    {
-    	
-     
-           
-        float cosVal = (float) Math.cos(newHue);
-        float sinVal = (float) Math.sin(newHue);
-        float lumR = 0.212671f;
-        float lumG = 0.715160f;
-        float lumB = 0.072169f;  
-        newHue = newHue / 3;
-        
-        if (newHue > 180) newHue = 180 - newHue;
-        
-        Log.e("***********************************************    ", String.valueOf(newHue));
-       
-        
-        float[] mat = new float[]
-        { 
-                lumR + cosVal * (1 - lumR) + sinVal * (-lumR)		, lumG + cosVal * (-lumG) + sinVal * (-lumG)		, lumB + cosVal * (-lumB) + sinVal * (1 - lumB)		, 0		, intens, 
-                lumR + cosVal * (-lumR) + sinVal * (0.143f)			, lumG + cosVal * (1 - lumG) + sinVal * (0.140f)	, lumB + cosVal * (-lumB) + sinVal * (-0.283f)		, 0		, intens,
-                lumR + cosVal * (-lumR) + sinVal * (-(1 - lumR))	, lumG + cosVal * (-lumG) + sinVal * (lumG)			, lumB + cosVal * (1 - lumB) + sinVal * (lumB)		, 0		, intens, 
-                0f, 0f, 0f, 1f, 0f, 
-                0f, 0f, 0f, 0f, 1f };
-              
-        
-        cm.postConcat(new ColorMatrix(mat));
-        //cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
-    }
-
-   
-
-    
-    
-    
-    
-    }      
     
     private void setBatteryIcon(int level, boolean plugged) {
         mLevel = level;
@@ -279,6 +161,11 @@ public class BatteryController extends LinearLayout {
         if (mBatteryStyle == STYLE_STOCK) {
             icon = plugged ? R.drawable.stat_sys_battery_charge
                     : R.drawable.stat_sys_battery;
+            if (mIconColorOn) {
+                mBatteryIconColor.setImageResource(R.drawable.stat_sys_battery_color);
+                mBatteryIconColor.setImageLevel(level);
+                mBatteryIconColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            }
         } else if (mBatteryStyle == STYLE_ICS) {
             icon = plugged ? R.drawable.stock_sys_battery_charge
                     : R.drawable.stock_sys_battery;
@@ -305,7 +192,6 @@ public class BatteryController extends LinearLayout {
             v.setImageLevel(level);
             v.setContentDescription(mContext.getString(
                     R.string.accessibility_battery_level, level));
-            v.setColorFilter(ColorFilterMaker.changeHue(mIconColorHue, mHueIntens));
         }
         N = mLabelViews.size();
         for (int i = 0; i < N; i++) {
@@ -313,6 +199,7 @@ public class BatteryController extends LinearLayout {
             v.setText(mContext.getString(
                     R.string.status_bar_settings_battery_meter_format, level));
         }
+
     }
 
     class SettingsObserver extends ContentObserver {
@@ -343,34 +230,42 @@ public class BatteryController extends LinearLayout {
             case STYLE_STOCK:;
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
+                mBatteryIconColor.setVisibility(mIconColorOn ? View.VISIBLE : View.INVISIBLE);
                 break;
             case STYLE_ICS:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
+                mBatteryIconColor.setVisibility(View.INVISIBLE);
                 break;
             case STYLE_VERTICAL:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
+                mBatteryIconColor.setVisibility(View.INVISIBLE);
                 break;
             case STYLE_BALL:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
+                mBatteryIconColor.setVisibility(View.INVISIBLE);
                 break;
             case STYLE_CIRCLE:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
+                mBatteryIconColor.setVisibility(View.INVISIBLE);
                 break;
             case STYLE_ANIMATED:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
+                mBatteryIconColor.setVisibility(View.INVISIBLE);
                 break;
             case STYLE_HIDE:
                 mBatteryIcon.setVisibility(View.GONE);
                 setVisibility(View.GONE);
+                mBatteryIconColor.setVisibility(View.INVISIBLE);
                 break;
             default:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
+                mBatteryIconColor.setVisibility(View.INVISIBLE);
                 break;
         }
 

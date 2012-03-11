@@ -58,6 +58,7 @@ public class Clock extends TextView {
     private boolean mClockAmPm = false;
     private int mClockColor = 0xff3F9BBF;
     private int mClockSize = 17;
+
 	
 	
     private boolean mAttached;
@@ -152,7 +153,13 @@ public class Clock extends TextView {
             if (action.equals("TRANQ_SETTINGS")) {
              	mShowClock = intent.getBooleanExtra("ShowClock", mShowClock);
             	mClockAmPm = intent.getBooleanExtra("ClockAmPm", mClockAmPm);
-            	mClockColor = intent.getIntExtra("ClockColor", mClockColor);	
+       	   		if (intent.getBooleanExtra("IconColorApply", false)) {
+       	   			mClockColor = intent.getIntExtra("IconColor", mClockColor);
+       	   		} else {
+       	   			mClockColor = intent.getIntExtra("ClockColor", mClockColor);	
+       	   		}
+       	   		
+            		
             	mClockSize = intent.getIntExtra("ClockSize", mClockSize);
             }
             
