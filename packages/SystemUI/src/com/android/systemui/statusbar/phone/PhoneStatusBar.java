@@ -29,6 +29,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
@@ -91,6 +92,8 @@ import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 
+import droidjunk.colorfitermaker.ColorFilterMaker;
+
 public class PhoneStatusBar extends StatusBar {
     static final String TAG = "PhoneStatusBar";
     public static final boolean DEBUG = false;
@@ -119,6 +122,16 @@ public class PhoneStatusBar extends StatusBar {
     private static final int INTRUDER_ALERT_DECAY_MS = 10000;
 
     private static final boolean CLOSE_PANEL_WHEN_EMPTIED = true;
+    
+    
+    // Tranq
+    private final String Tranq_Icon_Color = "tranq_icon_color"; // Tranq
+    private SharedPreferences mPrefs; // Tranq 
+    private boolean mIconColorOn;
+    private int mIconColor;
+    private boolean mIconColorApply;
+    private View mCloseBar;
+    
 
     // fling gesture tuning parameters, scaled to display density
     private float mSelfExpandVelocityPx; // classic value: 2000px/s
@@ -269,6 +282,9 @@ public class PhoneStatusBar extends StatusBar {
         mIconPolicy = new PhoneStatusBarPolicy(mContext);
     }
 
+    
+    
+    
     // ================================================================================
     // Constructing the view
     // ================================================================================
@@ -289,6 +305,23 @@ public class PhoneStatusBar extends StatusBar {
         }
         expanded.mService = this;
 
+        
+        
+        // Tranq
+  		Context settingsContext = mContext;
+		try {
+			settingsContext = mContext.createPackageContext("com.android.settings",0);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+		mIconColorOn = mPrefs.getBoolean("color_icons", false);
+   		mIconColor = mPrefs.getInt("icon_color", 0xff33b5e5);
+   		mIconColorApply = mPrefs.getBoolean("color_icons_apply", false);
+   		//
+        
         mIntruderAlertView = View.inflate(context, R.layout.intruder_alert, null);
         mIntruderAlertView.setVisibility(View.GONE);
         mIntruderAlertView.setClickable(true);
@@ -349,6 +382,8 @@ public class PhoneStatusBar extends StatusBar {
         mCloseView = (CloseDragHandle)mTrackingView.findViewById(R.id.close);
         mCloseView.mService = this;
 
+
+        
         mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
 
         // set the inital view visibility
@@ -377,6 +412,8 @@ public class PhoneStatusBar extends StatusBar {
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Tranq_Icon_Color);
+        filter.addAction("TRANQ_SETTINGS");
         context.registerReceiver(mBroadcastReceiver, filter);
 
         return sb;
@@ -396,6 +433,7 @@ public class PhoneStatusBar extends StatusBar {
             resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_TOP_MENU_BUTTON_LAND), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.SHOW_BOT_MENU_BUTTON_LAND), false, this);
             onChange(true);
+            
         }
 
         @Override
@@ -1220,6 +1258,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
     }
 
     public void animateExpand() {
+
         if (SPEW) Slog.d(TAG, "Animate expand: expanded=" + mExpanded);
         if ((mDisabled & StatusBarManager.DISABLE_EXPAND) != 0) {
             return ;
@@ -1273,6 +1312,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
     }
 
     void performExpand() {
+    	
         if (SPEW) Slog.d(TAG, "performExpand: mExpanded=" + mExpanded);
         if ((mDisabled & StatusBarManager.DISABLE_EXPAND) != 0) {
             return ;
@@ -1289,6 +1329,8 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
     }
 
     void performCollapse() {
+    	
+    	
         if (SPEW) Slog.d(TAG, "performCollapse: mExpanded=" + mExpanded
                 + " mExpandedVisible=" + mExpandedVisible);
 
@@ -1382,7 +1424,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
             Slog.d(TAG, "panel: beginning to track the user's touch, y=" + y + " opening=" + opening);
         }
 
-        // there are some race conditions that cause this to be inaccurate; let's recalculate it any
+   		// there are some race conditions that cause this to be inaccurate; let's recalculate it any
         // time we're about to drag the panel
         updateExpandedSize();
 
@@ -1496,6 +1538,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
             return false;
         }
 
+        
         final int action = event.getAction();
         final int statusBarSize = mStatusBarView.getHeight();
         final int hitSize = statusBarSize*2;
@@ -1931,6 +1974,11 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
                                            ViewGroup.LayoutParams.MATCH_PARENT));
         mExpandedDialog.getWindow().setBackgroundDrawable(null);
         mExpandedDialog.show();
+        
+        if (mIconColorOn && mIconColorApply) {
+        mCloseBar = mTrackingView.findViewById(R.id.sb_close);
+        mCloseBar.getBackground().setColorFilter(ColorFilterMaker.changeColor(mIconColor, .5f));
+        }
     }
 
     void setNotificationIconVisibility(boolean visible, int anim) {
@@ -1962,6 +2010,8 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
                     + " mTrackingParams.y=" + ((mTrackingParams == null) ? "?" : mTrackingParams.y)
                     + " mTrackingPosition=" + mTrackingPosition);
         }
+        
+        
 
         int h = mStatusBarView.getHeight();
         int disph = mDisplayMetrics.heightPixels;
@@ -2104,6 +2154,16 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
 * this is what he wants. (see bug 1131461)
 */
     void visibilityChanged(boolean visible) {
+        if (mIconColorOn && mIconColorApply) {
+            mCloseBar = mTrackingView.findViewById(R.id.sb_close);
+            mCloseBar.getBackground().clearColorFilter();
+            mCloseBar.getBackground().setColorFilter(ColorFilterMaker.changeColor(mIconColor, .5f));
+            mCloseBar.invalidate();
+        } else {
+        	mCloseBar = mTrackingView.findViewById(R.id.sb_close);
+        	mCloseBar.getBackground().clearColorFilter();
+        	mCloseBar.invalidate();
+        }
         if (mPanelSlightlyVisible != visible) {
             mPanelSlightlyVisible = visible;
             try {
@@ -2238,6 +2298,13 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+           
+            if (action.equals(Tranq_Icon_Color) || action.equals("TRANQ_SETTINGS")) {
+            	mIconColorOn = intent.getBooleanExtra("IconColorOn", mIconColorOn);	
+            	mIconColor = intent.getIntExtra("IconColor", mIconColor);
+            	mIconColorApply = intent.getBooleanExtra("IconColorApply", mIconColorApply);
+            }
+            
             if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)
                     || Intent.ACTION_SCREEN_OFF.equals(action)) {
                 boolean excludeRecents = false;

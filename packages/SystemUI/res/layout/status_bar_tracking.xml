@@ -145,11 +145,12 @@
         
         
         <ImageView
+        	android:id="@+id/sb_close"
             android:layout_width="match_parent"
             android:layout_height="42dip"
             android:layout_gravity="bottom"
             android:scaleType="fitXY"
-            android:src="@drawable/status_bar_close_on"
+            android:background="@drawable/status_bar_close_on"
             />
 
     </com.android.systemui.statusbar.phone.CloseDragHandle>
