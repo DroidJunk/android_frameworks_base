@@ -22,7 +22,14 @@ public static ColorFilter changeColor(int newColor, float intens)
     return new ColorMatrixColorFilter(cm);
 }
 
+public static ColorFilter changeColorAlpha(int newColor, float intens, float alpha)
+{
+    ColorMatrix cm = new ColorMatrix();
 
+    changeColorAlpha(cm, newColor, intens, alpha);
+
+    return new ColorMatrixColorFilter(cm);
+}
 
 public static ColorFilter changeHue(int newHue, int intens )
 {
@@ -51,13 +58,6 @@ private static void changeColor(ColorMatrix cm, int newColor, float itens) {
             ,0  	,0 		,0     	,1		,0  	// Alpha
             };
     
-    float[] matrix1 = new float[]
-            {       
-    		.6f		,.6f	,.6f	,0		,0    // Red
-           ,.6f		,.6f	,.6f	,0		,0    // Green
-           ,.6f		,.6f	,.6f	,0		,0    // Blue
-           ,0   	,0 		,0 		,1		,0    // Alpha
-           };    
  
     float[] matrix = new float[]
             {       
@@ -70,6 +70,33 @@ private static void changeColor(ColorMatrix cm, int newColor, float itens) {
     cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
 }
 
+
+private static void changeColorAlpha(ColorMatrix cm, int newColor, float itens, float alpha) {
+    
+	float A = (float)Color.alpha(newColor) / 255;
+    float R = (float)Color.red(newColor) / 255;
+    float G = (float)Color.green(newColor) / 255;
+    float B =  (float)Color.blue(newColor) / 255;
+
+    float[] mat = new float[]
+            {       
+            R		,0		,0		,0		,0  	// Red
+            ,0		,G		,0  	,0		,0  	// Green
+            ,0  	,0		,B		,0		,0		// Blue
+            ,0  	,0 		,0     	,A		,alpha 	// Alpha
+            };
+    
+ 
+    float[] matrix = new float[]
+            {       
+    		itens	,itens	,itens	,0		,0    // Red
+           ,itens	,itens	,itens	,0		,0    // Green
+           ,itens	,itens	,itens	,0		,0    // Blue
+           ,0   	,0 		,0 		,1		,0    // Alpha
+           };        
+    
+    cm.setConcat(new ColorMatrix(mat), new ColorMatrix(matrix));
+}
 
 
 private static void changeHue(ColorMatrix cm, int newHue, int intens)
