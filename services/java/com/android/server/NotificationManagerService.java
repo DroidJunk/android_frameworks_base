@@ -1181,7 +1181,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         mInCall = false;
         //
         
-        if (mLedNotification == null || mInCall || mScreenOn) {
+        if (mLedNotification == null || mInCall || mScreenOn || inQuietTime()) {
             mNotificationLight.turnOff();
          } else {
             int ledARGB = mLedNotification.notification.ledARGB;
