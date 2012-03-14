@@ -458,11 +458,15 @@ public class NetworkController extends BroadcastReceiver {
             if (CHATTY) Slog.d(TAG, "updateTelephonySignalStrength: !hasService()");
             mPhoneSignalIconId = R.drawable.stat_sys_signal_0;
             mDataSignalIconId = R.drawable.stat_sys_signal_0;
+            mPhoneSignalIconColorId = R.drawable.stat_sys_signal_trans;
+            mDataSignalIconColorId = R.drawable.stat_sys_signal_trans;
         } else {
             if (mSignalStrength == null) {
                 if (CHATTY) Slog.d(TAG, "updateTelephonySignalStrength: mSignalStrength == null");
                 mPhoneSignalIconId = R.drawable.stat_sys_signal_0;
                 mDataSignalIconId = R.drawable.stat_sys_signal_0;
+                mPhoneSignalIconColorId = R.drawable.stat_sys_signal_trans;
+                mDataSignalIconColorId = R.drawable.stat_sys_signal_trans;
                 mContentDescriptionPhoneSignal = mContext.getString(
                         AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0]);
             } else {
@@ -960,6 +964,7 @@ public class NetworkController extends BroadcastReceiver {
             mContentDescriptionPhoneSignal = mContext.getString(
                     R.string.accessibility_airplane_mode);
             mPhoneSignalIconId = mDataSignalIconId = R.drawable.stat_sys_signal_flightmode;
+            mPhoneSignalIconColorId = mDataSignalIconColorId = R.drawable.stat_sys_signal_trans;
             mDataTypeIconId = 0;
 
             // combined values from connected wifi take precedence over airplane mode
