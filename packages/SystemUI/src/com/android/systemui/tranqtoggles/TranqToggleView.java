@@ -22,20 +22,12 @@ public class TranqToggleView extends LinearLayout {
     private boolean mShowToggleInd = true;
     public static int mToggleIndOnColor = 0xffffbb33;
     public static int mToggleIndOffColor = 0xffba7b00;
-    private int mOrigToggleIndOnColor = 0xffffbb33;
-    private int mOrigToggleIndOffColor = 0xffffbb33;
     private boolean mShowToggleText = true;
     public static int mToggleTextOnColor = 0xffffbb33;
     public static int mToggleTextOffColor = 0xffba7b00;   
-    private int mOrigToggleTextOnColor = 0xffffbb33;
-    private int mOrigToggleTextOffColor = 0xffba7b00;   
     private boolean mShowToggleDiv = true;
     public static int mToggleDivColor = 0xff535252;   
-    private int mOrigToggleDivColor = 0xffba7b00;   
-    
-
-
-	public TranqToggleView(Context context, AttributeSet attrs) {
+    public TranqToggleView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 	}

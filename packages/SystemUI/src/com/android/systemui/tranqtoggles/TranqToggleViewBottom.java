@@ -21,7 +21,7 @@ public class TranqToggleViewBottom extends LinearLayout {
 	private final String Tranq_Settings = "TRANQ_SETTINGS";
 	private SharedPreferences mPrefs;
 
-	private int mToggleColor = 0xff3b3b3b;
+
     
 
 
@@ -48,15 +48,19 @@ public class TranqToggleViewBottom extends LinearLayout {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-     		
-
 
 		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
 
-   		mToggleColor = mPrefs.getInt("toggle_color", 0xff3b3b3b);
+   		TranqToggleViewTop.mToggleColor = mPrefs.getInt("toggle_color", 0xff3b3b3b);
+   		TranqToggleViewTop.mTogglesOn = mPrefs.getBoolean("toggles_show_toggles", true);
    		TranqToggleViewTop.mTogglesTop = mPrefs.getBoolean("toggles_top", true);
+   		TranqToggleViewTop.mToggleIndOnColor = mPrefs.getInt("toggle_ind_on_color", 0xffffbb33);
+   		TranqToggleViewTop.mToggleIndOffColor = mPrefs.getInt("toggle_ind_off_color", 0xffba7b00);
+   		TranqToggleViewTop.mToggleTextOnColor = mPrefs.getInt("toggle_text_on_color", 0xffffbb33);
+   		TranqToggleViewTop.mToggleTextOffColor = mPrefs.getInt("toggle_text_off_color", 0xffba7b00);
+   		TranqToggleViewTop.mToggleDivColor = mPrefs.getInt("toggle_divider_color", 0xff535252);
    		
-   		setBackgroundColor(mToggleColor);
+   		setBackgroundColor(TranqToggleViewTop.mToggleColor);
    		
    		updateView();
    		
@@ -75,8 +79,8 @@ public class TranqToggleViewBottom extends LinearLayout {
             String action = intent.getAction();
             if (action.equals("TRANQ_SETTINGS")) {
              	
-            	mToggleColor = intent.getIntExtra("ToggleColor", mToggleColor);	
-            	setBackgroundColor(mToggleColor);
+            	TranqToggleViewTop.mToggleColor = intent.getIntExtra("ToggleColor", TranqToggleViewTop.mToggleColor);	
+            	setBackgroundColor(TranqToggleViewTop.mToggleColor);
             	
             	updateView();
 

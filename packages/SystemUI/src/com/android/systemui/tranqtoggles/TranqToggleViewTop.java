@@ -18,24 +18,16 @@ public class TranqToggleViewTop extends LinearLayout {
 	private SharedPreferences mPrefs;
 	public static boolean mTogglesOn = true;
 	public static boolean mTogglesTop = true;
-	private int mToggleColor = 0xff3b3b3b;
+	public static int mToggleColor = 0xff3b3b3b;
     private boolean mShowToggleInd = true;
     public static int mToggleIndOnColor = 0xffffbb33;
     public static int mToggleIndOffColor = 0xffba7b00;
-    private int mOrigToggleIndOnColor = 0xffffbb33;
-    private int mOrigToggleIndOffColor = 0xffffbb33;
     private boolean mShowToggleText = true;
     public static int mToggleTextOnColor = 0xffffbb33;
     public static int mToggleTextOffColor = 0xffba7b00;   
-    private int mOrigToggleTextOnColor = 0xffffbb33;
-    private int mOrigToggleTextOffColor = 0xffba7b00;   
     private boolean mShowToggleDiv = true;
     public static int mToggleDivColor = 0xff535252;   
-    private int mOrigToggleDivColor = 0xffba7b00;   
-    
-
-
-	public TranqToggleViewTop(Context context, AttributeSet attrs) {
+    public TranqToggleViewTop(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
