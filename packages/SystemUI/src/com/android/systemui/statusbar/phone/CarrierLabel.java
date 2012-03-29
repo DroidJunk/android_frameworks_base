@@ -20,27 +20,60 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.provider.Telephony;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.TimeZone;
 
-import com.android.internal.R;
 
 /**
  * This widget display an analogic clock with two hands for hours and
  * minutes.
  */
 public class CarrierLabel extends TextView {
+
+	private final String Tranq_Settings = "TRANQ_SETTINGS";
     private boolean mAttached;
+	private SharedPreferences mPrefs;
+    private boolean mShowCarrier = true;
+    private int mCarrierColor = 0xff33b5e5;
+    private boolean mCustomCarrier = false;
+    private String mCustomCarrierText = "Tranquil Ice";
+    private int mCarrierSize = 15;
+    private String mDefaultCarrierText = "";
+    
+
+    
 
     public CarrierLabel(Context context) {
         this(context, null);
+        
+        setClickable(true);
+        
+		setOnClickListener(new OnClickListener() { 
+			public void onClick (View v){
+	        	Intent i = new Intent();
+	        	i.setAction(Tranq_Settings );
+	       	   	i.putExtra("TogglesOn", true);
+	       	   	getContext().sendBroadcast(i);
+	       	   	i = null;
+
+	        	i = new Intent();
+	            i.setAction(Tranq_Settings );
+	            i.putExtra("UpdateToggles", true);
+	            getContext().sendBroadcast(i);
+	            i = null;
+			}
+		}
+		);
     }
 
     public CarrierLabel(Context context, AttributeSet attrs) {
@@ -58,8 +91,28 @@ public class CarrierLabel extends TextView {
 
         if (!mAttached) {
             mAttached = true;
+            
+      		Context settingsContext = getContext();
+			try {
+				settingsContext = getContext().createPackageContext("com.android.settings",0);
+			} catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+     		
+			mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+     		
+     		mShowCarrier = mPrefs.getBoolean("show_carrier", true);
+    		mCarrierColor = mPrefs.getInt("carrier_color", 0xff33b5e5);
+    		mCustomCarrier = mPrefs.getBoolean("carrier_custom", false);
+    		mCustomCarrierText = mPrefs.getString("carrier_custom_text", "Tranquil Ice");
+    		mCarrierSize = mPrefs.getInt("carrier_size", 15);
+    		
+            updateCarrierLabel();
+    		
             IntentFilter filter = new IntentFilter();
             filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
+            filter.addAction(Tranq_Settings);
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
     }
@@ -83,14 +136,22 @@ public class CarrierLabel extends TextView {
                         intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
                         intent.getStringExtra(Telephony.Intents.EXTRA_PLMN));
             }
+            
+            if (action.equals("TRANQ_SETTINGS")) {
+             	mShowCarrier = intent.getBooleanExtra("ShowCarrier", mShowCarrier);
+            	mCustomCarrier = intent.getBooleanExtra("CustomCarrier", mCustomCarrier);
+            	mCarrierColor = intent.getIntExtra("CarrierColor", mCarrierColor);	
+            	if (intent.getStringExtra("CustomCarrierText") != null) mCustomCarrierText	= intent.getStringExtra("CustomCarrierText");
+            	mCarrierSize = intent.getIntExtra("CarrierSize", mCarrierSize);
+            	updateCarrierLabel();
+            }
+             
         }
     };
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
-        if (false) {
-            Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
-                    + " showPlmn=" + showPlmn + " plmn=" + plmn);
-        }
+        Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
+		        + " showPlmn=" + showPlmn + " plmn=" + plmn);
         StringBuilder str = new StringBuilder();
         boolean something = false;
         if (showPlmn && plmn != null) {
@@ -107,11 +168,34 @@ public class CarrierLabel extends TextView {
         if (something) {
             setText(str.toString());
         } else {
-            setText(com.android.internal.R.string.lockscreen_carrier_default);
+        	setText(com.android.internal.R.string.lockscreen_carrier_default);
         }
+        mDefaultCarrierText = (String) getText();
+        updateCarrierLabel();
     }
 
     
+    
+    void updateCarrierLabel(){
+    	
+        if (mShowCarrier) {
+        	setVisibility(View.VISIBLE);
+              
+        } else {
+        	setVisibility(View.GONE);
+        }
+        
+        setTextColor(mCarrierColor);
+        
+        if (mCustomCarrier) {
+        	setText(mCustomCarrierText);
+        } else {
+        	setText(mDefaultCarrierText);
+        }
+        
+        setTextSize(mCarrierSize);
+     	
+    }
+    
+    
 }
-
-

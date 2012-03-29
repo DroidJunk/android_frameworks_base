@@ -1036,7 +1036,8 @@ public class Notification implements Parcelable
             n.ledOffMS = mLedOffMs;
             n.defaults = mDefaults;
             n.flags = mFlags;
-            if (mLedOnMs != 0 && mLedOffMs != 0) {
+            // Tranq if (mLedOnMs != 0 && mLedOffMs != 0) { <<<< Can't make solid led without off = 0
+            if (mLedOnMs != 0) {
                 n.flags |= FLAG_SHOW_LIGHTS;
             }
             if ((mDefaults & DEFAULT_LIGHTS) != 0) {

@@ -20,11 +20,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.provider.Telephony;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
@@ -48,6 +51,16 @@ import com.android.internal.R;
  * minutes.
  */
 public class Clock extends TextView {
+	
+	private final String Tranq_Settings = "TRANQ_SETTINGS";
+	private SharedPreferences mPrefs;
+    private boolean mShowClock = true;
+    private boolean mClockAmPm = false;
+    private int mClockColor = 0xff3F9BBF;
+    private int mClockSize = 17;
+
+	
+	
     private boolean mAttached;
     private Calendar mCalendar;
     private String mClockFormatString;
@@ -57,7 +70,7 @@ public class Clock extends TextView {
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
 
-    private static final int AM_PM_STYLE = AM_PM_STYLE_GONE;
+    private static int AM_PM_STYLE = AM_PM_STYLE_GONE;
 
     public Clock(Context context) {
         this(context, null);
@@ -77,12 +90,31 @@ public class Clock extends TextView {
 
         if (!mAttached) {
             mAttached = true;
+            
+            
+            
+      		Context settingsContext = getContext();
+			try {
+				settingsContext = getContext().createPackageContext("com.android.settings",0);
+			} catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+     		
+			mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+     		
+     		mShowClock = mPrefs.getBoolean("show_clock", true);
+     		mClockAmPm = mPrefs.getBoolean("clock_ampm", false);
+    		mClockColor = mPrefs.getInt("clock_color", 0xff3F9BBF);
+    		mClockSize = mPrefs.getInt("clock_size", 17);
+    		
             IntentFilter filter = new IntentFilter();
 
             filter.addAction(Intent.ACTION_TIME_TICK);
             filter.addAction(Intent.ACTION_TIME_CHANGED);
             filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
             filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
+            filter.addAction(Tranq_Settings);
 
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
@@ -117,11 +149,40 @@ public class Clock extends TextView {
                     mClockFormat.setTimeZone(mCalendar.getTimeZone());
                 }
             }
+            
+            if (action.equals("TRANQ_SETTINGS")) {
+             	mShowClock = intent.getBooleanExtra("ShowClock", mShowClock);
+            	mClockAmPm = intent.getBooleanExtra("ClockAmPm", mClockAmPm);
+       	   		if (intent.getBooleanExtra("IconColorApply", false)) {
+       	   			mClockColor = intent.getIntExtra("IconColor", mClockColor);
+       	   		} else {
+       	   			mClockColor = intent.getIntExtra("ClockColor", mClockColor);	
+       	   		}
+       	   		
+            		
+            	mClockSize = intent.getIntExtra("ClockSize", mClockSize);
+            }
+            
             updateClock();
         }
     };
 
     final void updateClock() {
+        if (mShowClock) {
+        	setVisibility(VISIBLE);
+        } else {
+        	setVisibility(GONE);
+        }
+        
+        if (mClockAmPm) {
+        	AM_PM_STYLE = AM_PM_STYLE_SMALL;
+        } else {
+        	AM_PM_STYLE = AM_PM_STYLE_GONE;
+        }
+        
+        setTextColor(mClockColor);
+        setTextSize(mClockSize);
+
         mCalendar.setTimeInMillis(System.currentTimeMillis());
         setText(getSmallTime());
     }
@@ -205,4 +266,3 @@ public class Clock extends TextView {
 
     }
 }
-

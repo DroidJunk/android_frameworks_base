@@ -616,6 +616,8 @@ public final class Settings {
     private static final String TAG = "Settings";
     private static final boolean LOCAL_LOGV = false || false;
 
+
+
     public static class SettingNotFoundException extends AndroidException {
         public SettingNotFoundException(String msg) {
             super(msg);
@@ -750,6 +752,8 @@ public final class Settings {
             }
         }
     }
+
+
 
     /**
      * System settings, containing miscellaneous system preferences.  This
@@ -1884,6 +1888,109 @@ public final class Settings {
         public static final String POINTER_SPEED = "pointer_speed";
 
         /**
+        * Setting to show alternative battery meter
+        * @hide
+        */
+        public static final String USE_ALT_METERS = "alt_meters";
+
+        /**
+        * @hide
+        */
+        public static final String BATTERY_ICON = "battery_icon";
+ 	
+        /**
+        * 0 = stock
+        * 1 = talk
+        * 2 = sms
+        * 
+        * @hide
+        */
+        public static final String ALT_LAYOUTS = "alt_layouts";
+
+        /**
+         * Whether to show the battery bar
+         * 
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR = "statusbar_battery_bar";
+
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR_COLOR = "statusbar_battery_bar_color";
+
+
+        /**
+        * @hide
+        */
+        public static final String NAVIGATION_ORDER = "navigation_button_order";
+
+
+        /**
+        * @hide
+        */
+		public static final String NAVIGATION_BAR_TINT = "navigation_bar_tint";
+
+        /**
+        * @hide
+        */
+		public static final String LOCKSCREEN_LANDSCAPE = "lockscreen_orientation";
+
+       	/**
+        * @hide
+       	*/
+		public static final String TORCH_MODE = "torch_setting";
+
+        /**
+        * Whether to control brightness from status bar
+        *
+        * @hide
+        */
+        public static final String STATUS_BAR_BRIGHTNESS_TOGGLE = "status_bar_brightness_toggle";
+
+        /**
+        * Setting to show search button in nav bar (Portrait)
+        * @hide
+        */
+        public static final String SHOW_SEARCH_BUTTON = "show_search_button";
+
+        
+        /**
+        * Setting to show the left menu button in nav bar (Portrait)
+        * @hide
+        */
+        public static final String SHOW_LEFT_MENU_BUTTON = "show_left_menu_button";
+        
+        
+        /**
+        * Setting to show the right menu button in nav bar (Portrait)
+        * @hide
+        */
+        public static final String SHOW_RIGHT_MENU_BUTTON = "show_right_menu_button";
+        
+        /**
+        * Setting to show search button in nav bar (Landscape)
+        * @hide
+        */
+        public static final String SHOW_SEARCH_BUTTON_LAND = "show_search_button_land";
+
+        
+        /**
+        * Setting to show the left menu button in nav bar (Landscape)
+        * @hide
+        */
+        public static final String SHOW_TOP_MENU_BUTTON_LAND = "show_top_menu_button_land";
+        
+        
+        /**
+        * Setting to show the right menu button in nav bar (Landscape)
+        * @hide
+        */
+        public static final String SHOW_BOT_MENU_BUTTON_LAND = "show_bottom_menu_button_land";
+
+        
+        
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -1893,6 +2000,7 @@ public final class Settings {
          *
          * @hide
          */
+        
         public static final String[] SETTINGS_TO_BACKUP = {
             STAY_ON_WHILE_PLUGGED_IN,
             WIFI_USE_STATIC_IP,
@@ -2183,6 +2291,12 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+
+
+
+
+
     }
 
     /**
@@ -4355,6 +4469,351 @@ public final class Settings {
         }
     }
 
+    
+    public static final class QuietTime implements BaseColumns
+    {
+        private static final String TAG = "QuietTime";
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/quiet_time");
+
+        /**
+         * The row ID.
+         * <p>Type: INTEGER</p>
+         */
+        public static final String ID = "_id";
+
+        /**
+         * Is Quiet Time enabled
+         * 
+         * Whether or not Quiet Time is enabled
+         * <P>
+         * Type: BOOLEAN
+         * </P>
+         */
+        public static final String QT_ENABLED = "qtEnabled";
+
+        /**
+         * Quiet Time Start Hour
+         * 
+         * Start Hour for Quiet Time
+         *
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String QT_START_HOUR = "qtStartHour";
+        
+        /**
+         * Quiet Time Start Minutes
+         * 
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String QT_START_MIN = "qtStartMin";
+
+        /**
+         * Stop Hour for Quiet Time
+         *
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String QT_STOP_HOUR = "qtStopHour";
+       
+        /**
+         * Stop Minutes for Quiet Time
+         * 
+         * <P>Type: INTEGER</P>
+         */
+        public static final String QT_STOP_MIN = "qtStopMin";
+        
+        /**
+         * Quiet Time use led
+         * 
+         * <P>Type: BOOLEAN</P>
+         *
+         */
+        public static final String QT_LED_ON = "qtLedOn";
+        
+        /**
+         * Quiet Time use sound
+         * 
+         * <P>Type: BOOLEAN</P>
+         *
+         */
+        public static final String QT_SOUND_ON = "qtSoundOn";
+        
+        /**
+         * Quiet Time use vibrate
+         * 
+         * <P>Type: BOOLEAN</P>
+         *
+         */
+        public static final String QT_VIBRATE_ON = "qtVibrateOn";
+        
+    
+        
+        /**
+         * Convenience function for retrieving a cursor for the only row
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getCursor(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=1", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating Quiet Time settings
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Boolean updateQT (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=1", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }
+        
+        
+    }    
+    
+
+    public static final class NotifOptions implements BaseColumns
+    {
+        private static final String TAG = "NotifOptions";
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/notif_options");
+
+        /**
+         * The row ID.
+         * <p>Type: INTEGER</p>
+         */
+        public static final String ID = "_id";
+
+        /**
+         * Package Short Name - Row 1 is used for default led settings
+         * 
+         * Short name of package for led settings
+         * 
+         * <P>Type: STRING</P>
+         */
+        public static final String NAME = "Name";
+
+        /**
+         * Package Name - Row 1 is used for default led settings
+         * 
+         * Name of package for led settings
+         *
+         * <P>Type: STRING</P>
+         *
+         */
+        public static final String PKG_NAME = "pkgName";
+        
+        /**
+         * Led Color - Row 1 is used for default led settings
+         * 
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String LED_COLOR = "ledColor";
+
+        /**
+         * Led On Ms - Row 1 is used for default led settings
+         *
+         * <P>Type: INTEGER</P>
+         *
+         */
+        public static final String LED_ON_MS = "ledOnMs";
+       
+        /**
+         * Led off Ms - Row 1 is used for default led settings
+         * 
+         * <P>Type: INTEGER</P>
+         */
+        public static final String LED_OFF_MS = "ledOffMs";
+        
+   
+        
+        /**
+         * Convenience function for retrieving default led options (row 1)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getDefaultLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=1", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the default led options (row 1)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean updateDefaultLed (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=1", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }
+        
+ 
+        /**
+         * Convenience function for retrieving incoming call led options (row 2)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getIncomingCallLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=2", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the incoming call led options (row 2)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean updateIncomingCallLed (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=2", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }        
+        
+        
+        /**
+         * Convenience function for retrieving missed call led options (row 3)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getMissedCallLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=3", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the missed call led options (row 3)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean updateMissedCallLed (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=3", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }        
+        
+        
+        /**
+         * Convenience function for retrieving voice mail led options (row 4)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return Cursor or null
+         */
+        public static Cursor getVoiceMailLed(ContentResolver cr) {
+            
+        	Cursor c = null;
+            try {
+            	c = cr.query(CONTENT_URI, null, "_id=4", null, null);
+            } catch (NumberFormatException e) {
+                
+            }
+            c.moveToFirst();
+            return c;
+        }
+
+        /**
+         * Convenience function for updating the voice mail led options (row 4)
+         *
+         * @param cr The ContentResolver to access.
+         *
+         * @return BOOLEAN
+         */
+        public static Boolean updateVoiceMailLed (ContentResolver cr, ContentValues values) {
+            
+        	Boolean updated = false;
+            try {
+            	updated = cr.update(CONTENT_URI, values, "_id=4", null) == 1;
+            } catch (NumberFormatException e) {
+                
+            }
+            return updated;
+        }        
+        
+        
+        
+        
+    }
+
+    
+    
     /**
      * Returns the device ID that we should use when connecting to the mobile gtalk server.
      * This is a string like "android-0x1242", where the hex string is the Android ID obtained

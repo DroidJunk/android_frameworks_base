@@ -18,13 +18,18 @@ package com.android.systemui.statusbar.policy;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.os.ServiceManager;
 import android.util.AttributeSet;
 import android.view.accessibility.AccessibilityEvent;
@@ -40,6 +45,9 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
 import com.android.systemui.R;
+//import com.android.systemui.statusbar.policy.Clock.SettingsObserver;
+
+import droidjunk.colorfitermaker.ColorFilterMaker;
 
 public class KeyButtonView extends ImageView {
     private static final String TAG = "StatusBar.KeyButtonView";
@@ -86,6 +94,17 @@ public class KeyButtonView extends ImageView {
         mSupportsLongpress = a.getBoolean(R.styleable.KeyButtonView_keyRepeat, true);
 
         mGlowBG = a.getDrawable(R.styleable.KeyButtonView_glowBackground);
+
+        mGlowBG.setColorFilter(null);
+        try {
+			mGlowBG.setColorFilter(ColorFilterMaker.changeColor(Settings.System.getInt(mContext.getContentResolver(),
+					Settings.System.NAVIGATION_BAR_TINT), 0));
+		} catch (SettingNotFoundException e) {
+			e.printStackTrace();
+		}        
+        
+        
+        
         if (mGlowBG != null) {
             mDrawingAlpha = BUTTON_QUIESCENT_ALPHA;
         }
@@ -97,6 +116,8 @@ public class KeyButtonView extends ImageView {
 
         setClickable(true);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
+        settingsObserver.observe();
     }
 
     @Override
@@ -129,6 +150,10 @@ public class KeyButtonView extends ImageView {
         if (mGlowBG == null) return;
         mDrawingAlpha = x;
         invalidate();
+    }
+
+    public void setMCode(int x) {
+        mCode = x;
     }
 
     public float getGlowAlpha() {
@@ -279,6 +304,49 @@ public class KeyButtonView extends ImageView {
         } catch (RemoteException ex) {
             // System process is dead
         }
+    }
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_TINT), false,
+                    this);
+            updateSettings();
+        }	
+    
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
+    protected void updateSettings() {
+
+      
+        
+        try {
+            setColorFilter(null);
+            setColorFilter(ColorFilterMaker.changeColor(Settings.System.getInt(mContext.getContentResolver(),
+            		Settings.System.NAVIGATION_BAR_TINT), .45f));
+        } catch (SettingNotFoundException e) {
+        }
+
+        
+        try {
+        	mGlowBG.setColorFilter(null);
+			mGlowBG.setColorFilter(ColorFilterMaker.changeColor(Settings.System.getInt(mContext.getContentResolver(),
+					Settings.System.NAVIGATION_BAR_TINT), .6f));
+		} catch (SettingNotFoundException e) {
+			e.printStackTrace();
+		}          
+        
+        
+        
+        
     }
 }
 

@@ -16,18 +16,25 @@
 
 package com.android.systemui.statusbar;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.CheckBoxPreference;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.android.systemui.statusbar.policy.NetworkController;
-
 import com.android.systemui.R;
+
+import droidjunk.colorfitermaker.ColorFilterMaker;
+
+
 
 // Intimately tied to the design of res/layout/signal_cluster_view.xml
 public class SignalClusterView
@@ -37,17 +44,24 @@ public class SignalClusterView
     static final boolean DEBUG = false;
     static final String TAG = "SignalClusterView";
     
+    private final String Tranq_Icon_Color = "tranq_icon_color";
+    private SharedPreferences mPrefs;
+    private boolean mIconColorOn = false;
+    private int mIconColor = 0xff33b5e5;
+    private boolean mIconColorApply;
+    
+    
     NetworkController mNC;
 
     private boolean mWifiVisible = false;
-    private int mWifiStrengthId = 0, mWifiActivityId = 0;
+    private int mWifiStrengthId = 0,mWifiStrengthColorId, mWifiActivityId = 0;
     private boolean mMobileVisible = false;
-    private int mMobileStrengthId = 0, mMobileActivityId = 0, mMobileTypeId = 0;
+    private int mMobileStrengthId = 0, mMobileStrengthColorId = 0, mMobileActivityId = 0, mMobileTypeId = 0;
     private boolean mIsAirplaneMode = false;
     private String mWifiDescription, mMobileDescription, mMobileTypeDescription;
 
     ViewGroup mWifiGroup, mMobileGroup;
-    ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType;
+    ImageView mWifi, mWifiColor, mMobile, mMobileColor, mWifiActivity, mMobileActivity, mMobileType;
     View mSpacer;
 
     public SignalClusterView(Context context) {
@@ -73,13 +87,36 @@ public class SignalClusterView
 
         mWifiGroup      = (ViewGroup) findViewById(R.id.wifi_combo);
         mWifi           = (ImageView) findViewById(R.id.wifi_signal);
+        mWifiColor      = (ImageView) findViewById(R.id.wifi_signal_color);
         mWifiActivity   = (ImageView) findViewById(R.id.wifi_inout);
         mMobileGroup    = (ViewGroup) findViewById(R.id.mobile_combo);
         mMobile         = (ImageView) findViewById(R.id.mobile_signal);
+        mMobileColor         = (ImageView) findViewById(R.id.mobile_signal_color);
         mMobileActivity = (ImageView) findViewById(R.id.mobile_inout);
         mMobileType     = (ImageView) findViewById(R.id.mobile_type);
         mSpacer         =             findViewById(R.id.spacer);
 
+        
+  		Context settingsContext = getContext();
+		try {
+			settingsContext = getContext().createPackageContext("com.android.settings",0);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     		
+		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+		mIconColorOn = mPrefs.getBoolean("color_icons", false);
+   		mIconColor = mPrefs.getInt("icon_color", 0xff33b5e5);
+   	    mIconColorApply = mPrefs.getBoolean("color_icons_apply", false);
+   		
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Tranq_Icon_Color);
+        getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
+        
+        
+        
+        
         apply();
     }
 
@@ -95,21 +132,40 @@ public class SignalClusterView
 
         super.onDetachedFromWindow();
     }
+    
+    
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            
+            if (action.equals(Tranq_Icon_Color)) {
+            	mIconColorOn = intent.getBooleanExtra("IconColorOn", mIconColorOn);
+            	mIconColor= intent.getIntExtra("IconColor", mIconColor);
+            	mIconColorApply = intent.getBooleanExtra("IconColorApply", mIconColorApply);
+            	apply();
+            }
+        }
+    };     
+    
+    
 
-    public void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
+    public void setWifiIndicators(boolean visible, int strengthIcon, int strengthIconColor,  int activityIcon,
             String contentDescription) {
         mWifiVisible = visible;
         mWifiStrengthId = strengthIcon;
+        mWifiStrengthColorId = strengthIconColor;
         mWifiActivityId = activityIcon;
         mWifiDescription = contentDescription;
 
         apply();
     }
 
-    public void setMobileDataIndicators(boolean visible, int strengthIcon, int activityIcon,
+    public void setMobileDataIndicators(boolean visible, int strengthIcon, int strengthIconColor, int activityIcon,
             int typeIcon, String contentDescription, String typeContentDescription) {
         mMobileVisible = visible;
         mMobileStrengthId = strengthIcon;
+        mMobileStrengthColorId = strengthIconColor;
         mMobileActivityId = activityIcon;
         mMobileTypeId = typeIcon;
         mMobileDescription = contentDescription;
@@ -129,8 +185,15 @@ public class SignalClusterView
         if (mWifiVisible) {
             mWifiGroup.setVisibility(View.VISIBLE);
             mWifi.setImageResource(mWifiStrengthId);
+            mWifiColor.setImageResource(mWifiStrengthColorId);
             mWifiActivity.setImageResource(mWifiActivityId);
             mWifiGroup.setContentDescription(mWifiDescription);
+            if (mIconColorOn) {
+            	mWifiColor.setVisibility(View.VISIBLE);
+            	mWifiColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            } else {
+            	mWifiColor.setVisibility(View.INVISIBLE);
+            }
         } else {
             mWifiGroup.setVisibility(View.GONE);
         }
@@ -143,9 +206,16 @@ public class SignalClusterView
         if (mMobileVisible) {
             mMobileGroup.setVisibility(View.VISIBLE);
             mMobile.setImageResource(mMobileStrengthId);
+            mMobileColor.setImageResource(mMobileStrengthColorId);
             mMobileActivity.setImageResource(mMobileActivityId);
             mMobileType.setImageResource(mMobileTypeId);
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
+            if (mIconColorOn) {
+            	mMobileColor.setVisibility(View.VISIBLE);
+            	mMobileColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            } else {
+            	mMobileColor.setVisibility(View.INVISIBLE);
+            }
         } else {
             mMobileGroup.setVisibility(View.GONE);
         }
@@ -164,5 +234,9 @@ public class SignalClusterView
         mMobileType.setVisibility(
                 !mWifiVisible ? View.VISIBLE : View.GONE);
     }
+    
+    
+
+    
 }
 

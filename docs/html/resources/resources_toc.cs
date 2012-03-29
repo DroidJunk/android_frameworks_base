@@ -1,5 +1,6 @@
 <ul>
   <li>
+<<<<<<< HEAD
     <span class="heading">
       <span class="en">Android Training</span>
     </span>
@@ -262,6 +263,10 @@
     <span class="heading">
       <span class="en">Technical Resources</span>
     </span>
+=======
+    <h2><span class="en">Technical Resources</span>
+    </h2>
+>>>>>>> 60b44a1030bcb03a7cc12d96db8cc444c56352c4
     <ul>
       <li class="toggle-list">
         <div><a href="<?cs var:toroot ?>resources/browser.html?tag=sample">

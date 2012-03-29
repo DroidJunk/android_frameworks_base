@@ -20,10 +20,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.android.systemui.R;
@@ -36,7 +39,15 @@ public final class DateView extends TextView {
     private boolean mAttachedToWindow;
     private boolean mWindowVisible;
     private boolean mUpdating;
-
+    
+	private final String Tranq_Settings = "TRANQ_SETTINGS";
+	private SharedPreferences mPrefs;
+    private int mDateColor = 0xff3F9BBF;
+    private int mDateSize = 17;
+    
+    
+    
+    
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -46,18 +57,57 @@ public final class DateView extends TextView {
                     || Intent.ACTION_TIMEZONE_CHANGED.equals(action)) {
                 updateClock();
             }
+            
+            if (action.equals("TRANQ_SETTINGS")) {
+            	mDateColor = intent.getIntExtra("DateColor", mDateColor);	
+            	mDateSize = intent.getIntExtra("DateSize", mDateSize);
+            	updateClock();
+            }
         }
     };
 
     public DateView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+    
+    	setOnClickListener(new OnClickListener() { 
+    		public void onClick (View v){
+            	Intent i = new Intent();
+        	    i.setAction("android.intent.action.CLOSE_SYSTEM_DIALOGS");
+        	    getContext().sendBroadcast(i);
+        	    i.setAction("android.settings.SETTINGS");
+                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(i);
+           	   	i = null;
+           	   	
+
+    		}
+    	}
+    	);
+     
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mAttachedToWindow = true;
+        
+  		Context settingsContext = getContext();
+		try {
+			settingsContext = getContext().createPackageContext("com.android.settings",0);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+ 		
+		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+ 		
+ 		
+		mDateColor = mPrefs.getInt("date_color", 0xff3F9BBF);
+        
         setUpdates();
+        
+        
     }
     
     @Override
@@ -92,6 +142,8 @@ public final class DateView extends TextView {
         CharSequence dow = DateFormat.format("EEEE", now);
         CharSequence date = DateFormat.getLongDateFormat(context).format(now);
         setText(context.getString(R.string.status_bar_date_formatter, dow, date));
+        setTextColor(mDateColor);
+        setTextSize(mDateSize);
     }
 
     private boolean isVisible() {
@@ -119,6 +171,7 @@ public final class DateView extends TextView {
                 filter.addAction(Intent.ACTION_TIME_TICK);
                 filter.addAction(Intent.ACTION_TIME_CHANGED);
                 filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+                filter.addAction(Tranq_Settings);
                 mContext.registerReceiver(mIntentReceiver, filter, null, null);
                 updateClock();
             } else {

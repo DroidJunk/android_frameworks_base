@@ -16351,6 +16351,7 @@ package android.provider {
   }
 
   protected static abstract interface ContactsContract.BaseSyncColumns {
+    field public static final java.lang.String IS_RESTRICTED = "is_restricted";
     field public static final java.lang.String SYNC1 = "sync1";
     field public static final java.lang.String SYNC2 = "sync2";
     field public static final java.lang.String SYNC3 = "sync3";
@@ -17416,6 +17417,41 @@ package android.provider {
     method protected static boolean putString(android.content.ContentResolver, android.net.Uri, java.lang.String, java.lang.String);
     field public static final java.lang.String NAME = "name";
     field public static final java.lang.String VALUE = "value";
+  }
+
+  public static final class Settings.NotifOptions implements android.provider.BaseColumns {
+    ctor public Settings.NotifOptions();
+    method public static android.database.Cursor getDefaultLed(android.content.ContentResolver);
+    method public static android.database.Cursor getIncomingCallLed(android.content.ContentResolver);
+    method public static android.database.Cursor getMissedCallLed(android.content.ContentResolver);
+    method public static android.database.Cursor getVoiceMailLed(android.content.ContentResolver);
+    method public static java.lang.Boolean updateDefaultLed(android.content.ContentResolver, android.content.ContentValues);
+    method public static java.lang.Boolean updateIncomingCallLed(android.content.ContentResolver, android.content.ContentValues);
+    method public static java.lang.Boolean updateMissedCallLed(android.content.ContentResolver, android.content.ContentValues);
+    method public static java.lang.Boolean updateVoiceMailLed(android.content.ContentResolver, android.content.ContentValues);
+    field public static final android.net.Uri CONTENT_URI;
+    field public static final java.lang.String ID = "_id";
+    field public static final java.lang.String LED_COLOR = "ledColor";
+    field public static final java.lang.String LED_OFF_MS = "ledOffMs";
+    field public static final java.lang.String LED_ON_MS = "ledOnMs";
+    field public static final java.lang.String NAME = "Name";
+    field public static final java.lang.String PKG_NAME = "pkgName";
+  }
+
+  public static final class Settings.QuietTime implements android.provider.BaseColumns {
+    ctor public Settings.QuietTime();
+    method public static android.database.Cursor getCursor(android.content.ContentResolver);
+    method public static java.lang.Boolean updateQT(android.content.ContentResolver, android.content.ContentValues);
+    field public static final android.net.Uri CONTENT_URI;
+    field public static final java.lang.String ID = "_id";
+    field public static final java.lang.String QT_ENABLED = "qtEnabled";
+    field public static final java.lang.String QT_LED_ON = "qtLedOn";
+    field public static final java.lang.String QT_SOUND_ON = "qtSoundOn";
+    field public static final java.lang.String QT_START_HOUR = "qtStartHour";
+    field public static final java.lang.String QT_START_MIN = "qtStartMin";
+    field public static final java.lang.String QT_STOP_HOUR = "qtStopHour";
+    field public static final java.lang.String QT_STOP_MIN = "qtStopMin";
+    field public static final java.lang.String QT_VIBRATE_ON = "qtVibrateOn";
   }
 
   public static final class Settings.Secure extends android.provider.Settings.NameValueTable {

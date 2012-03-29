@@ -155,7 +155,7 @@ class="new">new!</span></li>
       <li><a href="<?cs var:toroot ?>sdk/tools-notes.html">SDK Tools, r16</a> <span
 class="new">new!</span></li>
       <li><a href="<?cs var:toroot ?>sdk/win-usb.html">Google USB Driver, r4</a></li>
-      <li><a href="<?cs var:toroot ?>sdk/compatibility-library.html">Support Package, r6</a>
+      <li><a href="<?cs var:toroot ?>sdk/compatibility-library.html">Support Package, r4</a>
       <span class="new">new!</span></li>
     </ul>
   </li>
@@ -171,7 +171,7 @@ class="new">new!</span></li>
       <span style="display:none" class="zh-TW"></span>
     </span>
     <ul>
-      <li><a href="<?cs var:toroot ?>sdk/eclipse-adt.html">ADT 16.0.1
+      <li><a href="<?cs var:toroot ?>sdk/eclipse-adt.html">ADT 16.0.0
       <span style="display:none" class="de"></span>
       <span style="display:none" class="es"></span>
       <span style="display:none" class="fr"></span>

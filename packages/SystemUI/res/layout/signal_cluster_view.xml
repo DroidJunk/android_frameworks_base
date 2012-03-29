@@ -39,6 +39,16 @@
             android:scaleType="center"
             />
         <ImageView
+            android:id="@+id/wifi_signal_color"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="center"
+            
+            />            
+            
+        <ImageView
             android:id="@+id/wifi_inout"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -92,6 +102,11 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 />
+            <ImageView
+                android:id="@+id/mobile_signal_color"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />            
             <ImageView
                 android:id="@+id/mobile_type"
                 android:layout_height="wrap_content"
