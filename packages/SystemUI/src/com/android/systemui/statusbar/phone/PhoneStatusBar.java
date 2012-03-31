@@ -179,7 +179,7 @@ public class PhoneStatusBar extends StatusBar {
     // top bar
     TextView mNoNotificationsTitle;
     View mClearButton;
-    View mSettingsButton;
+//    View mSettingsButton;
 
     // drag bar
     CloseDragHandle mCloseView;
@@ -366,8 +366,8 @@ public class PhoneStatusBar extends StatusBar {
         mClearButton.setAlpha(0f);
         mClearButton.setEnabled(false);
         mDateView = (DateView)expanded.findViewById(R.id.date);
-        mSettingsButton = expanded.findViewById(R.id.settings_button);
-        mSettingsButton.setOnClickListener(mSettingsButtonListener);
+//       mSettingsButton = expanded.findViewById(R.id.settings_button);
+//       mSettingsButton.setOnClickListener(mSettingsButtonListener);
 
 
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
@@ -2281,7 +2281,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
         }
     };
 
-    private View.OnClickListener mSettingsButtonListener = new View.OnClickListener() {
+/*    private View.OnClickListener mSettingsButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
             try {
                 // Dismiss the lock screen when Settings starts.
@@ -2294,7 +2294,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
         }
     };
 
-
+*/
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
