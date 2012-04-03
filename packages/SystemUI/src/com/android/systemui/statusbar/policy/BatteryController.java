@@ -166,21 +166,59 @@ public class BatteryController extends LinearLayout {
                 mBatteryIconColor.setImageLevel(level);
                 mBatteryIconColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
             }
+            
         } else if (mBatteryStyle == STYLE_ICS) {
             icon = plugged ? R.drawable.stock_sys_battery_charge
                     : R.drawable.stock_sys_battery;
+         
+            if (mIconColorOn) {
+            	if (plugged) {
+            		mBatteryIconColor.setImageResource(R.drawable.stock_sys_battery_charge_color);
+            	} else {
+            		mBatteryIconColor.setImageResource(R.drawable.stock_sys_battery_color);
+            	}
+                mBatteryIconColor.setImageLevel(level);
+                mBatteryIconColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            }
+            
         } else if (mBatteryStyle == STYLE_VERTICAL) {
             icon = plugged ? R.drawable.stat_vertical_battery_charge
                     : R.drawable.stat_vertical_battery;
+            if (mIconColorOn) {
+                mBatteryIconColor.setImageResource(R.drawable.stat_vertical_battery_color);
+                mBatteryIconColor.setImageLevel(level);
+                mBatteryIconColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            }
+            
         } else if (mBatteryStyle == STYLE_BALL) {
             icon = plugged ? R.drawable.stat_ball_battery_charge
                     : R.drawable.stat_ball_battery;
+            
+            
         } else if (mBatteryStyle == STYLE_CIRCLE) {
             icon = plugged ? R.drawable.stat_bcircle_battery_charge
                     : R.drawable.stat_bcircle_battery;
+            
+            if (mIconColorOn) {
+            	if (plugged) {
+            		icon = R.drawable.stat_bcircle_battery_charge;
+            		mBatteryIconColor.setImageResource(R.drawable.stat_bcircle_battery_charge_color);
+            	} else {
+            		mBatteryIconColor.setImageResource(R.drawable.stat_bcircle_battery_color);
+            	}
+                mBatteryIconColor.setImageLevel(level);
+                mBatteryIconColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            }
+            
         } else if (mBatteryStyle == STYLE_ANIMATED) {
             icon = plugged ? R.drawable.stat_animate_battery_charge
                     : R.drawable.stat_animate_battery;
+            if (mIconColorOn) {
+                mBatteryIconColor.setImageResource(R.drawable.stat_sys_battery_color);
+                mBatteryIconColor.setImageLevel(level);
+                mBatteryIconColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            }
+            
        } else {
             icon = plugged ? R.drawable.stat_sys_battery_charge
                     : R.drawable.stat_sys_battery;
@@ -235,12 +273,12 @@ public class BatteryController extends LinearLayout {
             case STYLE_ICS:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
-                mBatteryIconColor.setVisibility(View.INVISIBLE);
+                mBatteryIconColor.setVisibility(mIconColorOn ? View.VISIBLE : View.INVISIBLE);
                 break;
             case STYLE_VERTICAL:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
-                mBatteryIconColor.setVisibility(View.INVISIBLE);
+                mBatteryIconColor.setVisibility(mIconColorOn ? View.VISIBLE : View.INVISIBLE);
                 break;
             case STYLE_BALL:
                 mBatteryIcon.setVisibility(View.VISIBLE);
@@ -250,12 +288,12 @@ public class BatteryController extends LinearLayout {
             case STYLE_CIRCLE:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
-                mBatteryIconColor.setVisibility(View.INVISIBLE);
+                mBatteryIconColor.setVisibility(mIconColorOn ? View.VISIBLE : View.INVISIBLE);
                 break;
             case STYLE_ANIMATED:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
-                mBatteryIconColor.setVisibility(View.INVISIBLE);
+                mBatteryIconColor.setVisibility(mIconColorOn ? View.VISIBLE : View.INVISIBLE);
                 break;
             case STYLE_HIDE:
                 mBatteryIcon.setVisibility(View.GONE);
@@ -265,7 +303,7 @@ public class BatteryController extends LinearLayout {
             default:
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
-                mBatteryIconColor.setVisibility(View.INVISIBLE);
+                mBatteryIconColor.setVisibility(mIconColorOn ? View.VISIBLE : View.INVISIBLE);
                 break;
         }
 
