@@ -18,7 +18,14 @@ package android.widget;
 
 import com.android.internal.R;
 
+import droidjunk.colorfitermaker.ColorFilterMaker;
+
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -119,6 +126,13 @@ public class EdgeEffect {
     private int mState = STATE_IDLE;
 
     private float mPullDistance;
+    
+    // Tranq
+    private final String Tranq_Icon_Color = "tranq_icon_color";
+    private SharedPreferences mPrefs;
+    private boolean mIconColorOn;
+    private int mIconColor;
+    private boolean mIconColorApply;
 
     /**
      * Construct a new EdgeEffect with a theme appropriate for the provided context.
@@ -129,10 +143,63 @@ public class EdgeEffect {
         mEdge = res.getDrawable(R.drawable.overscroll_edge);
         mGlow = res.getDrawable(R.drawable.overscroll_glow);
 
+     // Tranq
+  		Context settingsContext = context;
+		try {
+			settingsContext = context.createPackageContext("com.android.settings",0);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+		mIconColorOn = mPrefs.getBoolean("color_icons", false);
+   		mIconColor = mPrefs.getInt("icon_color", 0xff33b5e5);
+   		mIconColorApply = mPrefs.getBoolean("color_icons_apply", false);
+        
+        
+        if (mIconColorOn && mIconColorApply) {
+        	mEdge.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+        	mGlow.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+            } else {
+            	mEdge.clearColorFilter();
+            	mGlow.clearColorFilter();
+            }
+
+        // receive broadcasts
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Tranq_Icon_Color);
+        filter.addAction("TRANQ_SETTINGS");
+        context.registerReceiver(mBroadcastReceiver, filter);        
+        
+        //
+        
         mMinWidth = (int) (res.getDisplayMetrics().density * MIN_WIDTH + 0.5f);
         mInterpolator = new DecelerateInterpolator();
     }
 
+    
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+           
+            if (action.equals(Tranq_Icon_Color) || action.equals("TRANQ_SETTINGS")) {
+            	mIconColorOn = intent.getBooleanExtra("IconColorOn", mIconColorOn);	
+            	mIconColor = intent.getIntExtra("IconColor", mIconColor);
+            	mIconColorApply = intent.getBooleanExtra("IconColorApply", mIconColorApply);
+                
+            	if (mIconColorOn && mIconColorApply) {
+                	mEdge.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+                	mGlow.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+                    } else {
+                    	mEdge.clearColorFilter();
+                    	mGlow.clearColorFilter();
+                    }
+            }
+        }
+    };    
+    
+    
     /**
      * Set the size of this edge effect in pixels.
      *
