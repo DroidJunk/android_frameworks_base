@@ -1,0 +1,116 @@
+package com.android.systemui.quicksettings;
+
+import com.android.systemui.R;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.CheckBoxPreference;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+
+
+public abstract class QuickButtonToggle extends TextView {
+
+	private final String Tranq_Settings = "TRANQ_SETTINGS";
+	private SharedPreferences mPrefs;
+	public static boolean mShowMeterButton = true;
+	public static boolean mCustomIconColors = false;
+	public static int mToggleIconOnColor = 0xff33b5e5;
+
+	public QuickButton(Context context, AttributeSet attrs) {
+		super(context, attrs);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Tranq_Settings);
+        getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
+       
+  		Context settingsContext = getContext();
+		try {
+			settingsContext = getContext().createPackageContext("com.android.settings",0);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     		
+		mPrefs = settingsContext.getSharedPreferences("Tranquility_Settings", Context.MODE_PRIVATE);
+		mShowMeterButton = mPrefs.getBoolean("quick_setting_meter", true);
+		mCustomIconColors = mPrefs.getBoolean("toggles_custom_icon_colors", false);
+   		mToggleIconOnColor = mPrefs.getInt("toggles_icon_on_color", 0xff33b5e5);
+
+		setOnClickListener(new OnClickListener() { 
+			public void onClick (View v){
+
+				if (getStatusOn()) {
+					toggleOff();
+				} else {
+					toggleOn();
+				}
+			}
+		}
+	);
+}
+
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            int oldColor = 0;
+            
+            if (action.equals("TRANQ_SETTINGS")) {
+            	
+
+            	if (intent.getBooleanExtra("ToggleCustomIconColors", mCustomIconColors) == false) {
+            		mCustomIconColors = false;
+            		updateResources();
+            	} else {
+            		mCustomIconColors = true;
+            		updateResources();
+            	}
+            	oldColor = mToggleIconOnColor;
+                mToggleIconOnColor = intent.getIntExtra("ToggleIconOnColor", mToggleIconOnColor);
+            	if (oldColor != mToggleIconOnColor) updateResources();
+   	
+            	if (intent.getBooleanExtra("UpdateToggles", false) == true) {
+            		updateResources();
+            	}
+
+            	if (intent.getBooleanExtra("UpdateSettings", false) == true) {
+            		updateResources();
+            	}
+
+            	if (intent.getBooleanExtra("ShowMeterButton", mShowMeterButton) == false) {
+            		mShowMeterButton = false;
+            		updateResources();
+            	} else {
+            		mShowMeterButton = true;
+            		updateResources();  
+            	}
+            }
+        }
+    };    
+
+    
+	abstract void updateResources();
+	abstract void toggleOne();
+	abstract void toggleTwo();
+	abstract void toggleThree();
+	abstract void toggleFour();
+	abstract void toggleFive();
+	abstract void toggleSix();
+	abstract void toggleSeven();
+	abstract boolean getStatusOn();
+	abstract void showSettings();    
+    
+
+} //
+
+
+

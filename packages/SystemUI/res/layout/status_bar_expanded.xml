@@ -51,24 +51,29 @@
             android:layout_alignParentRight="true"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:src="@drawable/ic_notify_clear"
+            android:background="@drawable/ic_notify_clear"
             android:contentDescription="@string/accessibility_clear_all"
             />            
     </RelativeLayout>
 
-    <com.android.systemui.tranqtoggles.TranqToggleViewTop    android:id="@+id/tranq_toggle_view" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="52dip" android:layout_marginTop="0dip" >
-  
-		<RelativeLayout  android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="52dp" > 
+<com.android.systemui.tranqtoggles.TranqToggleViewTop    
+	android:id="@+id/tranq_toggle_view" 
+	android:orientation="horizontal" 
+	android:layout_width="wrap_content" 
+	android:layout_height="52dip" 
+	android:layout_marginTop="0dip" >
  
-      	<FrameLayout android:id="@+id/settings_button" android:layout_width="55dp" android:layout_height="52dp" android:layout_weight="0" >   
-			<com.android.systemui.tranqtoggles.TranqSettingsButton android:id="@+id/settings_button" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/ic_notify_quicksettings" android:contentDescription="@string/accessibility_settings_button" />    
-        </FrameLayout>    
-        
- 		<LinearLayout android:layout_toRightOf="@id/settings_button" android:layout_width="wrap_content" android:layout_height="52dip"  >
- 
-   		<HorizontalScrollView  android:scrollbars="none" android:fadingEdge="vertical" android:fadingEdgeLength="20.0px" android:layout_width="wrap_content" android:layout_height="52dip" >
+	<HorizontalScrollView  
+	android:scrollbars="none" 
+	android:fadingEdge="vertical" 
+	android:fadingEdgeLength="20.0px" 
+	android:layout_width="wrap_content" 
+	android:layout_height="52dip" >
 
-		<RelativeLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="52dip" > 
+	<RelativeLayout 
+	android:orientation="horizontal" 
+	android:layout_width="wrap_content" 
+	android:layout_height="52dip" > 
 
       	<FrameLayout android:id="@+id/button_0" android:layout_width="60dip" android:layout_height="52.0dip" android:layout_weight="1.0" >
      		<ImageView android:id="@+id/fourg_icon" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dip" android:layout_marginRight="1.5dip" android:src="@drawable/tranqtoggle_fourg_on" />
@@ -127,28 +132,426 @@
         	<ImageView android:layout_gravity="right" android:id="@+id/divider_7" android:layout_width="1.25dip" android:layout_height="fill_parent" android:layout_marginTop="4.5dip" android:layout_marginBottom="3.5dip" android:background="#ff757575" />
     	</FrameLayout>   
     	
-   		<FrameLayout android:id="@+id/button_8" android:layout_toRightOf="@id/button_7" android:layout_width="60dip" android:layout_height="52.0dip" android:layout_weight="1.0">
-        	<ImageView android:id="@+id/sync_icon" android:layout_gravity="center"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dip" android:layout_marginRight="1.5dip" android:src="@drawable/tranqtoggle_sync_off" />
-        	<com.android.systemui.tranqtoggles.TranqSyncButton android:id="@+id/but8" android:text="@string/but8" android:textSize="9dip" android:textStyle="normal" android:layout_marginRight="2.5dip" android:gravity="center_horizontal"   android:layout_width="fill_parent" android:layout_height="65dip"  android:shadowDx="1.0" android:shadowDy="1.0" />
-        	<ImageView android:id="@+id/indicator_8" android:layout_gravity="bottom|center"  android:layout_width="fill_parent" android:layout_height="2dip" android:layout_marginBottom="0.5dip" android:layout_marginLeft="2dip" android:layout_marginRight="2.5dip" android:background="#ff696969" android:scaleType="fitXY" android:shadowDx="1.0" android:shadowDy="1.0" />
-        	<ImageView android:layout_gravity="right" android:id="@+id/divider_8" android:layout_width="1.25dip" android:layout_height="fill_parent" android:layout_marginTop="4.5dip" android:layout_marginBottom="3.5dip" android:background="#ff757575" />
-    	</FrameLayout> 
+   		
+	<FrameLayout android:id="@+id/button_8" 
+	android:layout_toRightOf="@id/button_7" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 
+	android:layout_weight="1.0">
+        	
+	<ImageView android:id="@+id/sync_icon" 
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="1.5dip" 
+	android:src="@drawable/tranqtoggle_sync_off" />
+        	
+	<com.android.systemui.tranqtoggles.TranqSyncButton 
+	android:id="@+id/but8" 
+	android:text="@string/but8" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+        	
+	<ImageView android:id="@+id/indicator_8" 
+	android:layout_gravity="bottom|center"  
+	android:layout_width="fill_parent" 
+	android:layout_height="2dip" 
+	android:layout_marginBottom="0.5dip" 
+	android:layout_marginLeft="2dip" 
+	android:layout_marginRight="2.5dip" 
+	android:background="#ff696969" 
+	android:scaleType="fitXY" 
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+        	
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/divider_8" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+</FrameLayout> 
     	
-   		<FrameLayout android:id="@+id/button_9" android:layout_toRightOf="@id/button_8" android:layout_width="60dip" android:layout_height="52.0dip" android:layout_weight="1.0">
-        	<ImageView android:id="@+id/data_icon" android:layout_gravity="center"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dip" android:layout_marginRight="1.5dip" android:src="@drawable/tranqtoggle_data_off" />
-        	<com.android.systemui.tranqtoggles.TranqDataButton android:id="@+id/but9" android:text="@string/but9" android:textSize="9dip" android:textStyle="normal" android:layout_marginRight="2.5dip" android:gravity="center_horizontal"   android:layout_width="fill_parent" android:layout_height="65dip"  android:shadowDx="1.0" android:shadowDy="1.0" />
-        	<ImageView android:id="@+id/indicator_9" android:layout_gravity="bottom|center"  android:layout_width="fill_parent" android:layout_height="2dip" android:layout_marginBottom="0.5dip" android:layout_marginLeft="2dip" android:layout_marginRight="2.5dip" android:background="#ff696969" android:scaleType="fitXY" android:shadowDx="1.0" android:shadowDy="1.0" />
-    	</FrameLayout> 
+	<FrameLayout android:id="@+id/button_9" 
+	android:layout_toRightOf="@id/button_8" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/data_icon" 
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="1.5dip" 
+	android:src="@drawable/tranqtoggle_data_off" />
+
+       <com.android.systemui.tranqtoggles.TranqDataButton 
+	android:id="@+id/but9" 
+	android:text="@string/but9" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+       	<ImageView android:id="@+id/indicator_9" 
+	android:layout_gravity="bottom|center"  
+	android:layout_width="fill_parent" 
+	android:layout_height="2dip" 
+	android:layout_marginBottom="0.5dip" 
+	android:layout_marginLeft="2dip" 
+	android:layout_marginRight="2.5dip" 
+	android:background="#ff696969" 
+	android:scaleType="fitXY" 
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+</FrameLayout> 
  
-	</RelativeLayout>
+				</RelativeLayout>
 
-	</HorizontalScrollView>
+			</HorizontalScrollView>
 
-	</LinearLayout> 
-   
-	</RelativeLayout>
+</com.android.systemui.tranqtoggles.TranqToggleViewTop>
 
-	</com.android.systemui.tranqtoggles.TranqToggleViewTop>
+
+ 	<com.android.systemui.quicksettings.QuickButtonsView    
+	android:id="@+id/quicksettings_view" 
+	android:orientation="horizontal" 
+	android:layout_width="wrap_content" 
+	android:layout_height="52dip" 
+	android:layout_marginTop="0dip" >
+ 
+	<HorizontalScrollView  
+	android:scrollbars="none" 
+	android:fadingEdge="vertical" 
+	android:fadingEdgeLength="20.0px" 
+	android:layout_width="wrap_content" 
+	android:layout_height="52dip" >
+
+	<RelativeLayout 
+	android:orientation="horizontal" 
+	android:layout_width="wrap_content" 
+	android:layout_height="52dip" > 
+
+	<FrameLayout android:id="@+id/button_clock" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_clock"
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="0dip" 
+	android:src="@drawable/stat_clock" />
+
+	<com.android.systemui.quicksettings.ClockButton
+	android:id="@+id/quick1" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/sdivider_1" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+	</FrameLayout>
+
+	<FrameLayout android:id="@+id/button_meter"
+	android:layout_toRightOf="@id/button_clock" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_meter" 
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="1.5dip" 
+	android:src="@drawable/stat_meter" />
+
+	<com.android.systemui.quicksettings.MeterButton
+	android:id="@+id/quick2" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/sdivider_2" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+	</FrameLayout>
+
+	<FrameLayout android:id="@+id/button_pulldown" 
+	android:layout_toRightOf="@id/button_meter"
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_pulldown" 
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="0dip" 
+	android:src="@drawable/stat_pulldown" />
+
+	<com.android.systemui.quicksettings.PulldownButton
+	android:id="@+id/quick3" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/sdivider_3" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+
+	</FrameLayout>
+
+	<FrameLayout android:id="@+id/button_toggles" 
+	android:layout_toRightOf="@id/button_pulldown"
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_toggles"
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="0dip" 
+	android:src="@drawable/stat_toggles" />
+
+	<com.android.systemui.quicksettings.ToggleButton
+	android:id="@+id/quick4" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/sdivider_4" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+
+	</FrameLayout>
+
+	<FrameLayout android:id="@+id/button_navigation"
+	android:layout_toRightOf="@id/button_toggles" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_navigation"
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="0dip" 
+	android:src="@drawable/stat_navigation" />
+
+	<com.android.systemui.quicksettings.NavButton
+	android:id="@+id/quick5" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/sdivider_5" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+
+	</FrameLayout>
+
+	<FrameLayout android:id="@+id/button_lockscreen"
+	android:layout_toRightOf="@id/button_navigation" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_lockscreen"
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="0dip" 
+	android:src="@drawable/stat_lockscreen" />
+
+	<com.android.systemui.quicksettings.LockscreenButton
+	android:id="@+id/quick6" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/sdivider_6" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+
+	</FrameLayout>
+
+	<FrameLayout android:id="@+id/button_iconcolor"
+	android:layout_toRightOf="@id/button_lockscreen" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_iconcolor"
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="0dip" 
+	android:src="@drawable/stat_iconcolor" />
+
+	<com.android.systemui.quicksettings.IconColorButton
+	android:id="@+id/quick7" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/sdivider_7" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+	</FrameLayout>
+
+	<FrameLayout android:id="@+id/button_quiettime"
+	android:layout_toRightOf="@id/button_iconcolor" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_quiettime"
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="0dip" 
+	android:src="@drawable/stat_quiettime" />
+
+	<com.android.systemui.quicksettings.QuietTimeButton
+	android:id="@+id/quick8" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+
+	<ImageView android:layout_gravity="right" 
+	android:id="@+id/sdivider_8" 
+	android:layout_width="1.25dip" 
+	android:layout_height="fill_parent" 
+	android:layout_marginTop="4.5dip" 
+	android:layout_marginBottom="3.5dip" 
+	android:background="#ff757575" />
+
+	</FrameLayout>
+
+	<FrameLayout android:id="@+id/button_led"
+	android:layout_toRightOf="@id/button_quiettime" 
+	android:layout_width="60dip" 
+	android:layout_height="52.0dip" 	
+	android:layout_weight="1.0">
+
+	<ImageView android:id="@+id/stat_led"
+	android:layout_gravity="center"  
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_marginTop="2dip" 
+	android:layout_marginRight="0dip" 
+	android:src="@drawable/stat_led" />
+
+	<com.android.systemui.quicksettings.LedButton
+	android:id="@+id/quick9" 
+	android:textSize="9dip" 
+	android:textStyle="normal" 
+	android:layout_marginRight="2.5dip" 
+	android:gravity="center_horizontal"   
+	android:layout_width="fill_parent" 
+	android:layout_height="65dip"  
+	android:shadowDx="1.0" 
+	android:shadowDy="1.0" />
+	</FrameLayout>
+
+</RelativeLayout>
+</HorizontalScrollView>
+</com.android.systemui.quicksettings.QuickButtonsView>    
+
+
 
     <FrameLayout
         android:layout_width="match_parent" 

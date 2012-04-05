@@ -132,6 +132,7 @@ public class PhoneStatusBar extends StatusBar {
     private boolean mIconColorApply;
     private View mCloseBar;
     
+    
 
     // fling gesture tuning parameters, scaled to display density
     private float mSelfExpandVelocityPx; // classic value: 2000px/s
@@ -179,7 +180,7 @@ public class PhoneStatusBar extends StatusBar {
     // top bar
     TextView mNoNotificationsTitle;
     View mClearButton;
-    View mSettingsButton;
+//    View mSettingsButton;
 
     // drag bar
     CloseDragHandle mCloseView;
@@ -366,8 +367,11 @@ public class PhoneStatusBar extends StatusBar {
         mClearButton.setAlpha(0f);
         mClearButton.setEnabled(false);
         mDateView = (DateView)expanded.findViewById(R.id.date);
-        mSettingsButton = expanded.findViewById(R.id.settings_button);
-        mSettingsButton.setOnClickListener(mSettingsButtonListener);
+        
+   
+        
+//       mSettingsButton = expanded.findViewById(R.id.settings_button);
+//       mSettingsButton.setOnClickListener(mSettingsButtonListener);
 
 
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
@@ -1076,6 +1080,12 @@ public class PhoneStatusBar extends StatusBar {
         }
 
         if (mClearButton.isShown()) {
+            if (mIconColorOn && mIconColorApply) {
+                mClearButton.getBackground().setColorFilter(ColorFilterMaker.changeColor(mIconColor, .65f));
+                } else {
+                	mClearButton.getBackground().clearColorFilter();
+                }
+
             if (clearable != (mClearButton.getAlpha() == 1.0f)) {
                 ObjectAnimator.ofFloat(mClearButton, "alpha",
                         clearable ? 1.0f : 0.0f)
@@ -2281,7 +2291,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
         }
     };
 
-    private View.OnClickListener mSettingsButtonListener = new View.OnClickListener() {
+/*    private View.OnClickListener mSettingsButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
             try {
                 // Dismiss the lock screen when Settings starts.
@@ -2294,7 +2304,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
         }
     };
 
-
+*/
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -2303,6 +2313,12 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
             	mIconColorOn = intent.getBooleanExtra("IconColorOn", mIconColorOn);	
             	mIconColor = intent.getIntExtra("IconColor", mIconColor);
             	mIconColorApply = intent.getBooleanExtra("IconColorApply", mIconColorApply);
+                if (mIconColorOn && mIconColorApply) {
+                    mClearButton.getBackground().setColorFilter(ColorFilterMaker.changeColor(mIconColor, .65f));
+                    } else {
+                    	mClearButton.getBackground().clearColorFilter();
+                    }
+            	mClearButton.invalidate();
             }
             
             if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)
