@@ -1081,7 +1081,7 @@ public class PhoneStatusBar extends StatusBar {
 
         if (mClearButton.isShown()) {
             if (mIconColorOn && mIconColorApply) {
-                mClearButton.getBackground().setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+                mClearButton.getBackground().setColorFilter(ColorFilterMaker.changeColor(mIconColor, .65f));
                 } else {
                 	mClearButton.getBackground().clearColorFilter();
                 }
@@ -2314,7 +2314,7 @@ mNoNotificationsTitle.setAlpha(any ? 0.0f : 0.75f);
             	mIconColor = intent.getIntExtra("IconColor", mIconColor);
             	mIconColorApply = intent.getBooleanExtra("IconColorApply", mIconColorApply);
                 if (mIconColorOn && mIconColorApply) {
-                    mClearButton.getBackground().setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
+                    mClearButton.getBackground().setColorFilter(ColorFilterMaker.changeColor(mIconColor, .65f));
                     } else {
                     	mClearButton.getBackground().clearColorFilter();
                     }
