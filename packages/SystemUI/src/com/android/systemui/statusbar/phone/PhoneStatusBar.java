@@ -366,8 +366,8 @@ public class PhoneStatusBar extends StatusBar {
         mClearButton.setAlpha(0f);
         mClearButton.setEnabled(false);
         mDateView = (DateView)expanded.findViewById(R.id.date);
-//       mSettingsButton = expanded.findViewById(R.id.settings_button);
-//       mSettingsButton.setOnClickListener(mSettingsButtonListener);
+//        mSettingsButton = expanded.findViewById(R.id.settings_button);
+//        mSettingsButton.setOnClickListener(mSettingsButtonListener);
 
 
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
