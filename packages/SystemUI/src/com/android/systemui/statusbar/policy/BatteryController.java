@@ -76,10 +76,9 @@ public class BatteryController extends LinearLayout {
     public static final int STYLE_STOCK = 0;
     public static final int STYLE_ICS = 1;
     public static final int STYLE_VERTICAL = 2;
-    public static final int STYLE_BALL = 3;
-    public static final int STYLE_CIRCLE = 4;
-    public static final int STYLE_ANIMATED = 5;
-    public static final int STYLE_HIDE = 6;
+    public static final int STYLE_CIRCLE = 3;
+    public static final int STYLE_ANIMATED = 4;
+    public static final int STYLE_HIDE = 5;
 
     public BatteryController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -189,12 +188,7 @@ public class BatteryController extends LinearLayout {
                 mBatteryIconColor.setImageLevel(level);
                 mBatteryIconColor.setColorFilter(ColorFilterMaker.changeColor(mIconColor, .6f));
             }
-            
-        } else if (mBatteryStyle == STYLE_BALL) {
-            icon = plugged ? R.drawable.stat_ball_battery_charge
-                    : R.drawable.stat_ball_battery;
-            
-            
+
         } else if (mBatteryStyle == STYLE_CIRCLE) {
             icon = plugged ? R.drawable.stat_bcircle_battery_charge
                     : R.drawable.stat_bcircle_battery;
@@ -279,11 +273,6 @@ public class BatteryController extends LinearLayout {
                 mBatteryIcon.setVisibility(View.VISIBLE);
                 setVisibility(View.VISIBLE);
                 mBatteryIconColor.setVisibility(mIconColorOn ? View.VISIBLE : View.INVISIBLE);
-                break;
-            case STYLE_BALL:
-                mBatteryIcon.setVisibility(View.VISIBLE);
-                setVisibility(View.VISIBLE);
-                mBatteryIconColor.setVisibility(View.INVISIBLE);
                 break;
             case STYLE_CIRCLE:
                 mBatteryIcon.setVisibility(View.VISIBLE);
